@@ -1,0 +1,28 @@
+Code Files:
+                    --- Main Method ---
+1. HopiumRestaurant.java
+                    --- BOUNDARY ---
+1. HomepageUI.java - Display 2 buttons (Admin & Customer)
+2. adminLogin.java - Display Radio Buttons to select the actors then redirected to their respective Log In Page, Return Button added
+3. customerLogin.java - Display Table Number ("Login")
+
+Notes
+
+Utilizing B-C-E model
+
+1. ENTITY LAYER
+    - Holds the data and is responsible for its persistence
+    - Represent business domain concepts - you will usually have identified many in the domain class diagram
+    - Entity classes used to store and manage information in the system - they map directly to database tables
+    - Some entity classes may be transient - i.e. they do not get stored in the DB but are only temporary
+
+2. CONTROL LAYER
+    - Contains the rules about how to combine info and how to deal with interaction
+
+3. BOUNDARY LAYER
+    - Responsible for representing info to user and to receive user interactions
+    - Used to model interaction between the environment and the system
+    - Boundary class typically represents a line between an actor a use case in the case diagram
+    - Actors interact only with Main.boundary classes (actors might be user or external system)
+        * In some cases, two actors can interface to a use case via the same Main.boundary class
+    - A Main.boundary class does not provide the actual behavior of the use case - it typically represents the GUI (dialog, menu, screen)
