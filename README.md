@@ -18,6 +18,6 @@ Code Files - Files in src folder
 1. HopiumRestaurant.java
 
 --- BOUNDARY ---
-1. startingPage.java - **Logo banner** & **Buttons** (Staff & Customer)
-2. customerLoginPage.java - **Logo banner**, **Login & Password Field**, **Radio Buttons for Staff** & **Buttons** (Log In & Return)
-3. customerLoginPage.java - **Logo banner**, **dropdown box for customer functions**
+1. startingPage.java - Frame for choosing between **staff** or **customer**.
+2. staffLoginPage.java - Frame for **staff** login only.
+3. customerLoginPage.java - Frame for **customer** login only.
