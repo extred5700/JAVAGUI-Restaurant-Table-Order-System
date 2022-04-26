@@ -8,11 +8,11 @@ public class DatabaseLoginCheck {
 
     public static void main(String[] args) {
         //Username modify to accept input etc
-        String UN = "Mindy";
+        String UN = "Helen";
         //Password modify to accept input etc
-        String PW = "security123";
+        String PW = "jasmine123";
         //User Profile modify to accept input etc
-        String Profile = "manager";
+        String Profile = "staff";
         try {
             //SQL connection
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314", "root", "root");
@@ -26,7 +26,7 @@ public class DatabaseLoginCheck {
                     +PW+
                     "' AND user_profile = '"
                     +Profile+
-                    "'"
+                    "' AND active = 'Y'"
             );
             if(rs.next() == false){
                 //This means no account found
