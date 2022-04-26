@@ -15,9 +15,6 @@ CSIT-314 Project
 Code Files - Files in src folder
 
 --- Main Method ---
-1. HopiumRestaurant.java
+1. HopiumRestaurant.java (Just run this, contains main method) 
 
 --- BOUNDARY ---
-1. startingPage.java - Frame for choosing between **staff** or **customer**.
-2. staffLoginPage.java - Frame for **staff** login only.
-3. customerLoginPage.java - Frame for **customer** login only.
