@@ -1,4 +1,4 @@
-package Main.Database;
+package Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +18,7 @@ public class DatabaseConnection {
             ResultSet resultSet = statement.executeQuery("select * from user");
 
             while (resultSet.next()) {
-                System.out.println(resultSet.getString("user_id") + "   " + resultSet.getString("username"));
+                System.out.println(resultSet.getString("username"));
             }
         } catch (Exception e) {
             e.printStackTrace();
