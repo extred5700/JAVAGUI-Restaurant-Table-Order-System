@@ -4,13 +4,13 @@ import Main.boundary.*;
 
 public class HopiumRestaurant {
     public static void main(String[] args) {
-        //new StartingPage();
+        new StartingPage();
 
-        // Staff
+        /* Staff */
         //new StaffLoginPage();
-        new UserAdminPageUI("ADMIN TEST");
+        //new UserAdminPageUI("ADMIN TEST");
 
-        // Customer
+        /* Customer */
         //new CustomerLoginPage();
         //new CustomerPageUI(42);
 
