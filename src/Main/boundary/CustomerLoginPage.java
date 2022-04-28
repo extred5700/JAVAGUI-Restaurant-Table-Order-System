@@ -7,9 +7,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import static Main.boundary.StartingPage.displayBannerImage;
+
 public class CustomerLoginPage extends JFrame {
     /* Variable declaration */
-    private JFrame customerLoginFrame;
+    private JFrame customerLoginFrame = new JFrame("Customer Login Page");
     private final JLabel labelTopText = new JLabel("Enter table number to view menu");
     // CUSTOMER
     // Table Number Label & Text Field
@@ -20,7 +22,18 @@ public class CustomerLoginPage extends JFrame {
     private final JButton buttonReturn = new JButton("Return");
 
     public CustomerLoginPage() {
-        customerLoginFrame = new DisplayPage("Customer Login Page");
+        // JFrame Properties
+        customerLoginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        customerLoginFrame.getContentPane().setLayout(null);
+        customerLoginFrame.setSize(520, 705);
+        customerLoginFrame.setResizable(false);
+        customerLoginFrame.setLocationRelativeTo(null); // Window will popout in the middle of the screen
+        customerLoginFrame.getContentPane().setBackground(Color.WHITE);
+
+        // Banner Image
+        displayBannerImage.setBounds(0, 0, 505, 200);
+        customerLoginFrame.getContentPane().add(displayBannerImage);
+
 
         // Header label
         labelTopText.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
@@ -56,6 +69,8 @@ public class CustomerLoginPage extends JFrame {
         buttonReturn.addActionListener(buttonListener);
         customerLoginFrame.getContentPane().add(buttonLogin);
         customerLoginFrame.getContentPane().add(buttonReturn);
+
+        customerLoginFrame.setVisible(true);
     }
 
     // Button Listener
