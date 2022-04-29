@@ -7,9 +7,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static Main.boundary.StartingPage.displayBannerImage;
+
 public class StaffLoginPage extends JFrame{
     /* Variable declaration */
-    private final JFrame staffLoginFrame;
+    private final JFrame staffLoginFrame = new JFrame("Staff Login Page");
     // STAFF
     // Labels
     private final JLabel labelID = new JLabel("Login ID: ");
@@ -25,7 +27,17 @@ public class StaffLoginPage extends JFrame{
     private final JButton buttonReturn = new JButton("Return");
 
     public StaffLoginPage(){
-        staffLoginFrame = new DisplayPage("Staff Login Page"); // Display Frame & Banner Image
+        // JFrame properties
+        staffLoginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        staffLoginFrame.getContentPane().setLayout(null);
+        staffLoginFrame.setSize(520, 705);
+        staffLoginFrame.setResizable(false);
+        staffLoginFrame.setLocationRelativeTo(null); // Window will popout in the middle of the screen
+        staffLoginFrame.getContentPane().setBackground(Color.WHITE);
+
+        // Banner Image
+        displayBannerImage.setBounds(0, 0, 505, 200);
+        staffLoginFrame.getContentPane().add(displayBannerImage);
 
         /* Login, Password Label and Text Field */
         displayLoginFields();
@@ -49,6 +61,8 @@ public class StaffLoginPage extends JFrame{
         buttonReturn.addActionListener(buttonListener);
         staffLoginFrame.getContentPane().add(buttonLogin);
         staffLoginFrame.getContentPane().add(buttonReturn);
+
+        staffLoginFrame.setVisible(true);
     }
 
     // Button Listener
@@ -113,8 +127,7 @@ public class StaffLoginPage extends JFrame{
         dispose();
         staffLoginFrame.setVisible(false);
         switch (profile){
-            //case "User Admin":
-            case "User Admin": // temporary
+            case "User Admin":
                 new UserAdminPageUI(username); // Display Administrator UI
                 break;
             case "Restaurant Owner":
