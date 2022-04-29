@@ -3,7 +3,6 @@ package Main.boundary;
 import Main.controller.AddUserController;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -129,11 +128,16 @@ public class UserAdminPageUI extends JFrame{
                 String profile = profileType.getSelectedItem().toString();
                 AddUserController addUserController = new AddUserController();
                 // validateCreateUserAccount() method located in AddUserController.java
-                if (addUserController.validateCreateUserAccount(username, password, profile) == true){
-                    JOptionPane.showMessageDialog(null, "Account is created successfully.", "Account Creation", JOptionPane.INFORMATION_MESSAGE);
+                if ((username.trim().isEmpty()) || (password.trim().isEmpty())){
+                    JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
                 }
                 else{
-                    JOptionPane.showMessageDialog(null, "Account already exist.", "Error!", JOptionPane.WARNING_MESSAGE);
+                    if (addUserController.validateCreate(username, password, profile) == true){
+                        JOptionPane.showMessageDialog(null, "Account is created successfully.", "Account Creation", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Account already exist.", "Error!", JOptionPane.WARNING_MESSAGE);
+                    }
                 }
             }
         });

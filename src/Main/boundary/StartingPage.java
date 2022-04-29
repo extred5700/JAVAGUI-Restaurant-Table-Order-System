@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 
 public class StartingPage extends JFrame{
     /* Variable declaration */
-    private JFrame startingPageFrame;
+    private JFrame startingPageFrame = new JFrame("Hopium Restaurant");
+    static final Image logoImage = new ImageIcon("src/Main/boundary/Images/Logo-Red.png").getImage();      // For banner
+    static final JLabel displayBannerImage = new JLabel(new ImageIcon(logoImage),SwingConstants.CENTER);   // For banner
     private final JLabel labelTopText = new JLabel("Who's Eating?");
     // Buttons
     private final JButton buttonStaff = new JButton("Staff");
@@ -15,7 +17,17 @@ public class StartingPage extends JFrame{
 
 
     public StartingPage(){
-        startingPageFrame = new DisplayPage("Homepage");
+        // JFrame properties
+        startingPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        startingPageFrame.getContentPane().setLayout(null);
+        startingPageFrame.setSize(520, 705);
+        startingPageFrame.setResizable(false);
+        startingPageFrame.setLocationRelativeTo(null); // Window will popout in the middle of the screen
+        startingPageFrame.getContentPane().setBackground(Color.WHITE);
+
+        // Banner Image
+        displayBannerImage.setBounds(0, 0, 505, 200);
+        startingPageFrame.getContentPane().add(displayBannerImage);
 
         // Header Label
         labelTopText.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
@@ -38,6 +50,8 @@ public class StartingPage extends JFrame{
         buttonCustomer.addActionListener(buttonListener);
         startingPageFrame.getContentPane().add(buttonStaff);
         startingPageFrame.getContentPane().add(buttonCustomer);
+
+        startingPageFrame.setVisible(true);
     }
 
     // Button Listener
