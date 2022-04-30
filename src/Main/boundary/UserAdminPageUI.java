@@ -37,8 +37,6 @@ public class UserAdminPageUI extends JFrame{
     /* JTable to display User Account Profiles */
     private JTable tableUsers;
 
-
-
     // Edit Panel
     private final JPanel panelEdit = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     private final JLabel labelEditUsername = new JLabel("Username: ");
@@ -74,7 +72,7 @@ public class UserAdminPageUI extends JFrame{
         panelCreate.setVisible(false);
 
         // EDIT function
-        displayEditPanel(usernameLoggedIn);
+        displayEditPanel();
         panelEdit.setVisible(false);
 
 
@@ -197,15 +195,8 @@ public class UserAdminPageUI extends JFrame{
         return arrayAllDetails;
     }
 
-    // Method for User Admin to display all User Profiles in a table format
-    public void displayEditPanel(String usernameLoggedIn){
-        // Border
-        titledBorder = new TitledBorder("Edit User Accounts");
-        titledBorder.setBorder(new LineBorder(Color.BLACK));
-        titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-
-        // Table
-        // Get User Data
+    // Construction of table variables for EDIT/SEARCH/SUSPEND functions
+    public Component tableConstruction(){
         ViewUserController viewUserController = new ViewUserController();
         ArrayList<ArrayList<String>> arrayListUserAllDetails = viewUserController.getUserInfo();
         String [][] data = getUserAccountTable(arrayListUserAllDetails); // Call method to "convert" ArrayLists inside a "big" Arraylist to a 2D array
@@ -214,6 +205,7 @@ public class UserAdminPageUI extends JFrame{
         tableUsers = new JTable(data, columnTableNames);
         JScrollPane sp = new JScrollPane(tableUsers);
         sp.setPreferredSize(new Dimension(485, 200)); // width then height
+
         // Table Mouse Listener
         tableUsers.addMouseListener(new MouseAdapter() {
             @Override
@@ -224,6 +216,18 @@ public class UserAdminPageUI extends JFrame{
                 fieldEditProfile.setText(tableUsers.getModel().getValueAt(getRow, 2).toString());
             }
         });
+        return sp;
+    }
+
+    // Method for User Admin to display all User Profiles in a table format
+    public void displayEditPanel(){
+        // Border
+        titledBorder = new TitledBorder("Edit User Accounts");
+        titledBorder.setBorder(new LineBorder(Color.BLACK));
+        titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+
+        // Table Construction called in method, converted to a JScrollPane
+        JScrollPane scrollPane = (JScrollPane) tableConstruction();
 
         // Labels
         labelEditUsername.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
@@ -234,7 +238,6 @@ public class UserAdminPageUI extends JFrame{
         fieldEditUsername.setPreferredSize(new Dimension(110, 30));
         fieldEditPassword.setPreferredSize(new Dimension(110, 30));
         fieldEditProfile.setPreferredSize(new Dimension(110, 30));
-
 
         // Edit Changes Button
         buttonEditChanges.setPreferredSize(new Dimension(150, 30));
@@ -252,16 +255,17 @@ public class UserAdminPageUI extends JFrame{
             else{
                 editUserDetails(username, password, profile);
                 // After data has been edited and updated, recall the JFrame and display it again
+                // Problem: doesnt automatically show Edit Functions when JFrame is called again 
                 dispose();
                 userAdminUIFrame.setVisible(false);
-                new UserAdminPageUI(usernameLoggedIn);
-                displayEditPanel(usernameLoggedIn);
+                new UserAdminPageUI("asd");
+                displayEditPanel();
             }
         });
 
         panelEdit.setPreferredSize(new Dimension(500, 490));
         panelEdit.setBackground(Color.WHITE);
-        panelEdit.add(sp);
+        panelEdit.add(scrollPane);
         panelEdit.add(labelEditUsername);
         panelEdit.add(fieldEditUsername);
         panelEdit.add(labelEditPassword);
