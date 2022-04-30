@@ -27,7 +27,7 @@ public class UserAdminPageUI extends JFrame{
     private final JTextField fieldUsername = new JTextField(20);
     private final JLabel labelPassword = new JLabel("Password: ");
     private final JTextField fieldPassword = new JTextField(20);
-    private final JComboBox profileType = new JComboBox();
+    private JComboBox <String> profileType = new JComboBox<>(new String[]{"User Admin", "Restaurant Owner", "Restaurant Manager", "Restaurant Staff"});
     private final JButton buttonCreateAccount = new JButton("Create Account");
 
     public UserAdminPageUI(String username){
@@ -49,6 +49,7 @@ public class UserAdminPageUI extends JFrame{
         displayAdminUserButtons();
 
         displayCreateFields();
+        panelCreate.setVisible(false);
 
         userAdminUIFrame.setVisible(true);
     }
@@ -74,12 +75,12 @@ public class UserAdminPageUI extends JFrame{
             String action = buttonPressed.getText();
             switch (action){
                 case "Logout":
-                    dispose();
+                    userAdminUIFrame.dispose();
                     userAdminUIFrame.setVisible(false);
                     new StaffLoginPage();
                     break;
                 case "Create":
-                    displayCreateFields();
+                    panelCreate.setVisible(true);
                     break;
                 case "Edit":
                     dispose();
@@ -109,10 +110,13 @@ public class UserAdminPageUI extends JFrame{
         fieldPassword.setPreferredSize(new Dimension(50, 30));
 
         // JComboBox/Dropdown List
+        /*
         profileType.addItem("User Admin");
         profileType.addItem("Restaurant Owner");
         profileType.addItem("Restaurant Manager");
         profileType.addItem("Restaurant Staff");
+
+        */
         profileType.setPreferredSize(new Dimension(230, 20));
 
         // Create Account Button
@@ -128,7 +132,7 @@ public class UserAdminPageUI extends JFrame{
                 String profile = profileType.getSelectedItem().toString();
                 AddUserController addUserController = new AddUserController();
                 // validateCreateUserAccount() method located in AddUserController.java
-                if ((username.trim().isEmpty()) || (password.trim().isEmpty())){
+                if ((username.isEmpty()) || (password.isEmpty())){
                     JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
                 }
                 else{
@@ -155,6 +159,8 @@ public class UserAdminPageUI extends JFrame{
         panelCreate.setVisible(true);
         userAdminUIFrame.add(panelCreate);
     } // end of the method displayCreateFields()
+
+    // Method for User Admin to display all User Profiles in a table format
 
 
 }
