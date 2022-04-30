@@ -1,8 +1,7 @@
 Steps to do BEFORE pulling the new main branch
 
-1. Make sure you have no new changes from main incase you lose them
-2. Open intelliJ and close the current open project so you see the intro screen
-3. Now you can pull the new main branch
+1. Open intelliJ and close the current open project so you see the intro screen
+2. Now you can pull the new main branch
 
 Steps to do AFTER pulling the new main branch
 
