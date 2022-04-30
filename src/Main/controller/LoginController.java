@@ -8,12 +8,10 @@ public class LoginController {
     public boolean validateLogin(String staffUsername, String password, String profile){
         return staff.checkUserExistence(staffUsername, password, profile);
     }
-    
-	public static Staff getStaff() {	//	to get Staff
-		return staff;
-	}
-	public static void setStaff(Staff staf) {	// to set new staff when logged out #logoutcontroller
-		staff = staf;
-	}
-    
+    public static Staff getStaff() {	//	to get Staff
+        return staff;
+    }
+    public static void setStaff(Staff staf) {	// to set new staff when logged out #logoutcontroller
+        staff = staf;
+    }
 }
