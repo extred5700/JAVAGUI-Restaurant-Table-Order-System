@@ -66,7 +66,7 @@ public class Staff{
                             +password+
                             "' AND user_profile = '"
                             +profile+
-                            "'");
+                            "' AND active = 'Y'");
             if (rs.next() == false){
                 //This means no account found
                 System.out.println("No account found.");
