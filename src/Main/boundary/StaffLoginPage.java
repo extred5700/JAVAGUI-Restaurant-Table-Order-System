@@ -4,7 +4,6 @@ import Main.controller.LoginController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static Main.boundary.StartingPage.displayBannerImage;
@@ -22,17 +21,13 @@ public class StaffLoginPage extends JFrame{
     // Staff Choices
     private final Choice staffType = new Choice();
 
-    // Button
-    private final JButton buttonLogin = new JButton("Login");
-    private final JButton buttonReturn = new JButton("Return");
-
     public StaffLoginPage(){
         // JFrame properties
         staffLoginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         staffLoginFrame.getContentPane().setLayout(null);
         staffLoginFrame.setSize(520, 705);
         staffLoginFrame.setResizable(false);
-        staffLoginFrame.setLocationRelativeTo(null); // Window will popout in the middle of the screen
+        staffLoginFrame.setLocationRelativeTo(null); // Window will pop out in the middle of the screen
         staffLoginFrame.getContentPane().setBackground(Color.WHITE);
 
         // Banner Image
@@ -47,11 +42,14 @@ public class StaffLoginPage extends JFrame{
 
         /* BUTTON DESIGN */
         // Login button
+        // Button
+        JButton buttonLogin = new JButton("Login");
         buttonLogin.setBounds(40, 460, 200, 40);
         buttonLogin.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonLogin.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonLogin.setBackground(Color.WHITE);
         // Return button
+        JButton buttonReturn = new JButton("Return");
         buttonReturn.setBounds(270, 460, 200, 40);
         buttonReturn.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonReturn.setBorder(BorderFactory.createLineBorder(Color.RED,1));
@@ -65,35 +63,32 @@ public class StaffLoginPage extends JFrame{
         staffLoginFrame.setVisible(true);
     }
 
+    // end of actionPerformed
     // Button Listener
-    ActionListener buttonListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JButton buttonPressed = (JButton)e.getSource();
-            String action = buttonPressed.getText();
-            switch (action){
-                case "Login":
-                    // Get ID, Password & Staff Type
-                    String staffUsername = loginField.getText();
-                    String staffPassword = passwordField.getText();
-                    String staffProfile = staffType.getSelectedItem();  // Check which dropdown list's item has been selected
-                    LoginController loginController = new LoginController(); // Controller Object to establish DB connection, attempt to login the user
-                    if (loginController.validateLogin(staffUsername, staffPassword, staffProfile) == true){
-                        loginSuccess(staffUsername, staffProfile);
-                    }
-                    // If login fails
-                    else{
-                        JOptionPane.showMessageDialog(null, "Invalid account!", "Error!", JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-
-                case "Return":
-                    dispose();
-                    staffLoginFrame.setVisible(false);
-                    new StartingPage();
-                    break;
-            } // end of switch for BUTTONS statements
-        } // end of actionPerformed
+    ActionListener buttonListener = e -> {
+        JButton buttonPressed = (JButton)e.getSource();
+        String action = buttonPressed.getText();
+        switch (action) {
+            case "Login" -> {
+                // Get ID, Password & Staff Type
+                String staffUsername = loginField.getText();
+                String staffPassword = passwordField.getText();
+                String staffProfile = staffType.getSelectedItem();  // Check which dropdown list's item has been selected
+                LoginController loginController = new LoginController(); // Controller Object to establish DB connection, attempt to login the user
+                if (loginController.validateLogin(staffUsername, staffPassword, staffProfile)) {
+                    loginSuccess(staffUsername, staffProfile);
+                }
+                // If login fails
+                else {
+                    JOptionPane.showMessageDialog(null, "Invalid account!", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            case "Return" -> {
+                dispose();
+                staffLoginFrame.setVisible(false);
+                new StartingPage();
+            }
+        } // end of switch for BUTTONS statements
     };
 
     // Method to display Login & Password Text Fields
