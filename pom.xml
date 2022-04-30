@@ -28,6 +28,13 @@
             <artifactId>junit-jupiter</artifactId>
             <version>5.8.2</version>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.29</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/mysql-connector-java-8.0.29.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <properties>
