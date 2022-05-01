@@ -1,8 +1,7 @@
 package Main.entity;
 
 import java.sql.*;
-
-import static java.time.chrono.JapaneseEra.values;
+import java.util.ArrayList;
 
 public class Staff{
     // Variable Declaration
@@ -66,24 +65,24 @@ public class Staff{
                             +password+
                             "' AND user_profile = '"
                             +profile+
-                            "' AND active = 'Y'");
-            if (rs.next() == false){
+                            "'");
+            if (!rs.next()){
                 //This means no account found
                 System.out.println("No account found.");
             }
             else{
                 //This means account found
-                System.out.println("Login successful.");
+                System.out.println("Account is valid.");
                 userExistence = true;
             }
-        } catch (Exception e){
+        }catch (SQLException e){
             // Catches any SQL query issues
-            e.printStackTrace();
+            System.out.println(e);
         }
         return userExistence;
     } // end of method checkUserExistence()
 
-    // Create new User Profile
+    // Create new User Account
     public boolean createUserAccount(String username, String password, String profile){
         boolean isUserCreated = false;
         String active = "Y";
@@ -101,9 +100,56 @@ public class Staff{
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
         }
-
-
         return isUserCreated;
     } // end of method createUserAccount()
+
+    // Method to get an arraylist of user account information
+    // Array list contains 4 array list: arrayListUsernames, arrayListPasswords, arrayListProfiles, arrayListActive
+    public ArrayList<ArrayList<String>> getUserInfoFromDB(){
+        ArrayList<ArrayList<String>> listAccountData = new ArrayList<>();
+        ArrayList<String> arrayListUsernames = new ArrayList<>();
+        ArrayList<String> arrayListPasswords = new ArrayList<>();
+        ArrayList<String> arrayListProfiles = new ArrayList<>();
+        ArrayList<String> arrayListActive = new ArrayList<>();
+
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "SELECT * from user";
+        try (Statement statement = dbConnection.createStatement()){
+            ResultSet set = statement.executeQuery(query);
+            while (set.next()){
+                // Add data to their respective category, then... (line 134)
+                String username = set.getString("username");
+                String password = set.getString("password");
+                String user_profile = set.getString("user_profile");
+                String active = set.getString("active");
+                arrayListUsernames.add(username);
+                arrayListPasswords.add(password);
+                arrayListProfiles.add(user_profile);
+                arrayListActive.add(active);
+            }
+        } catch(SQLException e){
+            System.out.println(e);
+        }
+        // COMBINE/ADD ALL array list to one array list
+        listAccountData.add(arrayListUsernames);
+        listAccountData.add(arrayListPasswords);
+        listAccountData.add(arrayListProfiles);
+        listAccountData.add(arrayListActive);
+        return listAccountData;
+    }
+
+    // Edit User Account CHANGES
+    public boolean editUserAccountUsingOldUsername(String oldUsername, String newUsername, String newPassword, String newProfile){
+        boolean isUserEdited = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "UPDATE user SET username ='" + newUsername + "',password='" + newPassword + "',user_profile='" + newProfile + "' WHERE username='" + oldUsername + "'";
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query);
+            isUserEdited = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return isUserEdited;
+    }
 
 }
