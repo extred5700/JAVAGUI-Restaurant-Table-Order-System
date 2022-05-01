@@ -1,6 +1,7 @@
 package Main.boundary.StaffUI;
 
 import Main.boundary.StaffLoginPage;
+import Main.controller.GenerateReportController;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -83,10 +84,16 @@ public class OwnerPageUI extends JFrame {
                 new StaffLoginPage();
                 break;
             case "Generate Data":
-                String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
-                if (radioButtonSelected == null){
-                    JOptionPane.showMessageDialog(null, "Please select a radio button!", "Error!", JOptionPane.WARNING_MESSAGE);
+                if (buttonGroup.getSelection() == null) {
+                    JOptionPane.showMessageDialog(null, "Please select a radio button!", "Error!", JOptionPane.ERROR_MESSAGE);
                 }
+                else{
+                    String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
+                    GenerateReportController generateReportController = new GenerateReportController();
+                    String [] generatedReport = generateReportController.getReport(radioButtonSelected);
+                    displayGeneratedResults(generatedReport);
+                }
+
                 break;
         }
     };
@@ -103,15 +110,10 @@ public class OwnerPageUI extends JFrame {
         JTextField [] textFields = {fieldDaily, fieldWeekly, fieldMonthly};
         JRadioButton [] radioButtons = {radioAvgSpend, radioFreqVisit, radioFoodPreference};
         String [] actionCommand = {"Average Spend", "Frequency of Visits", "Food Preference"};
-        displayAvgSpendFields(labels, textFields, radioButtons, actionCommand);
+        constructAndAddAvgSpendFields(labels, textFields, radioButtons, actionCommand);
 
         // Generate Data Button
         panelReport.add(buttonGenerateData);
-
-
-
-
-
 
         // Add components to the JPanel
         panelReport.setPreferredSize(new Dimension(490, 500));
@@ -121,8 +123,8 @@ public class OwnerPageUI extends JFrame {
         ownerUIFrame.add(panelReport);
     }
 
-    // Method for to display labels, textfields and button for AVERAGE SPEND PER VISIT
-    public void displayAvgSpendFields(JLabel [] labels, JTextField [] textFields, JRadioButton [] radioButtons,  String [] actionCommand){
+    // Method for to construct & display labels, textfields and button
+    public void constructAndAddAvgSpendFields(JLabel [] labels, JTextField [] textFields, JRadioButton [] radioButtons, String [] actionCommand){
         // Labels
         for (JLabel jLabel : labels){
             jLabel.setPreferredSize(new Dimension(110, 15));
@@ -133,7 +135,8 @@ public class OwnerPageUI extends JFrame {
 
         // Text Fields
         for (JTextField jTextField : textFields){
-            jTextField.setEnabled(false);
+            //jTextField.setEnabled(false);
+            jTextField.setForeground(Color.BLACK);
             panelReport.add(jTextField);
         }
 
@@ -148,19 +151,12 @@ public class OwnerPageUI extends JFrame {
             buttonGroup.add(radioButtons[i]);
             panelReport.add(radioButtons[i]);
         }
-        /*
-        for (JRadioButton jRadioButtons : radioButtons){
-            jRadioButtons.setBackground(Color.WHITE);
-            jRadioButtons.setAlignmentX(SwingConstants.CENTER);
-            jRadioButtons.setAlignmentY(SwingConstants.CENTER);
-            jRadioButtons.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-            jRadioButtons.setPreferredSize(new Dimension(240, 15));
-            buttonGroup.add(jRadioButtons);
-            panelReport.add(jRadioButtons);
-        }
-        */
     }
 
-
-    // Method for Restaurant Owner to display the DISH/DRINK PREFERENCE functions
+    // Method to display the calculated and generated results into the JTextFields
+    public void displayGeneratedResults(String [] generatedReport){
+        fieldDaily.setText(generatedReport[0]);
+        fieldWeekly.setText(generatedReport[1]);
+        fieldMonthly.setText(generatedReport[2]);
+    }
 }
