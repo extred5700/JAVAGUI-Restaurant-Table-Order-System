@@ -1,7 +1,7 @@
 package Main.boundary;
 
 import Main.boundary.StaffUI.*;
-import Main.controller.LoginController;
+import Main.controller.Staff.LoginController;
 
 import javax.swing.*;
 import java.awt.*;

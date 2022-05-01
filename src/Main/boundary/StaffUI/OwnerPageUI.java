@@ -1,7 +1,7 @@
 package Main.boundary.StaffUI;
 
 import Main.boundary.StaffLoginPage;
-import Main.controller.GenerateReportController;
+import Main.controller.RestaurantOwner.GenerateReportController;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -89,6 +89,7 @@ public class OwnerPageUI extends JFrame {
                 }
                 else{
                     String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
+                    System.out.println(radioButtonSelected);
                     GenerateReportController generateReportController = new GenerateReportController();
                     String [] generatedReport = generateReportController.getReport(radioButtonSelected);
                     displayGeneratedResults(generatedReport);

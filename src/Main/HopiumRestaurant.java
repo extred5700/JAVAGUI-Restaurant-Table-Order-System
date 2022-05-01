@@ -1,8 +1,9 @@
 package Main;
 
 import Main.boundary.*;
-import Main.boundary.StaffUI.ManagerPageUI;
-import Main.boundary.StaffUI.OwnerPageUI;
+import Main.boundary.CustomerPageUI;
+import Main.boundary.StaffLoginPage;
+import Main.boundary.StaffUI.*;
 
 public class HopiumRestaurant {
     public static void main(String[] args) {
@@ -10,8 +11,11 @@ public class HopiumRestaurant {
 
         /* Staff */
         //new StaffLoginPage();
-        //new UserAdminPageUI("ADMIN TEST");
-        new OwnerPageUI("Owner Test");
+        // Admin
+        new UserAdminPageUI("ADMIN TEST");
+        // Owner
+        //new OwnerPageUI("Owner Test");
+        // Manager
         //new ManagerPageUI("Manager Test");
 
         /* Customer */
