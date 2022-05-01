@@ -72,7 +72,7 @@ public class UserAdminPageUI extends JFrame{
         panelCreate.setVisible(false);
 
         // EDIT function
-        displayEditPanel();
+        displayEditPanel(usernameLoggedIn);
         panelEdit.setVisible(false);
 
 
@@ -220,7 +220,7 @@ public class UserAdminPageUI extends JFrame{
     }
 
     // Method for User Admin to display all User Profiles in a table format
-    public void displayEditPanel(){
+    public void displayEditPanel(String usernameLoggedIn){
         // Border
         titledBorder = new TitledBorder("Edit User Accounts");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -258,8 +258,10 @@ public class UserAdminPageUI extends JFrame{
                 // Problem: doesnt automatically show Edit Functions when JFrame is called again 
                 dispose();
                 userAdminUIFrame.setVisible(false);
-                new UserAdminPageUI("asd");
-                displayEditPanel();
+                new UserAdminPageUI(usernameLoggedIn);
+                //displayEditPanel(usernameLoggedIn);
+                buttonEdit.doClick();
+                panelEdit.setVisible(true);
             }
         });
 
@@ -283,12 +285,17 @@ public class UserAdminPageUI extends JFrame{
 
         EditUserController editUserController = new EditUserController();
         int rowSelected = tableUsers.getSelectedRow();
-        String oldUsername = tableUsers.getModel().getValueAt(rowSelected,0).toString();
-        if (editUserController.editUserAccount(oldUsername, newUsername, newPassword, newProfile)){
-            JOptionPane.showMessageDialog(null, "Account has been successful updated.", "Account Update", JOptionPane.INFORMATION_MESSAGE);
+        if (rowSelected != -1){
+            String oldUsername = tableUsers.getModel().getValueAt(rowSelected,0).toString();
+            if (editUserController.editUserAccount(oldUsername, newUsername, newPassword, newProfile)){
+                JOptionPane.showMessageDialog(null, "Account has been successful updated.", "Account Update", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Account has not been successful updated.", "Account Update", JOptionPane.ERROR_MESSAGE);
+            }
         }
         else{
-            System.out.println("failed");
+            JOptionPane.showMessageDialog(null, "No such account!", "Account Update", JOptionPane.ERROR_MESSAGE);
         }
     } // end of the method updateUserDetails()
 
