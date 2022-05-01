@@ -120,11 +120,13 @@ public class UserAdminPageUI extends JFrame{
                 dispose();
                 panelCreate.setVisible(true);
                 panelEdit.setVisible(false);
+                panelSuspend.setVisible(false);
                 break;
             case "Edit":
                 dispose();
                 panelEdit.setVisible(true);
                 panelCreate.setVisible(false);
+                panelSuspend.setVisible(false);
                 break;
             case "View":
                 break;
