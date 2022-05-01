@@ -12,7 +12,7 @@ public class HopiumRestaurant {
         /* Staff */
         //new StaffLoginPage();
         // Admin
-        new UserAdminPageUI("ADMIN TEST");
+        new UserAdminPageUI("Admin Test","View");
         // Owner
         //new OwnerPageUI("Owner Test");
         // Manager

@@ -89,8 +89,38 @@ public class User_Admin extends Staff {
     }
 
     // Function to Search for user accounts #5
-    public void searchAccount(String username, String password, String staffType) {
+    public ArrayList<ArrayList<String>> searchAccount(String usernameKeyedIn) {
+        ArrayList<ArrayList<String>> listSearchedAccountData = new ArrayList<>();
+        ArrayList<String> arrayListSearchedUsernames = new ArrayList<>();
+        ArrayList<String> arrayListSearchedPasswords = new ArrayList<>();
+        ArrayList<String> arrayListSearchedProfiles = new ArrayList<>();
+        ArrayList<String> arrayListSearchedActive = new ArrayList<>();
+        Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
 
+        try{
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE username LIKE '%" + usernameKeyedIn + "%'");
+
+            while (rs.next()) { //This is the result set
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String user_profile = rs.getString("user_profile");
+                String active = rs.getString("active");
+                arrayListSearchedUsernames.add(username);
+                arrayListSearchedPasswords.add(password);
+                arrayListSearchedProfiles.add(user_profile);
+                arrayListSearchedActive.add(active);
+            }
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        listSearchedAccountData.add(arrayListSearchedUsernames);
+        listSearchedAccountData.add(arrayListSearchedPasswords);
+        listSearchedAccountData.add(arrayListSearchedProfiles);
+        listSearchedAccountData.add(arrayListSearchedActive);
+        return listSearchedAccountData;
     }
 
     // Function to View user accounts #6

@@ -1,10 +1,9 @@
 package Main.boundary.StaffUI;
 
+
 import Main.boundary.StaffLoginPage;
-import Main.controller.UserAdmin.AddUserController;
-import Main.controller.UserAdmin.EditUserController;
-import Main.controller.UserAdmin.SuspendUserController;
-import Main.controller.UserAdmin.ViewUserController;
+import Main.controller.UserAdmin.*;
+
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -49,7 +48,10 @@ public class UserAdminPageUI extends JFrame{
     private final JButton buttonEditChanges = new JButton("Edit Changes");
 
     /* 3. VIEW function */
+    private JTable tableViewUsers;
     private final JPanel panelView = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+    private final JTextField fieldSearchUser = new JTextField(20);
+    private final JButton buttonSearchUser = new JButton("Search by Username");
 
     /* 4. SUSPEND Function */
     private JTable tableSuspendUsers;
@@ -57,7 +59,7 @@ public class UserAdminPageUI extends JFrame{
     private final JButton buttonSuspendChanges = new JButton("Suspend Account");
 
 
-    public UserAdminPageUI(String usernameLoggedIn){
+    public UserAdminPageUI(String usernameLoggedIn, String setDisplayPage){
         userAdminUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userAdminUIFrame.getContentPane().setLayout(new FlowLayout());
         userAdminUIFrame.setSize(520, 705);
@@ -88,13 +90,30 @@ public class UserAdminPageUI extends JFrame{
 
 
         // 3. VIEW function
+        displaySearchPanel();
+        panelView.setVisible(false);
 
 
         // 4. SUSPEND function
-        displaySuspendPanel();
+        displaySuspendPanel(usernameLoggedIn);
         panelSuspend.setVisible(false);
 
-
+        switch (setDisplayPage){
+            case "Default":
+                break;
+            case "Create":
+                panelCreate.setVisible(true);
+                break;
+            case "Edit":
+                panelEdit.setVisible(true);
+                break;
+            case "View":
+                panelView.setVisible(true);
+                break;
+            case "Suspend":
+                panelSuspend.setVisible(true);
+                break;
+        }
         userAdminUIFrame.setVisible(true);
     }
 
@@ -129,21 +148,28 @@ public class UserAdminPageUI extends JFrame{
                 dispose();
                 panelCreate.setVisible(true);
                 panelEdit.setVisible(false);
+                panelView.setVisible(false);
                 panelSuspend.setVisible(false);
                 break;
             case "Edit":
                 dispose();
                 panelEdit.setVisible(true);
-                panelCreate.setVisible(false);
+                panelView.setVisible(false);
                 panelSuspend.setVisible(false);
+                panelCreate.setVisible(false);
                 break;
             case "View":
+                panelView.setVisible(true);
+                panelSuspend.setVisible(false);
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(false);
                 break;
             case "Suspend":
                 dispose();
                 panelSuspend.setVisible(true);
                 panelCreate.setVisible(false);
                 panelEdit.setVisible(false);
+                panelView.setVisible(false);
                 break;
         } // end of switch statements
     };
@@ -180,7 +206,7 @@ public class UserAdminPageUI extends JFrame{
             String createPasswordText = fieldCreatePassword.getText();
             String createProfileText = Objects.requireNonNull(createProfileType.getSelectedItem()).toString();
             AddUserController addUserController = new AddUserController();
-            // validateCreateUserAccount() method located in AddUserController.java
+            // validateCreate() method located in AddUserController.java
             if ((createUsernameText.isEmpty()) || (createPasswordText.isEmpty())){
                 JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
             }
@@ -250,13 +276,9 @@ public class UserAdminPageUI extends JFrame{
             else{
                 editUserDetails(username, password, profile);
                 // After data has been edited and updated, recall the JFrame and display it again
-                // Problem: doesnt automatically show Edit Functions when JFrame is called again
-                dispose();
+                userAdminUIFrame.getContentPane().removeAll();
                 userAdminUIFrame.setVisible(false);
-                new UserAdminPageUI(usernameLoggedIn);
-                //displayEditPanel(usernameLoggedIn);
-                buttonEdit.doClick();
-                panelEdit.setVisible(true);
+                new UserAdminPageUI(usernameLoggedIn, "Edit");
             }
         });
 
@@ -337,14 +359,69 @@ public class UserAdminPageUI extends JFrame{
     } // end of the method updateUserDetails()
 
 
-    /* 3. VIEW function */
+    /* 3. VIEW function
+    * 3a) displaySearchPanel() - Display JPanel for User Admin to View accounts' details
+    * 3b) viewTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type, to display search results
+    * */
+    // 3a) Method for User Admin to VIEW a user account details
+    public void displaySearchPanel(){
+        // Border
+        titledBorder = new TitledBorder("View Users");
+        titledBorder.setBorder(new LineBorder(Color.BLACK));
+        titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+
+        // Text field
+        fieldSearchUser.setPreferredSize(new Dimension(50, 30));
+
+        // Search Button
+        buttonSearchUser.setPreferredSize(new Dimension(150, 30));
+        buttonSearchUser.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+        buttonSearchUser.setBorder(BorderFactory.createLineBorder(Color.RED,1));
+        buttonSearchUser.setBackground(Color.WHITE);
+        buttonSearchUser.addActionListener(e -> {
+            String usernameKeyedIn = fieldSearchUser.getText();
+            if (usernameKeyedIn.isEmpty()){
+                JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
+            }
+            else{
+                viewTableConstruction(usernameKeyedIn);
+            }
+        });
+
+        // Add components to the JPanel
+        panelView.setPreferredSize(new Dimension(500, 490));
+        panelView.setBackground(Color.WHITE);
+        panelView.setBorder(titledBorder);
+        panelView.add(fieldSearchUser);
+        panelView.add(buttonSearchUser);
+        panelView.setVisible(true);
+        userAdminUIFrame.add(panelView);
+    }
+
+    // Errror here: table appearing more than once
+    // 3b) viewTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type, to display search results
+    public void viewTableConstruction(String usernameKeyedIn){
+        ViewUserController viewUserController = new ViewUserController();
+        ArrayList<ArrayList<String>> arrayListOfSearchedResults = viewUserController.searchByUsername(usernameKeyedIn);
+        String [][] displaySearchResults = getUserAccountTable(arrayListOfSearchedResults); // Call method to "convert" ArrayLists inside a "big" Arraylist to a 2D array
+        // Display data in a table format
+        String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
+        tableViewUsers = new JTable(displaySearchResults, columnTableNames);
+        JScrollPane sp = new JScrollPane(tableViewUsers);
+        sp.setPreferredSize(new Dimension(485, 200)); // width then height
+        panelView.remove(sp);
+        panelView.add(sp);
+        panelView.revalidate();
+        panelView.repaint();
+    }
 
 
     /* 4. SUSPEND function
     * 4a) displaySuspendPanel() - Display JPanel for User Admin to suspend an account's details
-    * */
+    * 4b) suspendTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type
+    */
     // 4a) Method for the User Admin to SUSPEND a user account
-    public void displaySuspendPanel(){
+    public void displaySuspendPanel(String usernameLoggedIn){
         // Border
         titledBorder = new TitledBorder("Suspend a User");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -365,18 +442,16 @@ public class UserAdminPageUI extends JFrame{
                 // Get the selected username by getting the value of the
                 String selectedUsername = (String) tableSuspendUsers.getModel().getValueAt(getRow, 0);
                 String currentActiveStatus = (String) tableSuspendUsers.getModel().getValueAt(getRow, 3);
-                String newActiveStatus = "";
-                // Change active status to the opposite and update the database
-                switch (currentActiveStatus){
-                    case "Y":
-                        newActiveStatus = "N";
-                        break;
-                    case "N":
-                        newActiveStatus = "Y";
-                        break;
-                }
+                String newActiveStatus = switch (currentActiveStatus) {
+                    case "Y" -> "N";
+                    case "N" -> "Y";
+                    default -> "";
+                    // Change active status to the opposite and update the database
+                };
                 if (new SuspendUserController().suspendUser(selectedUsername, newActiveStatus)){
                     JOptionPane.showMessageDialog(null, "Account has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                    new UserAdminPageUI(usernameLoggedIn, "Suspend");
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Account suspension failed.", "Suspend User", JOptionPane.ERROR_MESSAGE);
