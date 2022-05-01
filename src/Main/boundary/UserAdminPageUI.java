@@ -19,6 +19,7 @@ public class UserAdminPageUI extends JFrame{
     /* Variable declaration */
     private final JFrame userAdminUIFrame = new JFrame("User Admin Homepage");
     private TitledBorder titledBorder;
+
     // Buttons
     private final JButton buttonLogout = new JButton("Logout");
     private final JButton buttonCreate = new JButton("Create");
@@ -105,8 +106,7 @@ public class UserAdminPageUI extends JFrame{
         }
     }
 
-    // end of actionPerformed
-    // Button Listener
+    // Top buttons Listener
     ActionListener topButtonsListener = e -> {
         JButton buttonPressed = (JButton)e.getSource();
         String action = buttonPressed.getText();

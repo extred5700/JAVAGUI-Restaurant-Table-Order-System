@@ -1,5 +1,6 @@
 package Main.boundary;
 
+import Main.boundary.StaffUI.*;
 import Main.controller.LoginController;
 
 import javax.swing.*;
@@ -126,8 +127,10 @@ public class StaffLoginPage extends JFrame{
                 new UserAdminPageUI(username); // Display Administrator UI
                 break;
             case "Restaurant Owner":
+                new OwnerPageUI(username);
                 break;
             case "Restaurant Manager":
+                new ManagerPageUI(username);
                 break;
             case "Restaurant Staff":
                 break;
