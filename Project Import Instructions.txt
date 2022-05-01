@@ -1,0 +1,18 @@
+Steps to do BEFORE pulling the new main branch
+
+1. Open intelliJ and close the current open project so you see the intro screen
+2. Now you can pull the new main branch
+
+Steps to do AFTER pulling the new main branch
+
+1. Open the Hopium folder with IntelliJ
+2. Wait awhile after IntelliJ opens the project
+3. There should be a prompt that appears at the bottom left asking to load maven script
+4. Click load maven script and let it download any plugins and dependencies (might take a long time)
+5. Once done, at the top of the right sidebar should have a maven option
+6. Click that and navigate to Hopium -> Lifecycle and double click the install option
+7. Let the install script run
+8. Once finished you should be done
+
+There should be 2 configurations in already added, HopiumRestaurant and StaffTest
+I set these configurations to save as project file so we can share it.
