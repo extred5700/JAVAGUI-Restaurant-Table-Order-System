@@ -51,6 +51,7 @@ public class Staff{
         return dbConnection;
     } // end of method dbConnection()
 
+    /* LOGIN FUNCTIONS FOR ALL ACTORS */
     // Validate user login profile
     public boolean checkUserExistence(String username, String password, String profile){
         boolean userExistence = false;
@@ -82,6 +83,8 @@ public class Staff{
         return userExistence;
     } // end of method checkUserExistence()
 
+    /* USER ADMIN SIDE
+    * Lines  86 - 171 */
     // Create new User Account
     public boolean createUserAccount(String username, String password, String profile){
         boolean isUserCreated = false;
@@ -152,6 +155,7 @@ public class Staff{
         return isUserEdited;
     }
 
+    // Suspend User Account
     public boolean suspendUserViaUsername(String selectedUsername, String newActiveStatus){
         boolean isUserSuspended = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -165,4 +169,12 @@ public class Staff{
         return isUserSuspended;
     }
 
+    /* RESTAURANT MANAGER SIDE
+     * Lines 174 - */
+    //
+    public String [] getReportUsingSelectedRadioButton(String radioButtonSelected){
+        String [] generatedReport = {"Dummy Value1", "Dummy Value2", "Dummy Value3"};
+        // Do SQL codes here
+        return generatedReport;
+    }
 }
