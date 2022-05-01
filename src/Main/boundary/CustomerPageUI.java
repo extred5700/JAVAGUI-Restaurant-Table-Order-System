@@ -3,13 +3,11 @@ package Main.boundary;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CustomerPageUI extends JFrame{
     /* Variable declaration */
-    private JFrame customerUIFrame = new JFrame("Customer Homepage");
-    private final JLabel labelTableNumber;// = new JLabel("Table Number " + tableNumber, JLabel.CENTER);
+    private final JFrame customerUIFrame = new JFrame("Customer Homepage");
     // Buttons
     private final JButton buttonMenu = new JButton("View Menu");
     private final JButton buttonEdit = new JButton("Edit Order");
@@ -25,7 +23,8 @@ public class CustomerPageUI extends JFrame{
         customerUIFrame.getContentPane().setBackground(Color.WHITE);
 
         // Display Table Number
-        labelTableNumber = new JLabel("Table Number " + tableNumber, JLabel.CENTER);
+        // = new JLabel("Table Number " + tableNumber, JLabel.CENTER);
+        JLabel labelTableNumber = new JLabel("Table Number " + tableNumber, JLabel.CENTER);
         labelTableNumber.setPreferredSize(new Dimension(500, 30));
         labelTableNumber.setBorder(new LineBorder(Color.BLACK));
         labelTableNumber.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
@@ -52,25 +51,23 @@ public class CustomerPageUI extends JFrame{
         }
     }
 
+    // end of actionPerformed
     // Button Listener
-    ActionListener topButtonsListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JButton buttonPressed = (JButton)e.getSource();
-            String action = buttonPressed.getText();
-            System.out.println(action);
-            switch(action){
-                case "View Menu":
-                    viewMenu();
-                    break;
-                case "Edit Order":
-                    break;
-                case "View Order":
-                    break;
-                case "Payment":
-                    break;
-            } // end of switch statements
-        } // end of actionPerformed
+    ActionListener topButtonsListener = e -> {
+        JButton buttonPressed = (JButton)e.getSource();
+        String action = buttonPressed.getText();
+        System.out.println(action);
+        switch(action){
+            case "View Menu":
+                viewMenu();
+                break;
+            case "Edit Order":
+                break;
+            case "View Order":
+                break;
+            case "Payment":
+                break;
+        } // end of switch statements
     };
 
     // View Menu
