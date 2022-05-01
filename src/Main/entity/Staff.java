@@ -152,4 +152,17 @@ public class Staff{
         return isUserEdited;
     }
 
+    public boolean suspendUserViaUsername(String selectedUsername, String newActiveStatus){
+        boolean isUserSuspended = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "UPDATE user SET active ='" + newActiveStatus + "' WHERE username='" + selectedUsername + "'";
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query);
+            isUserSuspended = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return isUserSuspended;
+    }
+
 }
