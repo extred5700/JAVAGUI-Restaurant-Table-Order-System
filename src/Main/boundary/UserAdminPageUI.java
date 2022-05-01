@@ -2,6 +2,7 @@ package Main.boundary;
 
 import Main.controller.AddUserController;
 import Main.controller.EditUserController;
+import Main.controller.SuspendUserController;
 import Main.controller.ViewUserController;
 
 import javax.swing.*;
@@ -25,7 +26,7 @@ public class UserAdminPageUI extends JFrame{
     private final JButton buttonView = new JButton("View");
     private final JButton buttonSuspend = new JButton("Suspend");
 
-    // Create Panel
+    // Create JPanel
     private final JPanel panelCreate = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     private final JLabel labelCreateUsername = new JLabel("Username: ");
     private final JTextField fieldCreateUsername = new JTextField(20);
@@ -37,7 +38,7 @@ public class UserAdminPageUI extends JFrame{
     /* JTable to display User Account Profiles */
     private JTable tableUsers;
 
-    // Edit Panel
+    // Edit JPanel
     private final JPanel panelEdit = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     private final JLabel labelEditUsername = new JLabel("Username: ");
     private final JTextField fieldEditUsername = new JTextField(20);
@@ -46,6 +47,10 @@ public class UserAdminPageUI extends JFrame{
     private final JLabel labelEditProfile = new JLabel("User Profile: ");
     private final JTextField fieldEditProfile = new JTextField(20);
     private final JButton buttonEditChanges = new JButton("Edit Changes");
+
+    // Suspend JPanel
+    private final JPanel panelSuspend = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+    private final JButton buttonSuspendChanges = new JButton("Suspend Account");
 
 
     public UserAdminPageUI(String usernameLoggedIn){
@@ -74,6 +79,12 @@ public class UserAdminPageUI extends JFrame{
         // EDIT function
         displayEditPanel(usernameLoggedIn);
         panelEdit.setVisible(false);
+
+
+
+        // SUSPEND function
+        displaySuspendPanel();
+        panelSuspend.setVisible(false);
 
 
 
@@ -118,11 +129,15 @@ public class UserAdminPageUI extends JFrame{
             case "View":
                 break;
             case "Suspend":
+                dispose();
+                panelSuspend.setVisible(true);
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(false);
                 break;
         } // end of switch statements
     };
 
-    // Method for User Admin to create a new user account for a new employee
+    // Method for User Admin to CREATE a new user account for a new employee
     public void displayCreatePanel(){
         // Border
         titledBorder = new TitledBorder("Add New User");
@@ -211,6 +226,7 @@ public class UserAdminPageUI extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 int getRow = tableUsers.getSelectedRow();
+                // Edit
                 fieldEditUsername.setText(tableUsers.getModel().getValueAt(getRow, 0).toString());
                 fieldEditPassword.setText(tableUsers.getModel().getValueAt(getRow, 1).toString());
                 fieldEditProfile.setText(tableUsers.getModel().getValueAt(getRow, 2).toString());
@@ -219,7 +235,7 @@ public class UserAdminPageUI extends JFrame{
         return sp;
     }
 
-    // Method for User Admin to display all User Profiles in a table format
+    // Method for User Admin to EDIT a user account details
     public void displayEditPanel(String usernameLoggedIn){
         // Border
         titledBorder = new TitledBorder("Edit User Accounts");
@@ -280,7 +296,7 @@ public class UserAdminPageUI extends JFrame{
         userAdminUIFrame.add(panelEdit);
     } // end of the method displayUsersInTable()
 
-    // Method to allow the user to confirm their changes before update
+    // Method to pass data to the controller before updating the DB
     public void editUserDetails(String newUsername, String newPassword, String newProfile){
 
         EditUserController editUserController = new EditUserController();
@@ -299,6 +315,60 @@ public class UserAdminPageUI extends JFrame{
         }
     } // end of the method updateUserDetails()
 
+    /* VIEW JPANEL METHODS */
 
+    // Method for the User Admin to SUSPEND a user account
+    public void displaySuspendPanel(){
+        // Border
+        titledBorder = new TitledBorder("Suspend a User");
+        titledBorder.setBorder(new LineBorder(Color.BLACK));
+        titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+
+        // Table Construction called in method, converted to a JScrollPane
+        JScrollPane scrollPane = (JScrollPane) tableConstruction();
+
+        // Suspend Button
+        buttonSuspendChanges.setPreferredSize(new Dimension(150, 30));
+        buttonSuspendChanges.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+        buttonSuspendChanges.setBorder(BorderFactory.createLineBorder(Color.RED,1));
+        buttonSuspendChanges.setBackground(Color.WHITE);
+        buttonSuspendChanges.addActionListener(e -> {
+            int getRow = tableUsers.getSelectedRow();
+            // Ensure the User has selected a row from the table displaying all the user accounts
+            if (getRow != -1){
+                // Get the selected username by getting the value of the
+                String selectedUsername = (String) tableUsers.getModel().getValueAt(getRow, 0);
+                String currentActiveStatus = (String) tableUsers.getModel().getValueAt(getRow, 3);
+                String newActiveStatus = "";
+                // Change active status to the opposite and update the database
+                switch (currentActiveStatus){
+                    case "Y":
+                        newActiveStatus = "N";
+                        break;
+                    case "N":
+                        newActiveStatus = "Y";
+                        break;
+                }
+                if (new SuspendUserController().suspendUser(selectedUsername, newActiveStatus)){
+                    JOptionPane.showMessageDialog(null, "Account has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Account suspension failed.", "Suspend User", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Please select a user account to suspend from the table.", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        // Add components to the JPanel
+        panelSuspend.setPreferredSize(new Dimension(500, 490));
+        panelSuspend.setBackground(Color.WHITE);
+        panelSuspend.add(scrollPane);
+        panelSuspend.add(buttonSuspendChanges);
+        panelSuspend.setBorder(titledBorder);
+        panelSuspend.setVisible(true);
+        userAdminUIFrame.add(panelSuspend);
+    }
 
 }
