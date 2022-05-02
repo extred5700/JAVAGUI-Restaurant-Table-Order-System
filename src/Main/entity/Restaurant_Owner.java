@@ -1,6 +1,6 @@
 package Main.entity;
 
-import java.sql.Connection;
+import java.sql.*;
 
 public class Restaurant_Owner extends Staff {
     // Variable Declaration
@@ -16,23 +16,71 @@ public class Restaurant_Owner extends Staff {
     }
 
     // Function to generate daily average spending per visit #37
-    public void dailySpending() {
+    public String dailySpending() {
+        float x = 0;
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("select AVG(total_price) from transaction_history WHERE date = current_date()");
+
+
+            while (rs.next()) {
+                x = rs.getFloat("AVG(total_price)");
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return Float.toString(x);
     }
 
     // Function to generate weekly average spending per visit #38
-    public void weeklySpending() {
+    public String weeklySpending() {
+        float x = 0;
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("select AVG(total_price) from transaction_history  WHERE date >= current_date() - interval 1 week");
 
+
+            while (rs.next()) {
+                x = rs.getFloat("AVG(total_price)");
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return Float.toString(x);
     }
 
     // Function to generate monthly average spending per visit #39
-    public void monthlySpending() {
+    public String monthlySpending() {
+        float x = 0;
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("select AVG(total_price) from transaction_history  WHERE date >= current_date() - interval 1 month");
 
+
+            while (rs.next()) {
+                x = rs.getFloat("AVG(total_price)");
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return Float.toString(x);
     }
 
     // Additional function to return an array of selected data by the user
     public String [] getReport(String radioButtonSelected){
-        String [] generatedReport = {"Dummy1", "Dummy2", "Dummy3"};
-        //String [] generatedReport = new String[3];
+        String [] generatedReport = new String[3];
         Connection dbConnection = dbConnection();
         switch(radioButtonSelected){
             case "Average Spend":
@@ -43,6 +91,9 @@ public class Restaurant_Owner extends Staff {
                 * Change the return type of the functions above from void to int
                 * Store the values in generatedReport, remember to use .toString()
                 */
+                generatedReport[0] = dailySpending();
+                generatedReport[1] = weeklySpending();
+                generatedReport[2] = monthlySpending();
                 break;
             case "Frequency of Visits":
                 break;
