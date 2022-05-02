@@ -56,7 +56,7 @@ public class UserAdminPageUI extends JFrame{
     /* 4. SUSPEND Function */
     private JTable tableSuspendUsers;
     private final JPanel panelSuspend = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
-    private final JButton buttonSuspendChanges = new JButton("Suspend Account");
+    private final JButton buttonSuspendChanges = new JButton("Suspend/Un-suspend Account");
 
 
     public UserAdminPageUI(String usernameLoggedIn, String setDisplayPage){
@@ -431,7 +431,7 @@ public class UserAdminPageUI extends JFrame{
         JScrollPane scrollPane3 = (JScrollPane) suspendTableConstruction();
 
         // Suspend Button
-        buttonSuspendChanges.setPreferredSize(new Dimension(150, 30));
+        buttonSuspendChanges.setPreferredSize(new Dimension(250, 30));
         buttonSuspendChanges.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonSuspendChanges.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonSuspendChanges.setBackground(Color.WHITE);
@@ -449,9 +449,18 @@ public class UserAdminPageUI extends JFrame{
                     // Change active status to the opposite and update the database
                 };
                 if (new SuspendUserController().suspendUser(selectedUsername, newActiveStatus)){
-                    JOptionPane.showMessageDialog(null, "Account has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
-                    new UserAdminPageUI(usernameLoggedIn, "Suspend");
+                    if (newActiveStatus == "N"){
+                        JOptionPane.showMessageDialog(null, "Account has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                        new UserAdminPageUI(usernameLoggedIn, "Suspend");
+                    }
+                    else if (newActiveStatus == "Y")
+                    {
+                        JOptionPane.showMessageDialog(null, "Account has been successfully un-suspended!", "Un-suspend User", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                        new UserAdminPageUI(usernameLoggedIn, "Suspend");
+                    }
+
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Account suspension failed.", "Suspend User", JOptionPane.ERROR_MESSAGE);
