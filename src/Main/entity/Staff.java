@@ -83,4 +83,63 @@ public class Staff{
     } // end of method checkUserExistence()
 
 
+    // DELETE LATER
+    public String [] getReportUsingSelectedRadioButton(String radioButtonSelected){
+        String [] generatedReport = new String[3];
+        Connection dbConnection = dbConnection();
+        //obtain daily value
+        try{
+            float x = 0;
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("select AVG(total_price) from transaction_history WHERE date = current_date()");
+
+
+            while (rs.next()) {
+                x = rs.getFloat("AVG(total_price)");
+                generatedReport[0] = Float.toString(x);
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        //obtain weekly value
+        try{
+            //obtain daily value
+            float x = 0;
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("select AVG(total_price) from transaction_history  WHERE date >= current_date() - interval 1 week;");
+
+
+            while (rs.next()) {
+                x = rs.getFloat("AVG(total_price)");
+                generatedReport[1] = Float.toString(x);
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        //obtain monthly values
+        try{
+            //obtain daily value
+            float x = 0;
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("select AVG(total_price) from transaction_history  WHERE date >= current_date() - interval 1 month;");
+
+
+            while (rs.next()) {
+                x = rs.getFloat("AVG(total_price)");
+                generatedReport[2] = Float.toString(x);
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return generatedReport;
+    }
 }
