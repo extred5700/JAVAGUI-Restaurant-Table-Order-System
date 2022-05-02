@@ -89,7 +89,6 @@ public class OwnerPageUI extends JFrame {
                 }
                 else{
                     String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
-                    System.out.println(radioButtonSelected);
                     GenerateReportController generateReportController = new GenerateReportController();
                     String [] generatedReport = generateReportController.getReport(radioButtonSelected);
                     displayGeneratedResults(generatedReport);
