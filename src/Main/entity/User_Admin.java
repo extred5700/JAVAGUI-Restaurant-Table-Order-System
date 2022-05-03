@@ -112,32 +112,49 @@ public class User_Admin extends Staff {
 
         switch (searchStatus){
             case "search_by_username":
-                // do codes here
+                try{
+                    Statement statement = dbConnection.createStatement();
+                    //SQL query stuff
+                    ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE username LIKE '%" + usernameKeyedIn + "%'");
+
+                    while (rs.next()) { //This is the result set
+                        String username = rs.getString("username");
+                        String password = rs.getString("password");
+                        String user_profile = rs.getString("user_profile");
+                        String active = rs.getString("active");
+                        arrayListSearchedUsernames.add(username);
+                        arrayListSearchedPasswords.add(password);
+                        arrayListSearchedProfiles.add(user_profile);
+                        arrayListSearchedActive.add(active);
+                    }
+                } catch (Exception e){
+                    // Catches any SQL query issues
+                    e.printStackTrace();
+                }
                 break;
             case "search_by_profile":
-                // do codes here
+                try{
+                    Statement statement = dbConnection.createStatement();
+                    //SQL query stuff
+                    ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE user_profile LIKE '%" + usernameKeyedIn + "%'");
+
+                    while (rs.next()) { //This is the result set
+                        String username = rs.getString("username");
+                        String password = rs.getString("password");
+                        String user_profile = rs.getString("user_profile");
+                        String active = rs.getString("active");
+                        arrayListSearchedUsernames.add(username);
+                        arrayListSearchedPasswords.add(password);
+                        arrayListSearchedProfiles.add(user_profile);
+                        arrayListSearchedActive.add(active);
+                    }
+                } catch (Exception e){
+                    // Catches any SQL query issues
+                    e.printStackTrace();
+                }
                 break;
         }
 
-        try{
-            Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE username LIKE '%" + usernameKeyedIn + "%'");
-
-            while (rs.next()) { //This is the result set
-                String username = rs.getString("username");
-                String password = rs.getString("password");
-                String user_profile = rs.getString("user_profile");
-                String active = rs.getString("active");
-                arrayListSearchedUsernames.add(username);
-                arrayListSearchedPasswords.add(password);
-                arrayListSearchedProfiles.add(user_profile);
-                arrayListSearchedActive.add(active);
-            }
-        } catch (Exception e){
-            // Catches any SQL query issues
-            e.printStackTrace();
-        }
         // Add ALL array list into 1 array list
         listSearchedAccountData.add(arrayListSearchedUsernames);
         listSearchedAccountData.add(arrayListSearchedPasswords);
@@ -156,7 +173,6 @@ public class User_Admin extends Staff {
             arrayAllSearchedData[i][2] = arrayProfile[i];
             arrayAllSearchedData[i][3] = arrayActive[i];
         }
-
         return arrayAllSearchedData;
     }
 
