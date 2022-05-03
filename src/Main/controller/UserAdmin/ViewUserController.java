@@ -10,11 +10,11 @@ public class ViewUserController {
     * 1. editTableConstruction() - 2b method in UserAdminPageUI.java
     * 2. suspendTableConstruction() - 4b method in UserAdminPageUI.java
     */
-    public ArrayList<ArrayList<String>> getUserInfo(){
+    public String[][] getUserInfo(){
         return userAdmin.getUserInfoFromDB();
     }
 
-    public ArrayList<ArrayList<String>> searchByUsername(String usernameKeyedIn){
-        return userAdmin.searchAccount(usernameKeyedIn);
+    public String [][] searchByUsername(String usernameKeyedIn, String searchStatus){
+        return userAdmin.searchAccount(usernameKeyedIn, searchStatus);
     }
 }
