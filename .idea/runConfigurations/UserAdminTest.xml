@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="UserAdminTest" type="JUnit" factoryName="JUnit">
+    <module name="Hopium" />
+    <option name="PACKAGE_NAME" value="Main.entity" />
+    <option name="MAIN_CLASS_NAME" value="Main.entity.UserAdminTest" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
