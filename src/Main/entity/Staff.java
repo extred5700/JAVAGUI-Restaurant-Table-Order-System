@@ -1,7 +1,6 @@
 package Main.entity;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class Staff{
     // Variable Declaration
@@ -52,7 +51,7 @@ public class Staff{
     } // end of method dbConnection()
 
     // Validate user login profile
-    public boolean checkUserExistence(String username, String password, String profile){
+    public boolean login(String username, String password, String profile){
         boolean userExistence = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         try{
@@ -80,5 +79,5 @@ public class Staff{
             System.out.println(e);
         }
         return userExistence;
-    } // end of method checkUserExistence()
+    } // end of method login()
 }

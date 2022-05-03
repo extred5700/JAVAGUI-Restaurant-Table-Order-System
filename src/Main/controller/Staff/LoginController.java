@@ -6,7 +6,7 @@ public class LoginController {
     private static Staff staff = new Staff();
     // Controller will check if Staff profile is in the system/DB
     public boolean validateLogin(String staffUsername, String password, String profile){
-        return staff.checkUserExistence(staffUsername, password, profile);
+        return staff.login(staffUsername, password, profile);
     }
     public static Staff getStaff() {	//	to get Staff
         return staff;

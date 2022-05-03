@@ -189,4 +189,34 @@ public class User_Admin extends Staff {
     public void suspendProfile(String userID, String profile) {
 
     }
+
+    public boolean checkUserExistence(String username, String password, String profile){
+        boolean userExistence = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        try{
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM user WHERE username ='"
+                            +username+
+                            "' AND password = '"
+                            +password+
+                            "' AND user_profile = '"
+                            +profile+
+                            "'");
+            if (!rs.next()){
+                //This means no account found
+                System.out.println("No account found.");
+            }
+            else{
+                //This means account found
+                System.out.println("Account is valid.");
+                userExistence = true;
+            }
+        }catch (SQLException e){
+            // Catches any SQL query issues
+            System.out.println(e);
+        }
+        return userExistence;
+    } // end of method checkUserExistence()
 }

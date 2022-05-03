@@ -39,7 +39,7 @@ class UserAdminTest {
     @DisplayName("User_Admin_4")
     void searchAccountTest() {
         // Test if user can be searched from database
-        assertNotNull(userAdminTest.searchAccount("testUser2"));
+        assertNotNull(userAdminTest.searchAccount("testUser2", "search_by_user"));
     }
 
     @Test

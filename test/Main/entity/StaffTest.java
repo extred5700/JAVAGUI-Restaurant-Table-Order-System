@@ -18,7 +18,7 @@ class StaffTest {
     @DisplayName("Staff_1")
     // Test checkUserExistence() with valid User Admin credentials
     void testValidUserAdmin() {
-        assertTrue(staffTest.checkUserExistence("user_admin1", "user_admin1", "User Admin"));
+        assertTrue(staffTest.login("user_admin1", "user_admin1", "User Admin"));
     }
 
     @Test
@@ -26,7 +26,7 @@ class StaffTest {
     @DisplayName("Staff_2")
     // Test checkUserExistence() with invalid User Admin credentials
     void testInvalidUserAdmin() {
-        assertFalse(staffTest.checkUserExistence("user_admin0", "user_admin0", "User Admin"));
+        assertFalse(staffTest.login("user_admin0", "user_admin0", "User Admin"));
     }
 
     @Test
@@ -34,7 +34,7 @@ class StaffTest {
     @DisplayName("Staff_3")
     // Test checkUserExistence() with valid User Admin credentials but wrong profile
     void testValidUAInvalidProfile() {
-        assertFalse(staffTest.checkUserExistence("user_admin1", "user_admin1", "Restaurant Manager"));
+        assertFalse(staffTest.login("user_admin1", "user_admin1", "Restaurant Manager"));
     }
 
     @Test
@@ -42,7 +42,7 @@ class StaffTest {
     @DisplayName("Staff_4")
         // Test checkUserExistence() with valid Restaurant Manager credentials
     void testValidRestMngr() {
-        assertTrue(staffTest.checkUserExistence("manager1", "manager1", "Restaurant Manager"));
+        assertTrue(staffTest.login("manager1", "manager1", "Restaurant Manager"));
     }
 
     @Test
@@ -50,7 +50,7 @@ class StaffTest {
     @DisplayName("Staff_5")
         // Test checkUserExistence() with invalid Restaurant Manager credentials
     void testInvalidRestMngr() {
-        assertFalse(staffTest.checkUserExistence("manager0", "manager0", "Restaurant Manager"));
+        assertFalse(staffTest.login("manager0", "manager0", "Restaurant Manager"));
     }
 
     @Test
@@ -58,7 +58,7 @@ class StaffTest {
     @DisplayName("Staff_6")
         // Test checkUserExistence() with valid Restaurant Manager credentials but wrong profile
     void testValidRMInvalidProfile() {
-        assertFalse(staffTest.checkUserExistence("manager1", "manager1", "User Admin"));
+        assertFalse(staffTest.login("manager1", "manager1", "User Admin"));
     }
 
     @Test
@@ -66,7 +66,7 @@ class StaffTest {
     @DisplayName("Staff_7")
         // Test checkUserExistence() with valid Restaurant Staff credentials
     void testValidRestStaff() {
-        assertTrue(staffTest.checkUserExistence("user1", "user1", "Restaurant Staff"));
+        assertTrue(staffTest.login("user1", "user1", "Restaurant Staff"));
     }
 
     @Test
@@ -74,7 +74,7 @@ class StaffTest {
     @DisplayName("Staff_8")
         // Test checkUserExistence() with invalid Restaurant Staff credentials
     void testInvalidRestStaff() {
-        assertFalse(staffTest.checkUserExistence("user0", "user0", "Restaurant Staff"));
+        assertFalse(staffTest.login("user0", "user0", "Restaurant Staff"));
     }
 
     @Test
@@ -82,7 +82,7 @@ class StaffTest {
     @DisplayName("Staff_9")
         // Test checkUserExistence() with valid Restaurant Staff credentials but wrong profile
     void testValidRSInvalidProfile() {
-        assertFalse(staffTest.checkUserExistence("user1", "user1", "User Admin"));
+        assertFalse(staffTest.login("user1", "user1", "User Admin"));
     }
 
     @Test
@@ -90,7 +90,7 @@ class StaffTest {
     @DisplayName("Staff_10")
         // Test checkUserExistence() with valid Restaurant Owner credentials
     void testValidRestOwner() {
-        assertTrue(staffTest.checkUserExistence("owner1", "owner1", "Restaurant Owner"));
+        assertTrue(staffTest.login("owner1", "owner1", "Restaurant Owner"));
     }
 
     @Test
@@ -98,7 +98,7 @@ class StaffTest {
     @DisplayName("Staff_11")
         // Test checkUserExistence() with invalid Restaurant Owner credentials
     void testInvalidRestOwner() {
-        assertFalse(staffTest.checkUserExistence("owner0", "owner0", "Restaurant Owner"));
+        assertFalse(staffTest.login("owner0", "owner0", "Restaurant Owner"));
     }
 
     @Test
@@ -106,7 +106,7 @@ class StaffTest {
     @DisplayName("Staff_12")
         // Test checkUserExistence() with valid Restaurant Owner credentials but wrong profile
     void testValidROInvalidProfile() {
-        assertFalse(staffTest.checkUserExistence("owner1", "owner1", "User Admin"));
+        assertFalse(staffTest.login("owner1", "owner1", "User Admin"));
     }
 
     @Test
