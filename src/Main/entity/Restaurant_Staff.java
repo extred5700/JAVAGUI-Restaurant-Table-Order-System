@@ -40,8 +40,7 @@ public class Restaurant_Staff extends Staff {
     }
 
     // Function to View customer orders #25
-    public ArrayList<ArrayList<String>> viewOrders() {
-        ArrayList<ArrayList<String>> combinedOrder = new ArrayList<>();
+    public String [][] viewOrders() {
         ArrayList<String> arrayListOrderID = new ArrayList<>();
         ArrayList<String> arrayListFoodName = new ArrayList<>();
         ArrayList<String> arrayListQuantity = new ArrayList<>();
@@ -49,31 +48,32 @@ public class Restaurant_Staff extends Staff {
         ArrayList<String> arrayListFulfill = new ArrayList<>();
 
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "SELECT order_id, name, qty, price, fufilled FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id;";
+        String query = "SELECT order_id, name, qty, price, fulfilled FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id;";
         try (Statement statement = dbConnection.createStatement()){
             ResultSet set = statement.executeQuery(query);
             while (set.next()){
-                // Add data to their respective category, then... (line 134)
-                String order_id = set.getString("order_id");
-                String food_name = set.getString("name");
-                String quantity = set.getString("qty");
-                String price = set.getString("price");
-                String fulfillStatus = set.getString("fufilled");
-                arrayListOrderID.add(order_id);
-                arrayListFoodName.add(food_name);
-                arrayListQuantity.add(quantity);
-                arrayListPrice.add(price);
-                arrayListFulfill.add(fulfillStatus);
+                // Add data to their respective respective array list
+                arrayListOrderID.add(set.getString("order_id"));
+                arrayListFoodName.add(set.getString("name"));
+                arrayListQuantity.add(set.getString("qty"));
+                arrayListPrice.add(set.getString("price"));
+                arrayListFulfill.add(set.getString("fulfilled"));
             }
         } catch(SQLException e){
             System.out.println(e);
         }
-        combinedOrder.add(arrayListOrderID);
-        combinedOrder.add(arrayListFoodName);
-        combinedOrder.add(arrayListQuantity);
-        combinedOrder.add(arrayListPrice);
-        combinedOrder.add(arrayListFulfill);
-        return combinedOrder;
+        // Convert Array List to a 2D array
+        String [][] arrayAllOrderData = new String[arrayListOrderID.size()][5];
+        for (int row = 0; row < arrayAllOrderData.length; row++){
+            for (int column = 0; column < arrayAllOrderData[row].length; column++){
+                arrayAllOrderData[row][0] = arrayListOrderID.get(row);
+                arrayAllOrderData[row][1] = arrayListFoodName.get(row);
+                arrayAllOrderData[row][2] = arrayListQuantity.get(row);
+                arrayAllOrderData[row][3] = arrayListPrice.get(row);
+                arrayAllOrderData[row][4] = arrayListFulfill.get(row);
+            }
+        }
+        return arrayAllOrderData;
     }
 
     // Function to Delete customer orders #26

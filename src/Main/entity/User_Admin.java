@@ -56,7 +56,6 @@ public class User_Admin extends Staff {
     // Method to get an arraylist of user account information
     // Array list contains 4 array list: arrayListUsernames, arrayListPasswords, arrayListProfiles, arrayListActive
     public String [][] getUserInfoFromDB(){
-        ArrayList<ArrayList<String>> arrayListAllAccountData = new ArrayList<>();
         ArrayList<String> arrayListUsernames = new ArrayList<>();
         ArrayList<String> arrayListPasswords = new ArrayList<>();
         ArrayList<String> arrayListProfiles = new ArrayList<>();
@@ -67,43 +66,30 @@ public class User_Admin extends Staff {
         try (Statement statement = dbConnection.createStatement()){
             ResultSet set = statement.executeQuery(query);
             while (set.next()){
-                // Add data to their respective category, then... (line 134)
-                String username = set.getString("username");
-                String password = set.getString("password");
-                String user_profile = set.getString("user_profile");
-                String active = set.getString("active");
-                arrayListUsernames.add(username);
-                arrayListPasswords.add(password);
-                arrayListProfiles.add(user_profile);
-                arrayListActive.add(active);
+                // Add data to their respective array list
+                arrayListUsernames.add(set.getString("username"));
+                arrayListPasswords.add(set.getString("password"));
+                arrayListProfiles.add(set.getString("user_profile"));
+                arrayListActive.add(set.getString("active"));
             }
         } catch(SQLException e){
             System.out.println(e);
         }
-        // Add ALL array list into 1 array list
-        arrayListAllAccountData.add(arrayListUsernames);
-        arrayListAllAccountData.add(arrayListPasswords);
-        arrayListAllAccountData.add(arrayListProfiles);
-        arrayListAllAccountData.add(arrayListActive);
-
-        // Convert array list to an array
-        String [] arrayUsername = arrayListAllAccountData.get(0).toArray(new String[0]);
-        String [] arrayPassword = arrayListAllAccountData.get(1).toArray(new String[0]);
-        String [] arrayProfile = arrayListAllAccountData.get(2).toArray(new String[0]);
-        String [] arrayActive = arrayListAllAccountData.get(3).toArray(new String[0]);
-        String [][] arrayAllAccountDetails = new String[arrayUsername.length][arrayListAllAccountData.size()];
-        for (int i = 0; i < arrayUsername.length; i++){
-            arrayAllAccountDetails[i][0] = arrayUsername[i];
-            arrayAllAccountDetails[i][1] = arrayPassword[i];
-            arrayAllAccountDetails[i][2] = arrayProfile[i];
-            arrayAllAccountDetails[i][3] = arrayActive[i];
+        // Convert Array List to a 2D array
+        String [][] arrayAllAccountDetails = new String[arrayListUsernames.size()][4];
+        for (int row = 0; row < arrayAllAccountDetails.length; row++){
+            for (int column = 0; column < arrayAllAccountDetails[row].length; column++){
+                arrayAllAccountDetails[row][0] = arrayListUsernames.get(row);
+                arrayAllAccountDetails[row][1] = arrayListPasswords.get(row);
+                arrayAllAccountDetails[row][2] = arrayListProfiles.get(row);
+                arrayAllAccountDetails[row][3] = arrayListActive.get(row);
+            }
         }
         return arrayAllAccountDetails;
     }
 
     // Function to Search for user accounts #5
     public String [][] searchAccount(String usernameKeyedIn, String searchStatus) {
-        ArrayList<ArrayList<String>> listSearchedAccountData = new ArrayList<>();
         ArrayList<String> arrayListSearchedUsernames = new ArrayList<>();
         ArrayList<String> arrayListSearchedPasswords = new ArrayList<>();
         ArrayList<String> arrayListSearchedProfiles = new ArrayList<>();
@@ -118,14 +104,11 @@ public class User_Admin extends Staff {
                     ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE username LIKE '%" + usernameKeyedIn + "%'");
 
                     while (rs.next()) { //This is the result set
-                        String username = rs.getString("username");
-                        String password = rs.getString("password");
-                        String user_profile = rs.getString("user_profile");
-                        String active = rs.getString("active");
-                        arrayListSearchedUsernames.add(username);
-                        arrayListSearchedPasswords.add(password);
-                        arrayListSearchedProfiles.add(user_profile);
-                        arrayListSearchedActive.add(active);
+                        // Add data to their respective array list
+                        arrayListSearchedUsernames.add(rs.getString("username"));
+                        arrayListSearchedPasswords.add(rs.getString("password"));
+                        arrayListSearchedProfiles.add(rs.getString("user_profile"));
+                        arrayListSearchedActive.add(rs.getString("active"));
                     }
                 } catch (Exception e){
                     // Catches any SQL query issues
@@ -139,14 +122,11 @@ public class User_Admin extends Staff {
                     ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE user_profile LIKE '%" + usernameKeyedIn + "%'");
 
                     while (rs.next()) { //This is the result set
-                        String username = rs.getString("username");
-                        String password = rs.getString("password");
-                        String user_profile = rs.getString("user_profile");
-                        String active = rs.getString("active");
-                        arrayListSearchedUsernames.add(username);
-                        arrayListSearchedPasswords.add(password);
-                        arrayListSearchedProfiles.add(user_profile);
-                        arrayListSearchedActive.add(active);
+                        // Add data to their respective array list
+                        arrayListSearchedUsernames.add(rs.getString("username"));
+                        arrayListSearchedPasswords.add(rs.getString("password"));
+                        arrayListSearchedProfiles.add(rs.getString("user_profile"));
+                        arrayListSearchedActive.add(rs.getString("active"));
                     }
                 } catch (Exception e){
                     // Catches any SQL query issues
@@ -154,24 +134,15 @@ public class User_Admin extends Staff {
                 }
                 break;
         }
-
-        // Add ALL array list into 1 array list
-        listSearchedAccountData.add(arrayListSearchedUsernames);
-        listSearchedAccountData.add(arrayListSearchedPasswords);
-        listSearchedAccountData.add(arrayListSearchedProfiles);
-        listSearchedAccountData.add(arrayListSearchedActive);
-
-        // Convert array list to an array
-        String [] arrayUsername = listSearchedAccountData.get(0).toArray(new String[0]);
-        String [] arrayPassword = listSearchedAccountData.get(1).toArray(new String[0]);
-        String [] arrayProfile = listSearchedAccountData.get(2).toArray(new String[0]);
-        String [] arrayActive = listSearchedAccountData.get(3).toArray(new String[0]);
-        String [][] arrayAllSearchedData = new String[arrayUsername.length][listSearchedAccountData.size()];
-        for (int i = 0; i < arrayUsername.length; i++){
-            arrayAllSearchedData[i][0] = arrayUsername[i];
-            arrayAllSearchedData[i][1] = arrayPassword[i];
-            arrayAllSearchedData[i][2] = arrayProfile[i];
-            arrayAllSearchedData[i][3] = arrayActive[i];
+        // Convert Array List to a 2D array
+        String [][] arrayAllSearchedData = new String[arrayListSearchedUsernames.size()][4];
+        for (int row = 0; row < arrayAllSearchedData.length; row++){
+            for (int column = 0; column < arrayAllSearchedData[row].length; column++){
+                arrayAllSearchedData[row][0] = arrayListSearchedUsernames.get(row);
+                arrayAllSearchedData[row][1] = arrayListSearchedPasswords.get(row);
+                arrayAllSearchedData[row][2] = arrayListSearchedProfiles.get(row);
+                arrayAllSearchedData[row][3] = arrayListSearchedActive.get(row);
+            }
         }
         return arrayAllSearchedData;
     }
