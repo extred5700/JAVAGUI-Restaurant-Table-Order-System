@@ -12,19 +12,8 @@ import java.awt.event.ActionListener;
 public class OwnerPageUI extends JFrame {
     /* Variable declaration */
     private final JFrame ownerUIFrame = new JFrame("Restaurant Owner Homepage");
-    private TitledBorder titledBorder;
 
-    // Buttons
-    private final JButton buttonLogout = new JButton("Logout");
     private final JButton buttonGenerateData = new JButton("Generate Data");
-
-    /* Text Fields */
-    private final JLabel labelDaily = new JLabel("Daily", SwingConstants.CENTER);
-    private final JLabel labelWeekly = new JLabel("Weekly", SwingConstants.CENTER);
-    private final JLabel labelMonthly = new JLabel("Monthly", SwingConstants.CENTER);
-    private final JTextField fieldDaily = new JTextField(10);
-    private final JTextField fieldWeekly = new JTextField(10);
-    private final JTextField fieldMonthly = new JTextField(10);
 
     // Radio buttons
     private final JRadioButton radioAvgSpend = new JRadioButton("Average Spend Per Visit");
@@ -52,12 +41,13 @@ public class OwnerPageUI extends JFrame {
         ownerUIFrame.add(labelTopHeader);
 
         // Add buttons & functions
+        JButton buttonLogout = new JButton("Logout");
         JButton [] buttons = {buttonLogout, buttonGenerateData};
         constructButtons(buttons);
         ownerUIFrame.add(buttonLogout);
 
         // Display respective labels, fields and buttons
-        displayGenerateDataFields();
+        displayGenerateDataPanel();
 
         ownerUIFrame.setVisible(true);
     }
@@ -89,9 +79,8 @@ public class OwnerPageUI extends JFrame {
                 }
                 else{
                     String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
-                    GenerateReportController generateReportController = new GenerateReportController();
-                    String [] generatedReport = generateReportController.getReport(radioButtonSelected);
-                    displayGeneratedResults(generatedReport);
+                    // Table
+                    refreshEditTable(radioButtonSelected);
                 }
 
                 break;
@@ -99,18 +88,16 @@ public class OwnerPageUI extends JFrame {
     };
 
     // Method for Restaurant Owner to display the data generation functions
-    public void displayGenerateDataFields(){
+    public void displayGenerateDataPanel(){
         // Border
-        titledBorder = new TitledBorder("Generate Data");
+        TitledBorder titledBorder = new TitledBorder("Generate Data");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
-        // Display Average Spend
-        JLabel [] labels = {labelDaily, labelWeekly, labelMonthly};
-        JTextField [] textFields = {fieldDaily, fieldWeekly, fieldMonthly};
+        // Radio Buttons
         JRadioButton [] radioButtons = {radioAvgSpend, radioFreqVisit, radioFoodPreference};
         String [] actionCommand = {"Average Spend", "Frequency of Visits", "Food Preference"};
-        constructAndAddAvgSpendFields(labels, textFields, radioButtons, actionCommand);
+        constructAndAddAvgSpendFields(radioButtons, actionCommand);
 
         // Generate Data Button
         panelReport.add(buttonGenerateData);
@@ -123,23 +110,8 @@ public class OwnerPageUI extends JFrame {
         ownerUIFrame.add(panelReport);
     }
 
-    // Method for to construct & display labels, textfields and button
-    public void constructAndAddAvgSpendFields(JLabel [] labels, JTextField [] textFields, JRadioButton [] radioButtons, String [] actionCommand){
-        // Labels
-        for (JLabel jLabel : labels){
-            jLabel.setPreferredSize(new Dimension(110, 15));
-            jLabel.setBorder(new LineBorder(Color.WHITE));
-            jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-            panelReport.add(jLabel);
-        }
-
-        // Text Fields
-        for (JTextField jTextField : textFields){
-            //jTextField.setEnabled(false);
-            jTextField.setForeground(Color.BLACK);
-            panelReport.add(jTextField);
-        }
-
+    // Method to construct and add Radio Buttons to the JPanel
+    public void constructAndAddAvgSpendFields(JRadioButton [] radioButtons, String [] actionCommand){
         // Radio Buttons
         for (int i = 0; i < radioButtons.length; i++){
             radioButtons[i].setBackground(Color.WHITE);
@@ -153,10 +125,33 @@ public class OwnerPageUI extends JFrame {
         }
     }
 
-    // Method to display the calculated and generated results into the JTextFields
-    public void displayGeneratedResults(String [] generatedReport){
-        fieldDaily.setText(generatedReport[0]);
-        fieldWeekly.setText(generatedReport[1]);
-        fieldMonthly.setText(generatedReport[2]);
+    // Construction of the JTable (JTable type returned as a JScrollPane type)
+    public Component displayDataTableConstruction(String radioButtonSelected){
+        GenerateReportController generateReportController = new GenerateReportController();
+        String [][] data = generateReportController.getReport(radioButtonSelected);
+        // Display data in a table format
+        String [] columnTableNames = {"Daily", "Weekly", "Monthly"};
+        // Table
+        JTable tableGenerateData = new JTable(data, columnTableNames);
+        JScrollPane sp = new JScrollPane(tableGenerateData);
+        sp.setPreferredSize(new Dimension(485, 200)); // width then height
+        return sp;
+    }
+
+    // Method to refresh the Table data
+    public void refreshEditTable(String radioButtonSelected){
+        //Get the components in the panel
+        Component[] componentList = panelReport.getComponents();
+        //Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JScrollPane){
+                //Remove it
+                panelReport.remove(c);
+            }
+        }
+        panelReport.add(displayDataTableConstruction(radioButtonSelected));
+        panelReport.revalidate();
+        panelReport.repaint();
     }
 }
