@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class StaffViewController {
     Restaurant_Staff restaurant_staff = new Restaurant_Staff();
-    public ArrayList<ArrayList<String>> displayOrders(){
+    public String [][] displayOrders(){
         return restaurant_staff.viewOrders();
     }
 }
