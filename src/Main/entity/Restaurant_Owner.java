@@ -98,6 +98,9 @@ public class Restaurant_Owner extends Staff {
             case "Frequency of Visits":
                 break;
             case "Food Preference":
+                generatedReport[0] = dailyPreference();
+                generatedReport[1] = weeklyPreference();
+                generatedReport[2] = monthlyPreference();
                 break;
         } // end of switch statements
         return generatedReport;
@@ -119,17 +122,65 @@ public class Restaurant_Owner extends Staff {
     }
 
     // Function to generate daily dish/drink preference #43
-    public void dailyPreference() {
+    public String dailyPreference() {
+        String x = "NULL";
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date = current_date() GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 1;");
 
+
+            while (rs.next()) {
+                x = rs.getString("name");
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return x;
     }
 
     // Function to generate weekly dish/drink preference #44
-    public void weeklyPreference() {
+    public String weeklyPreference() {
+        String x = "NULL";
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 week GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 1;");
 
+
+            while (rs.next()) {
+                x = rs.getString("name");
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return x;
     }
 
     // Function to generate monthly dish/drink preference #45
-    public void monthlyPreference() {
+    public String monthlyPreference() {
+        String x = "NULL";
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 month GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 1;");
 
+
+            while (rs.next()) {
+                x = rs.getString("name");
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return x;
     }
 }
