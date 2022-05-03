@@ -114,21 +114,19 @@ public class RestaurantStaffPageUI extends JFrame {
 
     // Method to store the respective array list into a 2D array
     public String[][] getTransactionHistory(ArrayList<ArrayList<String>> arrayListTransactionHistory){
-        String [] transaction_id = arrayListTransactionHistory.get(0).toArray(new String[0]);
-        String [] table_num = arrayListTransactionHistory.get(1).toArray(new String[0]);
-        String [] date = arrayListTransactionHistory.get(2).toArray(new String[0]);
-        String [] phone_num = arrayListTransactionHistory.get(3).toArray(new String[0]);
-        String [] total_price = arrayListTransactionHistory.get(4).toArray(new String[0]);
-        String [] isPaid = arrayListTransactionHistory.get(5).toArray(new String[0]);
+        String [] order_id = arrayListTransactionHistory.get(0).toArray(new String[0]);
+        String [] food_name = arrayListTransactionHistory.get(1).toArray(new String[0]);
+        String [] quantity = arrayListTransactionHistory.get(2).toArray(new String[0]);
+        String [] price = arrayListTransactionHistory.get(3).toArray(new String[0]);
+        String [] fulfillStatus = arrayListTransactionHistory.get(4).toArray(new String[0]);
 
-        String [][] arrayAllTransactions = new String[transaction_id.length][arrayListTransactionHistory.size()];
-        for (int i = 0; i < transaction_id.length; i++){
-            arrayAllTransactions[i][0] = transaction_id[i];
-            arrayAllTransactions[i][1] = table_num[i];
-            arrayAllTransactions[i][2] = date[i];
-            arrayAllTransactions[i][3] = phone_num[i];
-            arrayAllTransactions[i][4] = total_price[i];
-            arrayAllTransactions[i][5] = isPaid[i];
+        String [][] arrayAllTransactions = new String[order_id.length][arrayListTransactionHistory.size()];
+        for (int i = 0; i < order_id.length; i++){
+            arrayAllTransactions[i][0] = order_id[i];
+            arrayAllTransactions[i][1] = food_name[i];
+            arrayAllTransactions[i][2] = quantity[i];
+            arrayAllTransactions[i][3] = price[i];
+            arrayAllTransactions[i][4] = fulfillStatus[i];
         }
         return arrayAllTransactions;
     }
@@ -161,10 +159,9 @@ public class RestaurantStaffPageUI extends JFrame {
     // 1b) Method to construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
     public Component displayTableConstruction(){
         StaffViewController staffViewController = new StaffViewController();
-        ArrayList<ArrayList<String>> arrayListOrders = staffViewController.displayOrders();
-        String [][] data =getTransactionHistory(arrayListOrders);
+        String [][] data = staffViewController.displayOrders();
         // Display data in a table format
-        String [] columnTableNames = {"Order ID", "Transaction ID", "Item ID", "Quantity", "Price", "Fulfilled"};
+        String [] columnTableNames = {"Order ID", "Food Name", "Quantity", "Price", "Fulfilled"};
         tableEditOrder = new JTable(data, columnTableNames);
         JScrollPane sp = new JScrollPane(tableEditOrder);
         sp.setPreferredSize(new Dimension(485, 200)); // width then height
