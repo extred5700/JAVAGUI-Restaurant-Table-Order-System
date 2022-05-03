@@ -55,8 +55,8 @@ public class User_Admin extends Staff {
 
     // Method to get an arraylist of user account information
     // Array list contains 4 array list: arrayListUsernames, arrayListPasswords, arrayListProfiles, arrayListActive
-    public ArrayList<ArrayList<String>> getUserInfoFromDB(){
-        ArrayList<ArrayList<String>> listAccountData = new ArrayList<>();
+    public String [][] getUserInfoFromDB(){
+        ArrayList<ArrayList<String>> arrayListAllAccountData = new ArrayList<>();
         ArrayList<String> arrayListUsernames = new ArrayList<>();
         ArrayList<String> arrayListPasswords = new ArrayList<>();
         ArrayList<String> arrayListProfiles = new ArrayList<>();
@@ -80,22 +80,44 @@ public class User_Admin extends Staff {
         } catch(SQLException e){
             System.out.println(e);
         }
-        // COMBINE/ADD ALL array list to one array list
-        listAccountData.add(arrayListUsernames);
-        listAccountData.add(arrayListPasswords);
-        listAccountData.add(arrayListProfiles);
-        listAccountData.add(arrayListActive);
-        return listAccountData;
+        // Add ALL array list into 1 array list
+        arrayListAllAccountData.add(arrayListUsernames);
+        arrayListAllAccountData.add(arrayListPasswords);
+        arrayListAllAccountData.add(arrayListProfiles);
+        arrayListAllAccountData.add(arrayListActive);
+
+        // Convert array list to an array
+        String [] arrayUsername = arrayListAllAccountData.get(0).toArray(new String[0]);
+        String [] arrayPassword = arrayListAllAccountData.get(1).toArray(new String[0]);
+        String [] arrayProfile = arrayListAllAccountData.get(2).toArray(new String[0]);
+        String [] arrayActive = arrayListAllAccountData.get(3).toArray(new String[0]);
+        String [][] arrayAllAccountDetails = new String[arrayUsername.length][arrayListAllAccountData.size()];
+        for (int i = 0; i < arrayUsername.length; i++){
+            arrayAllAccountDetails[i][0] = arrayUsername[i];
+            arrayAllAccountDetails[i][1] = arrayPassword[i];
+            arrayAllAccountDetails[i][2] = arrayProfile[i];
+            arrayAllAccountDetails[i][3] = arrayActive[i];
+        }
+        return arrayAllAccountDetails;
     }
 
     // Function to Search for user accounts #5
-    public ArrayList<ArrayList<String>> searchAccount(String usernameKeyedIn) {
+    public String [][] searchAccount(String usernameKeyedIn, String searchStatus) {
         ArrayList<ArrayList<String>> listSearchedAccountData = new ArrayList<>();
         ArrayList<String> arrayListSearchedUsernames = new ArrayList<>();
         ArrayList<String> arrayListSearchedPasswords = new ArrayList<>();
         ArrayList<String> arrayListSearchedProfiles = new ArrayList<>();
         ArrayList<String> arrayListSearchedActive = new ArrayList<>();
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
+
+        switch (searchStatus){
+            case "search_by_username":
+                // do codes here
+                break;
+            case "search_by_profile":
+                // do codes here
+                break;
+        }
 
         try{
             Statement statement = dbConnection.createStatement();
@@ -116,11 +138,26 @@ public class User_Admin extends Staff {
             // Catches any SQL query issues
             e.printStackTrace();
         }
+        // Add ALL array list into 1 array list
         listSearchedAccountData.add(arrayListSearchedUsernames);
         listSearchedAccountData.add(arrayListSearchedPasswords);
         listSearchedAccountData.add(arrayListSearchedProfiles);
         listSearchedAccountData.add(arrayListSearchedActive);
-        return listSearchedAccountData;
+
+        // Convert array list to an array
+        String [] arrayUsername = listSearchedAccountData.get(0).toArray(new String[0]);
+        String [] arrayPassword = listSearchedAccountData.get(1).toArray(new String[0]);
+        String [] arrayProfile = listSearchedAccountData.get(2).toArray(new String[0]);
+        String [] arrayActive = listSearchedAccountData.get(3).toArray(new String[0]);
+        String [][] arrayAllSearchedData = new String[arrayUsername.length][listSearchedAccountData.size()];
+        for (int i = 0; i < arrayUsername.length; i++){
+            arrayAllSearchedData[i][0] = arrayUsername[i];
+            arrayAllSearchedData[i][1] = arrayPassword[i];
+            arrayAllSearchedData[i][2] = arrayProfile[i];
+            arrayAllSearchedData[i][3] = arrayActive[i];
+        }
+
+        return arrayAllSearchedData;
     }
 
     // Function to View user accounts #6
