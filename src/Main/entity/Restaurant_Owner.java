@@ -79,8 +79,11 @@ public class Restaurant_Owner extends Staff {
     }
 
     // Additional function to return an array of selected data by the user
-    public String [] getReport(String radioButtonSelected){
-        String [] generatedReport = new String[3];
+    public String [][] getReport(String radioButtonSelected){
+        String [][] generatedReport = {
+                {"null", "null", "null"}
+        }; // Temp values inside 2D array
+
         Connection dbConnection = dbConnection();
         switch(radioButtonSelected){
             case "Average Spend":
@@ -91,148 +94,48 @@ public class Restaurant_Owner extends Staff {
                 * Change the return type of the functions above from void to int
                 * Store the values in generatedReport, remember to use .toString()
                 */
-                generatedReport[0] = dailySpending();
-                generatedReport[1] = weeklySpending();
-                generatedReport[2] = monthlySpending();
+                generatedReport = new String[][]{{"1", "1", "1"}}; // replace correct values in "1"
+                /* Or:
+                *  generatedReport = new String[][]{{dailySpending(), weeklySpending(), monthlySpending()}};
+                * */
                 break;
             case "Frequency of Visits":
-                generatedReport[0] = dailyFrequency();
-                generatedReport[1] = weeklyFrequency();
-                generatedReport[2] = monthlyFrequency();
+                generatedReport = new String[][]{{"2", "2", "2"}}; // replace correct values in "2"
                 break;
             case "Food Preference":
-                generatedReport[0] = dailyPreference();
-                generatedReport[1] = weeklyPreference();
-                generatedReport[2] = monthlyPreference();
+                generatedReport = new String[][]{{"3", "3", "3"}}; // replace correct values in "3"
                 break;
         } // end of switch statements
         return generatedReport;
     }
 
     // Function to generate daily frequency of visits #40
-    public String dailyFrequency() {
-        int x = 0;
-        try{
-            Connection dbConnection = dbConnection();
-            Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT count(*) FROM transaction_history WHERE date = current_date()");
+    public void dailyFrequency() {
 
-
-            while (rs.next()) {
-                x = rs.getInt("count(*)");
-            }
-            //probably have to run a return for array list here in main program
-        } catch (Exception e){
-            // Catches any SQL query issues
-            e.printStackTrace();
-        }
-        return Integer.toString(x);
     }
 
-
     // Function to generate weekly frequency of visit #41
-    public String weeklyFrequency() {
-        int x = 0;
-        try{
-            Connection dbConnection = dbConnection();
-            Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT count(*) FROM transaction_history WHERE date >= current_date() - interval 1 week");
+    public void weeklyFrequency() {
 
-
-            while (rs.next()) {
-                x = rs.getInt("count(*)");
-            }
-            //probably have to run a return for array list here in main program
-        } catch (Exception e){
-            // Catches any SQL query issues
-            e.printStackTrace();
-        }
-        return Integer.toString(x);
     }
 
     // Function to generate monthly frequency of visit #42
-    public String monthlyFrequency() {
-        int x = 0;
-        try{
-            Connection dbConnection = dbConnection();
-            Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT count(*) FROM transaction_history WHERE date >= current_date() - interval 1 month");
+    public void monthlyFrequency() {
 
-
-            while (rs.next()) {
-                x = rs.getInt("count(*)");
-            }
-            //probably have to run a return for array list here in main program
-        } catch (Exception e){
-            // Catches any SQL query issues
-            e.printStackTrace();
-        }
-        return Integer.toString(x);
     }
 
     // Function to generate daily dish/drink preference #43
-    public String dailyPreference() {
-        String x = "NULL";
-        try{
-            Connection dbConnection = dbConnection();
-            Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date = current_date() GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 1;");
+    public void dailyPreference() {
 
-
-            while (rs.next()) {
-                x = rs.getString("name");
-            }
-            //probably have to run a return for array list here in main program
-        } catch (Exception e){
-            // Catches any SQL query issues
-            e.printStackTrace();
-        }
-        return x;
     }
 
     // Function to generate weekly dish/drink preference #44
-    public String weeklyPreference() {
-        String x = "NULL";
-        try{
-            Connection dbConnection = dbConnection();
-            Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 week GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 1;");
+    public void weeklyPreference() {
 
-
-            while (rs.next()) {
-                x = rs.getString("name");
-            }
-            //probably have to run a return for array list here in main program
-        } catch (Exception e){
-            // Catches any SQL query issues
-            e.printStackTrace();
-        }
-        return x;
     }
 
     // Function to generate monthly dish/drink preference #45
-    public String monthlyPreference() {
-        String x = "NULL";
-        try{
-            Connection dbConnection = dbConnection();
-            Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 month GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 1;");
+    public void monthlyPreference() {
 
-
-            while (rs.next()) {
-                x = rs.getString("name");
-            }
-            //probably have to run a return for array list here in main program
-        } catch (Exception e){
-            // Catches any SQL query issues
-            e.printStackTrace();
-        }
-        return x;
     }
 }
