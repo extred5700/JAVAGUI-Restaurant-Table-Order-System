@@ -1,9 +1,7 @@
 package Main.boundary.StaffUI;
 
-
 import Main.boundary.StaffLoginPage;
 import Main.controller.UserAdmin.*;
-
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class UserAdminPageUI extends JFrame{
@@ -52,6 +49,7 @@ public class UserAdminPageUI extends JFrame{
     private final JPanel panelView = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     private final JTextField fieldSearchUser = new JTextField(20);
     private final JButton buttonSearchUser = new JButton("Search by Username");
+    private final JButton buttonSearchProfile = new JButton("Search by User Profile");
 
     /* 4. SUSPEND Function */
     private JTable tableSuspendUsers;
@@ -85,7 +83,7 @@ public class UserAdminPageUI extends JFrame{
 
 
         // 2. EDIT function
-        displayEditPanel(usernameLoggedIn);
+        displayEditPanel();
         panelEdit.setVisible(false);
 
 
@@ -95,7 +93,7 @@ public class UserAdminPageUI extends JFrame{
 
 
         // 4. SUSPEND function
-        displaySuspendPanel(usernameLoggedIn);
+        displaySuspendPanel();
         panelSuspend.setVisible(false);
 
         switch (setDisplayPage){
@@ -138,39 +136,39 @@ public class UserAdminPageUI extends JFrame{
     ActionListener topButtonsListener = e -> {
         JButton buttonPressed = (JButton)e.getSource();
         String action = buttonPressed.getText();
-        switch (action){
-            case "Logout":
+        switch (action) {
+            case "Logout" -> {
                 userAdminUIFrame.dispose();
                 userAdminUIFrame.setVisible(false);
                 new StaffLoginPage();
-                break;
-            case "Create":
+            }
+            case "Create" -> {
                 panelCreate.setVisible(true);
                 panelEdit.setVisible(false);
                 panelView.setVisible(false);
                 panelSuspend.setVisible(false);
-                break;
-            case "Edit":
+            }
+            case "Edit" -> {
                 panelEdit.setVisible(true);
                 panelView.setVisible(false);
                 panelSuspend.setVisible(false);
                 panelCreate.setVisible(false);
-                break;
-            case "View":
+            }
+            case "View" -> {
                 //When swapping back to the view page, refresh the view table
-                refreshViewTable("default");
+                refreshViewTable("default", "default");
                 panelView.setVisible(true);
                 panelSuspend.setVisible(false);
                 panelCreate.setVisible(false);
                 panelEdit.setVisible(false);
-                break;
-            case "Suspend":
+            }
+            case "Suspend" -> {
                 //dispose();
                 panelSuspend.setVisible(true);
                 panelCreate.setVisible(false);
                 panelEdit.setVisible(false);
                 panelView.setVisible(false);
-                break;
+            }
         } // end of switch statements
     };
 
@@ -238,11 +236,11 @@ public class UserAdminPageUI extends JFrame{
     /* 2. EDIT function
     * 2a) displayEditPanel(String usernameLoggedIn) - Display JPanel for User Admin to edit an account's details
     * 2b) editTableConstruction() - Construction of the JTable, Mouse Click Listener to display an account's details in the text field (JTable type returned as a JScrollPane type)
-    * 2c) getUserAccountTable(ArrayList<ArrayList<String>> arrayListUserAllDetails) - Convert ArrayLists to a 2D array, return the 2D array to display on the table
-    * 2e) refreshEditTable() - Used to refresh only the JScrollPane for Edit page
+    * 2c) editUserDetails(String newUsername, String newPassword, String newProfile) - Method to pass data to the controller before updating the DB
+    * 2d) refreshEditTable() - Used to refresh only the JScrollPane for Edit page
     */
     // 2a) Method for User Admin to EDIT a user account details
-    public void displayEditPanel(String usernameLoggedIn){
+    public void displayEditPanel(){
         // Border
         titledBorder = new TitledBorder("Edit User Accounts");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -299,8 +297,7 @@ public class UserAdminPageUI extends JFrame{
     // 2b) Construction of table variables for EDIT functions
     public Component editTableConstruction(){
         ViewUserController viewUserController = new ViewUserController();
-        ArrayList<ArrayList<String>> arrayListUserAllDetails = viewUserController.getUserInfo();
-        String [][] data = getUserAccountTable(arrayListUserAllDetails); // Call method to "convert" ArrayLists inside a "big" Arraylist to a 2D array
+        String [][] data = viewUserController.getUserInfo();
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
         tableEditUsers = new JTable(data, columnTableNames);
@@ -321,24 +318,7 @@ public class UserAdminPageUI extends JFrame{
         return sp;
     }
 
-    // 2c) Method to store the respective array list into a 2D array
-    public String[][] getUserAccountTable(ArrayList<ArrayList<String>> arrayListUserAllDetails){
-        String [] arrayUsername = arrayListUserAllDetails.get(0).toArray(new String[0]);
-        String [] arrayPassword = arrayListUserAllDetails.get(1).toArray(new String[0]);
-        String [] arrayProfile = arrayListUserAllDetails.get(2).toArray(new String[0]);
-        String [] arrayActive = arrayListUserAllDetails.get(3).toArray(new String[0]);
-
-        String [][] arrayAllDetails = new String[arrayUsername.length][arrayListUserAllDetails.size()];
-        for (int i = 0; i < arrayUsername.length; i++){
-            arrayAllDetails[i][0] = arrayUsername[i];
-            arrayAllDetails[i][1] = arrayPassword[i];
-            arrayAllDetails[i][2] = arrayProfile[i];
-            arrayAllDetails[i][3] = arrayActive[i];
-        }
-        return arrayAllDetails;
-    }
-
-    // 2d) Method to pass data to the controller before updating the DB
+    // 2c) Method to pass data to the controller before updating the DB
     public void editUserDetails(String newUsername, String newPassword, String newProfile){
 
         EditUserController editUserController = new EditUserController();
@@ -357,7 +337,7 @@ public class UserAdminPageUI extends JFrame{
         }
     } // end of the method updateUserDetails()
 
-    // 2e) Used to refresh only the JScrollPane for Edit page
+    // 2d) Used to refresh only the JScrollPane for Edit page
     public void refreshEditTable(){
         //Get the components in the panel
         Component[] componentList = panelEdit.getComponents();
@@ -388,17 +368,19 @@ public class UserAdminPageUI extends JFrame{
         titledBorder.setBorder(new LineBorder(Color.BLACK));
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
-        // Table Construction called in method, converted to a JScrollPane
-        JScrollPane scrollPane = (JScrollPane) viewTableConstruction("default");
-
         // Text field
-        fieldSearchUser.setPreferredSize(new Dimension(50, 30));
+        fieldSearchUser.setPreferredSize(new Dimension(60, 30));
+        panelView.add(fieldSearchUser);
 
-        // Search Button
-        buttonSearchUser.setPreferredSize(new Dimension(150, 30));
-        buttonSearchUser.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-        buttonSearchUser.setBorder(BorderFactory.createLineBorder(Color.RED,1));
-        buttonSearchUser.setBackground(Color.WHITE);
+        // Search Buttons (Username & User Profile)
+        JButton [] butttonsForViewUsers = {buttonSearchUser, buttonSearchProfile};
+        for (JButton jButton : butttonsForViewUsers){
+            jButton.setPreferredSize(new Dimension(220, 30));
+            jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
+            jButton.setBackground(Color.WHITE);
+            panelView.add(jButton);
+        }
+        // Search Username Button
         buttonSearchUser.addActionListener(e -> {
             String usernameKeyedIn = fieldSearchUser.getText();
             if (usernameKeyedIn.isEmpty()){
@@ -406,17 +388,29 @@ public class UserAdminPageUI extends JFrame{
             }
             else{
                 //Refresh View Table with search query results
-                refreshViewTable(usernameKeyedIn);
+                refreshViewTable(usernameKeyedIn, "search_by_username");
+            }
+        });
+        // Search User Profile Button
+        buttonSearchProfile.addActionListener(e -> {
+            String userProfileKeyedIn = fieldSearchUser.getText();
+            if (userProfileKeyedIn.isEmpty()){
+                JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
+            }
+            else{
+                //Refresh View Table with search query results
+                refreshViewTable(userProfileKeyedIn, "search_by_profile");
             }
         });
 
-        // Add components to the JPanel
+        // Table Construction called in method, converted to a JScrollPane
+        JScrollPane scrollPane = (JScrollPane) viewTableConstruction("default", "default");
+        panelView.add(scrollPane);
+
+        // Components of JPanel
         panelView.setPreferredSize(new Dimension(500, 490));
         panelView.setBackground(Color.WHITE);
         panelView.setBorder(titledBorder);
-        panelView.add(fieldSearchUser);
-        panelView.add(buttonSearchUser);
-        panelView.add(scrollPane);
         panelView.repaint();
         panelView.revalidate();
         panelView.setVisible(true);
@@ -424,28 +418,28 @@ public class UserAdminPageUI extends JFrame{
     }
 
     // 3b) viewTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type, to display search results
-    public Component viewTableConstruction(String usernameKeyedIn){
+    public Component viewTableConstruction(String usernameKeyedIn, String searchStatus){
         ViewUserController viewUserController = new ViewUserController();
-        String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
-        if (usernameKeyedIn == "default")
-        {
-            ArrayList<ArrayList<String>> arrayListUserAllDetails = viewUserController.getUserInfo();
-            String [][] data = getUserAccountTable(arrayListUserAllDetails);
+        String [] columnTableNames = {"Username", "Password", "User Profile", "Active"};
+
+        if (searchStatus.equals("default")){
+            String [][] data = viewUserController.getUserInfo();
             tableViewUsers = new JTable(data, columnTableNames);
         }
-        else{
-            ArrayList<ArrayList<String>> arrayListOfSearchedResults = viewUserController.searchByUsername(usernameKeyedIn);
-            String [][] displaySearchResults = getUserAccountTable(arrayListOfSearchedResults); // Call method to "convert" ArrayLists inside a "big" Arraylist to a 2D array
+        // Search by username or user profile
+        else {
+            String [][] displaySearchResults = viewUserController.searchByUsername(usernameKeyedIn, searchStatus);
             // Display data in a table format
             tableViewUsers = new JTable(displaySearchResults, columnTableNames);
         }
+
         JScrollPane sp = new JScrollPane(tableViewUsers);
         sp.setPreferredSize(new Dimension(485, 200)); // width then height
         return sp;
     }
 
     // 3c) Used to refresh only the JScrollPane for View page
-    public void refreshViewTable(String usernameKeyedIn){
+    public void refreshViewTable(String searchResult, String searchStatus){
         //Get the components in the panel
         Component[] componentList = panelView.getComponents();
         //Loop through the components
@@ -456,7 +450,7 @@ public class UserAdminPageUI extends JFrame{
                 panelView.remove(c);
             }
         }
-        panelView.add(viewTableConstruction(usernameKeyedIn));
+        panelView.add(viewTableConstruction(searchResult, searchStatus));
         panelView.revalidate();
         panelView.repaint();
     }
@@ -468,7 +462,7 @@ public class UserAdminPageUI extends JFrame{
     * 4c) refreshSuspendTable(String usernameKeyedIn) - Used to refresh only the JScrollPane for Suspend page
     */
     // 4a) Method for the User Admin to SUSPEND a user account
-    public void displaySuspendPanel(String usernameLoggedIn){
+    public void displaySuspendPanel(){
         // Border
         titledBorder = new TitledBorder("Suspend a User");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -496,11 +490,11 @@ public class UserAdminPageUI extends JFrame{
                     // Change active status to the opposite and update the database
                 };
                 if (new SuspendUserController().suspendUser(selectedUsername, newActiveStatus)){
-                    if (newActiveStatus == "N"){
+                    if (newActiveStatus.equals("N")){
                         JOptionPane.showMessageDialog(null, "Account has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
                         refreshSuspendTable();
                     }
-                    else if (newActiveStatus == "Y")
+                    else if (newActiveStatus.equals("Y"))
                     {
                         JOptionPane.showMessageDialog(null, "Account has been successfully un-suspended!", "Un-suspend User", JOptionPane.INFORMATION_MESSAGE);
                         refreshSuspendTable();
@@ -529,8 +523,7 @@ public class UserAdminPageUI extends JFrame{
     // 4b) Construction of the JTable, Mouse Click Listener to display an account's details in the text field (JTable type returned as a JScrollPane type)
     public Component suspendTableConstruction(){
         ViewUserController viewUserController = new ViewUserController();
-        ArrayList<ArrayList<String>> arrayListUserAllDetails = viewUserController.getUserInfo();
-        String [][] data = getUserAccountTable(arrayListUserAllDetails); // Call method to "convert" ArrayLists inside a "big" Arraylist to a 2D array
+        String [][] data = viewUserController.getUserInfo();
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
         tableSuspendUsers = new JTable(data, columnTableNames);

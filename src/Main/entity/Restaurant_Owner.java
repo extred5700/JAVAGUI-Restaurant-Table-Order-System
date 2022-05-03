@@ -96,6 +96,9 @@ public class Restaurant_Owner extends Staff {
                 generatedReport[2] = monthlySpending();
                 break;
             case "Frequency of Visits":
+                generatedReport[0] = dailyFrequency();
+                generatedReport[1] = weeklyFrequency();
+                generatedReport[2] = monthlyFrequency();
                 break;
             case "Food Preference":
                 generatedReport[0] = dailyPreference();
@@ -107,18 +110,67 @@ public class Restaurant_Owner extends Staff {
     }
 
     // Function to generate daily frequency of visits #40
-    public void dailyFrequency() {
+    public String dailyFrequency() {
+        int x = 0;
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT count(*) FROM transaction_history WHERE date = current_date()");
 
+
+            while (rs.next()) {
+                x = rs.getInt("count(*)");
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return Integer.toString(x);
     }
 
-    // Function to generate weekly frequency of visit #41
-    public void weeklyFrequency() {
 
+    // Function to generate weekly frequency of visit #41
+    public String weeklyFrequency() {
+        int x = 0;
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT count(*) FROM transaction_history WHERE date >= current_date() - interval 1 week");
+
+
+            while (rs.next()) {
+                x = rs.getInt("count(*)");
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return Integer.toString(x);
     }
 
     // Function to generate monthly frequency of visit #42
-    public void monthlyFrequency() {
+    public String monthlyFrequency() {
+        int x = 0;
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT count(*) FROM transaction_history WHERE date >= current_date() - interval 1 month");
 
+
+            while (rs.next()) {
+                x = rs.getInt("count(*)");
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return Integer.toString(x);
     }
 
     // Function to generate daily dish/drink preference #43

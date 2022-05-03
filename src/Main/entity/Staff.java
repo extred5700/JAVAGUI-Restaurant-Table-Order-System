@@ -81,5 +81,4 @@ public class Staff{
         }
         return userExistence;
     } // end of method checkUserExistence()
-
 }

@@ -43,27 +43,24 @@ public class Restaurant_Staff extends Staff {
     public ArrayList<ArrayList<String>> viewOrders() {
         ArrayList<ArrayList<String>> combinedOrder = new ArrayList<>();
         ArrayList<String> arrayListOrderID = new ArrayList<>();
-        ArrayList<String> arrayListTransactionID = new ArrayList<>();
-        ArrayList<String> arrayListItemID = new ArrayList<>();
+        ArrayList<String> arrayListFoodName = new ArrayList<>();
         ArrayList<String> arrayListQuantity = new ArrayList<>();
         ArrayList<String> arrayListPrice = new ArrayList<>();
         ArrayList<String> arrayListFulfill = new ArrayList<>();
 
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "SELECT * from order_history";
+        String query = "SELECT order_id, name, qty, price, fufilled FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id;";
         try (Statement statement = dbConnection.createStatement()){
             ResultSet set = statement.executeQuery(query);
             while (set.next()){
                 // Add data to their respective category, then... (line 134)
                 String order_id = set.getString("order_id");
-                String transaction_id = set.getString("transaction_id");
-                String item_id = set.getString("item_id");
+                String food_name = set.getString("name");
                 String quantity = set.getString("qty");
                 String price = set.getString("price");
                 String fulfillStatus = set.getString("fufilled");
                 arrayListOrderID.add(order_id);
-                arrayListTransactionID.add(transaction_id);
-                arrayListItemID.add(item_id);
+                arrayListFoodName.add(food_name);
                 arrayListQuantity.add(quantity);
                 arrayListPrice.add(price);
                 arrayListFulfill.add(fulfillStatus);
@@ -72,8 +69,7 @@ public class Restaurant_Staff extends Staff {
             System.out.println(e);
         }
         combinedOrder.add(arrayListOrderID);
-        combinedOrder.add(arrayListTransactionID);
-        combinedOrder.add(arrayListItemID);
+        combinedOrder.add(arrayListFoodName);
         combinedOrder.add(arrayListQuantity);
         combinedOrder.add(arrayListPrice);
         combinedOrder.add(arrayListFulfill);

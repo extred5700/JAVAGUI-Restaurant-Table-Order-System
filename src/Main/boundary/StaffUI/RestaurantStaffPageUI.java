@@ -28,7 +28,6 @@ public class RestaurantStaffPageUI extends JFrame {
     /* 1. EDIT Function */
     private final JPanel panelEditOrder = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     private JTable tableEditOrder;
-    DefaultTableModel model;
 
     public RestaurantStaffPageUI(String usernameLoggedIn){
         staffUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,7 +60,8 @@ public class RestaurantStaffPageUI extends JFrame {
     /* Universal GUI Functions
      * displayAdminUserButtons() - Method to display the buttons on top of the screen
      * ActionListener topButtonsListener - Button Listener for the buttons on top of the screen
-     * isplayTitledBorder(JPanel panel) - Construction and display of the Titled Border
+     * displayTitledBorder(JPanel panel) - Construction and display of the Titled Border
+     * getTransactionHistory(ArrayList<ArrayList<String>> arrayListTransactionHistory) - Convert arraylist (Containing all transaction history) to a 2D array
      */
     public void displayStaffUserButton(){
         JButton [] myArray = {buttonLogout, buttonEdit, buttonSearch, buttonView, buttonDelete};
@@ -104,6 +104,7 @@ public class RestaurantStaffPageUI extends JFrame {
         }
     };
 
+    // Method to construct and display of the Titled Border
     public void displayTitledBorder(JPanel panel){
         titledBorder = new TitledBorder("Edit Customer Order");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -111,37 +112,40 @@ public class RestaurantStaffPageUI extends JFrame {
         panel.setBorder(titledBorder);
     }
 
+    // Method to store the respective array list into a 2D array
+    public String[][] getTransactionHistory(ArrayList<ArrayList<String>> arrayListTransactionHistory){
+        String [] transaction_id = arrayListTransactionHistory.get(0).toArray(new String[0]);
+        String [] table_num = arrayListTransactionHistory.get(1).toArray(new String[0]);
+        String [] date = arrayListTransactionHistory.get(2).toArray(new String[0]);
+        String [] phone_num = arrayListTransactionHistory.get(3).toArray(new String[0]);
+        String [] total_price = arrayListTransactionHistory.get(4).toArray(new String[0]);
+        String [] isPaid = arrayListTransactionHistory.get(5).toArray(new String[0]);
+
+        String [][] arrayAllTransactions = new String[transaction_id.length][arrayListTransactionHistory.size()];
+        for (int i = 0; i < transaction_id.length; i++){
+            arrayAllTransactions[i][0] = transaction_id[i];
+            arrayAllTransactions[i][1] = table_num[i];
+            arrayAllTransactions[i][2] = date[i];
+            arrayAllTransactions[i][3] = phone_num[i];
+            arrayAllTransactions[i][4] = total_price[i];
+            arrayAllTransactions[i][5] = isPaid[i];
+        }
+        return arrayAllTransactions;
+    }
+
+
     /* 1a. CREATE function
-    * 1a) displayEditOrder function - Display JPanel for Restaurant Staff to edit orders
+    * 1a) displayEditOrder method - Display JPanel for Restaurant Staff to edit orders
+    * 1b) displayTableConstruction() method - Construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
     */
+    // 1a) Method to display JPanel for Restaurant Staff to edit orders
     public void displayEditOrder(){
         displayTitledBorder(panelEditOrder); // Display titled border
 
-        // Display Table
-        JScrollPane editOrderScrollPane = new JScrollPane();
-        panelEditOrder.add(editOrderScrollPane);
+        // Table Construction called in method, converted to a JScrollPane
+        JScrollPane editOrderScrollPane = (JScrollPane) displayTableConstruction();
 
 
-        tableEditOrder = new JTable();
-        String [] column = {"Order ID", "Transaction ID", "Item ID", "Quantity", "Price", "Fulfilled"};
-        Object [] row = new Object[column.length];
-        tableEditOrder.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int getSelectedRow = tableEditOrder.getSelectedRow();
-            }
-        });
-        tableEditOrder.setDefaultEditor(Object.class, null);
-        editOrderScrollPane.setViewportView(tableEditOrder);
-        model = new DefaultTableModel();
-        model.setColumnIdentifiers(column);
-        tableEditOrder.setModel(model);
-        model = (DefaultTableModel) tableEditOrder.getModel();
-        tableEditOrder.getTableHeader().setReorderingAllowed(false);
-
-        StaffViewController staffViewController = new StaffViewController();
-        ArrayList<ArrayList<String>> arrayListOrders = staffViewController.displayOrders();
-        getOrderTable(arrayListOrders, row);
 
 
 
@@ -149,22 +153,22 @@ public class RestaurantStaffPageUI extends JFrame {
         // Add components to the JPanel
         panelEditOrder.setPreferredSize(new Dimension(500, 490));
         panelEditOrder.setBackground(Color.WHITE);
+        panelEditOrder.add(editOrderScrollPane);
         staffUIFrame.add(panelEditOrder);
         panelEditOrder.setVisible(true);;
     }
 
-    public void getOrderTable(ArrayList<ArrayList<String>> arrayListOrders, Object[] row){
-        for (int i = 0; i < arrayListOrders.size(); i++){
-            for (int j = 0; j < arrayListOrders.get(i).size(); j++){
-                String value = arrayListOrders.get(i).get(j);
-                if (j < 6){
-                    row[j] = value;
-                }
-                if (j == 5){
-                    model.addRow(row);
-                }
-            }
-        }
+    // 1b) Method to construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
+    public Component displayTableConstruction(){
+        StaffViewController staffViewController = new StaffViewController();
+        ArrayList<ArrayList<String>> arrayListOrders = staffViewController.displayOrders();
+        String [][] data =getTransactionHistory(arrayListOrders);
+        // Display data in a table format
+        String [] columnTableNames = {"Order ID", "Transaction ID", "Item ID", "Quantity", "Price", "Fulfilled"};
+        tableEditOrder = new JTable(data, columnTableNames);
+        JScrollPane sp = new JScrollPane(tableEditOrder);
+        sp.setPreferredSize(new Dimension(485, 200)); // width then height
+        return sp;
     }
 
 

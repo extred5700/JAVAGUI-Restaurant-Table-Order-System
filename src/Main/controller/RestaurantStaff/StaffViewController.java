@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class StaffViewController {
     Restaurant_Staff restaurant_staff = new Restaurant_Staff();
-    Order order = new Order();
     public ArrayList<ArrayList<String>> displayOrders(){
         return restaurant_staff.viewOrders();
     }
