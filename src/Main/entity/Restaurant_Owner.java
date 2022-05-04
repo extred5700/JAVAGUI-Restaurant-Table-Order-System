@@ -94,7 +94,7 @@ public class Restaurant_Owner extends Staff {
                 generatedReport = new String[][]{{dailyFrequency(), weeklyFrequency(), monthlyFrequency()}};
                 break;
             case "Food Preference":
-                generatedReport = new String[5][3];
+                generatedReport = new String[10][3];
                 for (int row = 0; row < generatedReport.length; row++){
                     for (int column = 0; column < generatedReport[row].length; column++){
                         generatedReport[row][0] = dailyPreference().get(row);
@@ -174,12 +174,12 @@ public class Restaurant_Owner extends Staff {
     // Function to generate daily dish/drink preference #43
     public ArrayList<String> dailyPreference() {
         String x = "NULL";
-        ArrayList<String> tempDaily = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL"));
+        ArrayList<String> tempDaily = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"));
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
             //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date = current_date() GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 5");
+            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date = current_date() GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 10");
 
             int i = 0;
             while (rs.next()) {
@@ -198,12 +198,12 @@ public class Restaurant_Owner extends Staff {
     // Function to generate weekly dish/drink preference #44
     public ArrayList<String> weeklyPreference() {
         String x = "NULL";
-        ArrayList<String> tempWeekly = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL"));
+        ArrayList<String> tempWeekly = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"));
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
             //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 week GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 5");
+            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 week GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 10");
 
             int i = 0;
             while (rs.next()) {
@@ -222,12 +222,12 @@ public class Restaurant_Owner extends Staff {
     // Function to generate monthly dish/drink preference #45
     public ArrayList<String> monthlyPreference() {
         String x = "NULL";
-        ArrayList<String> tempMonthly = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL"));
+        ArrayList<String> tempMonthly = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"));
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
             //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 month GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 5");
+            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 month GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 10");
 
             int i=0;
             while (rs.next()) {
