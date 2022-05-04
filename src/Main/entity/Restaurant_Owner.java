@@ -81,8 +81,8 @@ public class Restaurant_Owner extends Staff {
     // Additional function to return an array of selected data by the user
     public String [][] getReport(String radioButtonSelected){
         String [][] generatedReport = {
-                {"null", "null", "null"}
-        }; // Temp values inside 2D array
+                {"", "", ""}
+        }; // Temp values inside 2D array, leave it as empty strings
 
         Connection dbConnection = dbConnection();
         switch(radioButtonSelected){
