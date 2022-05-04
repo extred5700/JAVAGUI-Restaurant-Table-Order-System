@@ -103,12 +103,15 @@ public class UserAdminPageUI extends JFrame{
                 panelCreate.setVisible(true);
                 break;
             case "Edit":
+                refreshEditTable();
                 panelEdit.setVisible(true);
                 break;
             case "View":
+                refreshViewTable("default", "default");
                 panelView.setVisible(true);
                 break;
             case "Suspend":
+                refreshSuspendTable();
                 panelSuspend.setVisible(true);
                 break;
         }
@@ -149,6 +152,8 @@ public class UserAdminPageUI extends JFrame{
                 panelSuspend.setVisible(false);
             }
             case "Edit" -> {
+                //When swapping back to the edit page, refresh the edit table
+                refreshEditTable();
                 panelEdit.setVisible(true);
                 panelView.setVisible(false);
                 panelSuspend.setVisible(false);
@@ -163,7 +168,8 @@ public class UserAdminPageUI extends JFrame{
                 panelEdit.setVisible(false);
             }
             case "Suspend" -> {
-                //dispose();
+                //When swapping back to the suspend page, refresh the suspend table
+                refreshSuspendTable();
                 panelSuspend.setVisible(true);
                 panelCreate.setVisible(false);
                 panelEdit.setVisible(false);
