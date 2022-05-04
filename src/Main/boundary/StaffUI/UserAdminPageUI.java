@@ -368,6 +368,10 @@ public class UserAdminPageUI extends JFrame{
         titledBorder.setBorder(new LineBorder(Color.BLACK));
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
+        // Table Construction called in method, converted to a JScrollPane
+        JScrollPane scrollPane = (JScrollPane) viewTableConstruction("default", "default");
+        panelView.add(scrollPane);
+
         // Text field
         fieldSearchUser.setPreferredSize(new Dimension(60, 30));
         panelView.add(fieldSearchUser);
@@ -403,12 +407,8 @@ public class UserAdminPageUI extends JFrame{
             }
         });
 
-        // Table Construction called in method, converted to a JScrollPane
-        JScrollPane scrollPane = (JScrollPane) viewTableConstruction("default", "default");
-        panelView.add(scrollPane);
-
         // Components of JPanel
-        panelView.setPreferredSize(new Dimension(500, 490));
+        panelView.setPreferredSize(new Dimension(500, 390));
         panelView.setBackground(Color.WHITE);
         panelView.setBorder(titledBorder);
         panelView.repaint();
@@ -450,7 +450,7 @@ public class UserAdminPageUI extends JFrame{
                 panelView.remove(c);
             }
         }
-        panelView.add(viewTableConstruction(searchResult, searchStatus));
+        panelView.add(viewTableConstruction(searchResult, searchStatus),0);
         panelView.revalidate();
         panelView.repaint();
     }
@@ -511,7 +511,7 @@ public class UserAdminPageUI extends JFrame{
         });
 
         // Add components to the JPanel
-        panelSuspend.setPreferredSize(new Dimension(500, 490));
+        panelSuspend.setPreferredSize(new Dimension(500, 330));
         panelSuspend.setBackground(Color.WHITE);
         panelSuspend.add(scrollPane3);
         panelSuspend.add(buttonSuspendChanges);
