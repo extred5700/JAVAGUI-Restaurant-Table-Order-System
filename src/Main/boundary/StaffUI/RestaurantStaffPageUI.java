@@ -139,13 +139,14 @@ public class RestaurantStaffPageUI extends JFrame {
     * 1b) displayTableConstruction() method - Construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
     * 1c) refreshEditTable(int indexInDB) - Used to refresh only the JScrollPane for Edit page
     * 1d) checkOrderFulfillment() - Check if Customer Order is fulfilled based on the Edit Table
+    * 1e) editPanelButtonOnClick(String nameOfButton) - All button action based on switch case
     */
     // 1a) Method to display JPanel for Restaurant Staff to edit orders
     public void displayEditPanel(){
         displayTitledBorder(panelEditOrder, "Edit/Fulfill Customer Order"); // Display titled border
 
         // Table Construction called in method, converted to a JScrollPane
-        JScrollPane editOrderScrollPane = (JScrollPane) displayTableConstruction();
+        JScrollPane editOrderScrollPane = (JScrollPane) editTableConstruction();
 
         // Label
         labelOrderID.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
@@ -168,62 +169,17 @@ public class RestaurantStaffPageUI extends JFrame {
             jButton.setBackground(Color.WHITE);
             jButton.setEnabled(false);
         }
+        buttonEditOrder.setActionCommand("Edit Order");
+        buttonFulfillment.setActionCommand("Fulfill Order");
+
         // EDIT Button Click Listener
         buttonEditOrder.addActionListener(e -> {
-            // If Customer Order fulfillment status == "Y"
-            if (checkOrderFulfillment()){
-                JOptionPane.showMessageDialog(null, "Customer Order has already been fulfilled.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            // If Customer Order fulfillment status == "N"
-            else{
-                int orderIDSelected = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 0).toString());
-                // Check if the data keyed in Quantity Text Field is a numeric data type
-                if ((fieldQuantity.getText() != null) && (fieldQuantity.getText().matches("[0-9.]+"))){
-                    int oldQuantity = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 2).toString());
-                    // Check if quantity text field is edited to a new value
-                    int newQuantity = Integer.parseInt(fieldQuantity.getText());
-                    /* If the new quantity keyed into the text field is (MUST satisfy the following conditions):
-                     * a) A numeric data type
-                     * b) New quantity is a different value from the old quantity value
-                     */
-                    if ((newQuantity != oldQuantity)){
-                        StaffEditController staffEditController = new StaffEditController();
-                        if (staffEditController.editCustomerOrder(orderIDSelected, newQuantity)){
-                            JOptionPane.showMessageDialog(null, "Customer Order has been successful updated.", "Customer Order Update", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        else{
-                            JOptionPane.showMessageDialog(null, "Customer Order has not been successful updated.", "Customer Order Update", JOptionPane.ERROR_MESSAGE);
-                        }
-                        // Refresh Table, text fields and disable buttons
-                        refreshEditTable();
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null, "Quantity text field has not been edited.", "Error!", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Please enter a valid number in the quantity text field.", "Error!", JOptionPane.WARNING_MESSAGE);
-                }
-            }
+            editPanelButtonOnClick(e.getActionCommand());
         });
 
         // Fulfill Button Click Listener
         buttonFulfillment.addActionListener(e -> {
-            int orderIDSelected = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 0).toString());
-            // If Customer Order fulfillment status == "Y"
-            if (checkOrderFulfillment()){
-                JOptionPane.showMessageDialog(null, "Customer Order has already been fulfilled.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                StaffFulfillOrderController staffFulfillOrderController = new StaffFulfillOrderController();
-                if (staffFulfillOrderController.fulfillOrder(orderIDSelected)){
-                    JOptionPane.showMessageDialog(null, "Customer order fulfillment is successful.", "Customer Order Fulfillment", JOptionPane.INFORMATION_MESSAGE);
-                    refreshEditTable();
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Customer order fulfilled has failed.", "Error!", JOptionPane.WARNING_MESSAGE);
-                }
-            }
+            editPanelButtonOnClick(e.getActionCommand());
         });
 
         // Add components to the JPanel
@@ -243,7 +199,7 @@ public class RestaurantStaffPageUI extends JFrame {
     }
 
     // 1b) Method to construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
-    public Component displayTableConstruction(){
+    public Component editTableConstruction(){
         StaffViewController staffViewController = new StaffViewController();
         String [][] data = staffViewController.displayOrders();
         // Display data in a table format
@@ -290,7 +246,7 @@ public class RestaurantStaffPageUI extends JFrame {
                 panelEditOrder.remove(c);
             }
         }
-        panelEditOrder.add(displayTableConstruction(), 0);
+        panelEditOrder.add(editTableConstruction(), 0);
         panelEditOrder.revalidate();
         panelEditOrder.repaint();
     }
@@ -303,6 +259,66 @@ public class RestaurantStaffPageUI extends JFrame {
             isCustomerOrderFulfilled = true;
         }
         return isCustomerOrderFulfilled;
+    }
+
+    // 1e)
+    public void editPanelButtonOnClick(String nameOfButton){
+        switch (nameOfButton){
+            case "Edit Order":
+                // If Customer Order fulfillment status == "Y"
+                if (checkOrderFulfillment()){
+                    JOptionPane.showMessageDialog(null, "Customer Order has already been fulfilled.", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                // If Customer Order fulfillment status == "N"
+                else{
+                    int orderIDSelected = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 0).toString());
+                    // Check if the data keyed in Quantity Text Field is a numeric data type
+                    if ((fieldQuantity.getText() != null) && (fieldQuantity.getText().matches("[0-9.]+"))){
+                        int oldQuantity = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 2).toString());
+                        // Check if quantity text field is edited to a new value
+                        int newQuantity = Integer.parseInt(fieldQuantity.getText());
+                        /* If the new quantity keyed into the text field is (MUST satisfy the following conditions):
+                         * a) A numeric data type
+                         * b) New quantity is a different value from the old quantity value
+                         */
+                        if ((newQuantity != oldQuantity)){
+                            StaffEditController staffEditController = new StaffEditController();
+                            if (staffEditController.editCustomerOrder(orderIDSelected, newQuantity)){
+                                JOptionPane.showMessageDialog(null, "Customer Order has been successful updated.", "Customer Order Update", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(null, "Customer Order has not been successful updated.", "Customer Order Update", JOptionPane.ERROR_MESSAGE);
+                            }
+                            // Refresh Table, text fields and disable buttons
+                            refreshEditTable();
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null, "Quantity text field has not been edited.", "Error!", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Please enter a valid number in the quantity text field.", "Error!", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+                break;
+            case "Fulfill Order":
+                int orderIDSelected = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 0).toString());
+                // If Customer Order fulfillment status == "Y"
+                if (checkOrderFulfillment()){
+                    JOptionPane.showMessageDialog(null, "Customer Order has already been fulfilled.", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                else{
+                    StaffFulfillOrderController staffFulfillOrderController = new StaffFulfillOrderController();
+                    if (staffFulfillOrderController.fulfillOrder(orderIDSelected)){
+                        JOptionPane.showMessageDialog(null, "Customer order fulfillment is successful.", "Customer Order Fulfillment", JOptionPane.INFORMATION_MESSAGE);
+                        refreshEditTable();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Customer order fulfilled has failed.", "Error!", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+                break;
+        }
     }
 
 
