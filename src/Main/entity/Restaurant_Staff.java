@@ -25,13 +25,33 @@ public class Restaurant_Staff extends Staff {
     }
 
     // Function to Edit order status #22
-    public void editOrderStatus(Order order) {
+    public boolean editOrderStatus(int orderIDSelected) {
+        boolean isOrderFulfilled = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "UPDATE order_history SET fulfilled ='" + "Y" + "' WHERE order_id='" + orderIDSelected + "'";
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query);
+            isOrderFulfilled = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
 
+        return isOrderFulfilled;
     }
 
     // Function to Edit customer orders #23
-    public void editOrder(Order order) {
+    public boolean editOrder(int orderIDSelected, int newQuantity) {
+        boolean isOrderEdited = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "UPDATE order_history SET qty ='" + newQuantity + "' WHERE order_id='" + orderIDSelected + "'";
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query);
+            isOrderEdited = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
 
+        return isOrderEdited;
     }
 
     // Function to Search customer orders #24
