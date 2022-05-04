@@ -80,14 +80,20 @@ public class OwnerPageUI extends JFrame {
                 else{
                     String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
                     // Table
-                    refreshEditTable(radioButtonSelected);
+                    displayDataTableConstruction(radioButtonSelected);
                 }
 
                 break;
         }
     };
 
-    // Method for Restaurant Owner to display the data generation functions
+    /* 1. GENERATE REPORT/DATA function
+     * 1a) void displayGenerateDataPanel() - Display JPanel for Restaurant Owner to display the data generation functions
+     * 1b) void constructAndAddAvgSpendFields(JRadioButton [] radioButtons, String [] actionCommand) - Construct and add Radio Buttons to the JPanel
+     * 1c) Component displayDataTableConstruction(String radioButtonSelected) - Construction of the JTable (JTable type returned as a JScrollPane type)
+     */
+
+    // 1a) Method for Restaurant Owner to display the data generation functions
     public void displayGenerateDataPanel(){
         // Border
         TitledBorder titledBorder = new TitledBorder("Generate Data");
@@ -114,7 +120,7 @@ public class OwnerPageUI extends JFrame {
         ownerUIFrame.add(panelReport);
     }
 
-    // Method to construct and add Radio Buttons to the JPanel
+    // 1b) Method to construct and add Radio Buttons to the JPanel
     public void constructAndAddAvgSpendFields(JRadioButton [] radioButtons, String [] actionCommand){
         // Radio Buttons
         for (int i = 0; i < radioButtons.length; i++){
@@ -129,7 +135,7 @@ public class OwnerPageUI extends JFrame {
         }
     }
 
-    // Construction of the JTable (JTable type returned as a JScrollPane type)
+    // 1c) Construction of the JTable (JTable type returned as a JScrollPane type)
     public Component displayDataTableConstruction(String radioButtonSelected){
         GenerateReportController generateReportController = new GenerateReportController();
         String [][] data = generateReportController.getReport(radioButtonSelected);
@@ -137,13 +143,9 @@ public class OwnerPageUI extends JFrame {
         String [] columnTableNames = {"Daily", "Weekly", "Monthly"};
         // Table
         JTable tableGenerateData = new JTable(data, columnTableNames);
-        JScrollPane sp = new JScrollPane(tableGenerateData);
-        sp.setPreferredSize(new Dimension(470, 200)); // width then height
-        return sp;
-    }
+        JScrollPane generatedDataScrollPane = new JScrollPane(tableGenerateData);
+        generatedDataScrollPane.setPreferredSize(new Dimension(470, 200)); // width then height
 
-    // Method to refresh the Table data
-    public void refreshEditTable(String radioButtonSelected){
         //Get the components in the panel
         Component[] componentList = panelReport.getComponents();
         //Loop through the components
@@ -154,8 +156,11 @@ public class OwnerPageUI extends JFrame {
                 panelReport.remove(c);
             }
         }
-        panelReport.add(displayDataTableConstruction(radioButtonSelected),0);
+        panelReport.add(generatedDataScrollPane, 0);
         panelReport.revalidate();
         panelReport.repaint();
+
+        return generatedDataScrollPane;
     }
+
 }
