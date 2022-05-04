@@ -94,6 +94,10 @@ public class OwnerPageUI extends JFrame {
         titledBorder.setBorder(new LineBorder(Color.BLACK));
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
+        // Table Construction called in method, converted to a JScrollPane
+        JScrollPane scrollPane3 = (JScrollPane) displayDataTableConstruction("default");
+        panelReport.add(scrollPane3);
+
         // Radio Buttons
         JRadioButton [] radioButtons = {radioAvgSpend, radioFreqVisit, radioFoodPreference};
         String [] actionCommand = {"Average Spend", "Frequency of Visits", "Food Preference"};
@@ -103,7 +107,7 @@ public class OwnerPageUI extends JFrame {
         panelReport.add(buttonGenerateData);
 
         // Add components to the JPanel
-        panelReport.setPreferredSize(new Dimension(490, 500));
+        panelReport.setPreferredSize(new Dimension(490, 460));
         panelReport.setBackground(Color.WHITE);
         panelReport.setBorder(titledBorder);
         panelReport.setVisible(true);
@@ -134,7 +138,7 @@ public class OwnerPageUI extends JFrame {
         // Table
         JTable tableGenerateData = new JTable(data, columnTableNames);
         JScrollPane sp = new JScrollPane(tableGenerateData);
-        sp.setPreferredSize(new Dimension(485, 200)); // width then height
+        sp.setPreferredSize(new Dimension(470, 200)); // width then height
         return sp;
     }
 
@@ -150,7 +154,7 @@ public class OwnerPageUI extends JFrame {
                 panelReport.remove(c);
             }
         }
-        panelReport.add(displayDataTableConstruction(radioButtonSelected));
+        panelReport.add(displayDataTableConstruction(radioButtonSelected),0);
         panelReport.revalidate();
         panelReport.repaint();
     }
