@@ -67,9 +67,7 @@ public class RestaurantStaffPageUI extends JFrame {
         displayEditPanel();
         panelEditOrder.setVisible(true);
 
-        // 2. SEARCH function
-        displaySearchPanel();
-        panelSearchOrder.setVisible(false);
+
 
 
         staffUIFrame.setVisible(true);
@@ -135,18 +133,17 @@ public class RestaurantStaffPageUI extends JFrame {
 
 
     /* 1. CREATE function
-    * 1a) displayEditPanel method - Display JPanel for Restaurant Staff to edit orders
-    * 1b) displayTableConstruction() method - Construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
-    * 1c) refreshEditTable(int indexInDB) - Used to refresh only the JScrollPane for Edit page
-    * 1d) checkOrderFulfillment() - Check if Customer Order is fulfilled based on the Edit Table
-    * 1e) editPanelButtonOnClick(String nameOfButton) - All button action based on switch case
+    * 1a) void displayEditPanel - Display JPanel for Restaurant Staff to edit orders
+    * 1b) Component constructEditTable() - Construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
+    * 1c) boolean checkOrderFulfillment() - Check if Customer Order is fulfilled based on the Edit Table
+    * 1d) void editPanelButton_OnClick(String nameOfButton) - ALL edit JPanel buttons
     */
     // 1a) Method to display JPanel for Restaurant Staff to edit orders
     public void displayEditPanel(){
         displayTitledBorder(panelEditOrder, "Edit/Fulfill Customer Order"); // Display titled border
 
         // Table Construction called in method, converted to a JScrollPane
-        JScrollPane editOrderScrollPane = (JScrollPane) editTableConstruction();
+        JScrollPane editOrderScrollPane = (JScrollPane) constructEditTable();
 
         // Label
         labelOrderID.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
@@ -174,12 +171,12 @@ public class RestaurantStaffPageUI extends JFrame {
 
         // EDIT Button Click Listener
         buttonEditOrder.addActionListener(e -> {
-            editPanelButtonOnClick(e.getActionCommand());
+            editPanelButton_OnClick(e.getActionCommand());
         });
 
         // Fulfill Button Click Listener
         buttonFulfillment.addActionListener(e -> {
-            editPanelButtonOnClick(e.getActionCommand());
+            editPanelButton_OnClick(e.getActionCommand());
         });
 
         // Add components to the JPanel
@@ -199,16 +196,16 @@ public class RestaurantStaffPageUI extends JFrame {
     }
 
     // 1b) Method to construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
-    public Component editTableConstruction(){
+    public Component constructEditTable(){
         StaffViewController staffViewController = new StaffViewController();
         String [][] data = staffViewController.displayOrders();
         // Display data in a table format
         String [] columnTableNames = {"Order ID", "Food Name", "Quantity", "Price", "Fulfilled"};
         tableEditOrder = new JTable(data, columnTableNames);
-        JScrollPane sp = new JScrollPane(tableEditOrder);
-        sp.setPreferredSize(new Dimension(485, 200)); // width then height
+        JScrollPane editScrollPane = new JScrollPane(tableEditOrder);
+        editScrollPane.setPreferredSize(new Dimension(485, 200)); // width then height
 
-        // Table Mouse Listener
+        // Table Mouse Click Listener
         tableEditOrder.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -231,11 +228,7 @@ public class RestaurantStaffPageUI extends JFrame {
         for (JButton jButton : editButtons){
             jButton.setEnabled(false);
         }
-        return sp;
-    }
 
-    // 1c) Used to refresh only the JScrollPane for Edit page
-    public void refreshEditTable(){
         //Get the components in the panel
         Component[] componentList = panelEditOrder.getComponents();
         //Loop through the components
@@ -246,12 +239,14 @@ public class RestaurantStaffPageUI extends JFrame {
                 panelEditOrder.remove(c);
             }
         }
-        panelEditOrder.add(editTableConstruction(), 0);
+        panelEditOrder.add(editScrollPane, 0);
         panelEditOrder.revalidate();
         panelEditOrder.repaint();
+
+        return editScrollPane;
     }
 
-    // 1d) Check if Customer Order is fulfilled based on the Edit Table
+    // 1c) Check if Customer Order is fulfilled based on the Edit Table
     public boolean checkOrderFulfillment(){
         boolean isCustomerOrderFulfilled = false;
         String getCurrentFulfillmentStatus = tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 4).toString();
@@ -261,8 +256,8 @@ public class RestaurantStaffPageUI extends JFrame {
         return isCustomerOrderFulfilled;
     }
 
-    // 1e)
-    public void editPanelButtonOnClick(String nameOfButton){
+    // 1d) ALL edit JPanel buttons
+    public void editPanelButton_OnClick(String nameOfButton){
         switch (nameOfButton){
             case "Edit Order":
                 // If Customer Order fulfillment status == "Y"
@@ -290,7 +285,7 @@ public class RestaurantStaffPageUI extends JFrame {
                                 JOptionPane.showMessageDialog(null, "Customer Order has not been successful updated.", "Customer Order Update", JOptionPane.ERROR_MESSAGE);
                             }
                             // Refresh Table, text fields and disable buttons
-                            refreshEditTable();
+                            constructEditTable();
                         }
                         else{
                             JOptionPane.showMessageDialog(null, "Quantity text field has not been edited.", "Error!", JOptionPane.WARNING_MESSAGE);
@@ -311,7 +306,7 @@ public class RestaurantStaffPageUI extends JFrame {
                     StaffFulfillOrderController staffFulfillOrderController = new StaffFulfillOrderController();
                     if (staffFulfillOrderController.fulfillOrder(orderIDSelected)){
                         JOptionPane.showMessageDialog(null, "Customer order fulfillment is successful.", "Customer Order Fulfillment", JOptionPane.INFORMATION_MESSAGE);
-                        refreshEditTable();
+                        constructEditTable();
                     }
                     else{
                         JOptionPane.showMessageDialog(null, "Customer order fulfilled has failed.", "Error!", JOptionPane.WARNING_MESSAGE);
@@ -321,22 +316,6 @@ public class RestaurantStaffPageUI extends JFrame {
         }
     }
 
-
-    /* 2. SEARCH function
-    * 2a) displaySearchPanel - Display JPanel for Restaurant Staff to search orders
-    * */
-    public void displaySearchPanel(){
-        displayTitledBorder(panelSearchOrder, "Search Customer Order"); // Display titled border
-
-
-
-        // Add components to the JPanel
-        panelSearchOrder.setPreferredSize(new Dimension(500, 550));
-        panelSearchOrder.setBackground(Color.WHITE);
-
-        staffUIFrame.add(panelSearchOrder);
-        panelSearchOrder.setVisible(true);
-    }
 
 
 }
