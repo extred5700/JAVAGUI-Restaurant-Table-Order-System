@@ -81,16 +81,13 @@ public class UserAdminPageUI extends JFrame{
         displayCreatePanel();
         panelCreate.setVisible(false);
 
-
         // 2. EDIT function
         displayEditPanel();
         panelEdit.setVisible(false);
 
-
         // 3. VIEW function
         displaySearchPanel();
         panelView.setVisible(false);
-
 
         // 4. SUSPEND function
         displaySuspendPanel();
@@ -103,15 +100,12 @@ public class UserAdminPageUI extends JFrame{
                 panelCreate.setVisible(true);
                 break;
             case "Edit":
-                refreshEditTable();
                 panelEdit.setVisible(true);
                 break;
             case "View":
-                refreshViewTable("default", "default");
                 panelView.setVisible(true);
                 break;
             case "Suspend":
-                refreshSuspendTable();
                 panelSuspend.setVisible(true);
                 break;
         }
@@ -152,24 +146,19 @@ public class UserAdminPageUI extends JFrame{
                 panelSuspend.setVisible(false);
             }
             case "Edit" -> {
-                //When swapping back to the edit page, refresh the edit table
-                refreshEditTable();
                 panelEdit.setVisible(true);
                 panelView.setVisible(false);
                 panelSuspend.setVisible(false);
                 panelCreate.setVisible(false);
             }
             case "View" -> {
-                //When swapping back to the view page, refresh the view table
-                refreshViewTable("default", "default");
                 panelView.setVisible(true);
                 panelSuspend.setVisible(false);
                 panelCreate.setVisible(false);
                 panelEdit.setVisible(false);
             }
             case "Suspend" -> {
-                //When swapping back to the suspend page, refresh the suspend table
-                refreshSuspendTable();
+                //dispose();
                 panelSuspend.setVisible(true);
                 panelCreate.setVisible(false);
                 panelEdit.setVisible(false);
@@ -180,7 +169,8 @@ public class UserAdminPageUI extends JFrame{
 
 
     /* 1. CREATE function
-    * 1a) displayCreatePanel() - Display JPanel for User Admin to create an account
+    * 1a) void displayCreatePanel() - Display JPanel for User Admin to create an account
+    * 1b) void createButton_Onclick() - Create button function to allow the user to create an account by passing the data to the controller
     */
     // 1a) Method for User Admin to CREATE a new user account for a new employee
     public void displayCreatePanel(){
@@ -205,24 +195,7 @@ public class UserAdminPageUI extends JFrame{
         buttonCreateAccount.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonCreateAccount.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonCreateAccount.setBackground(Color.WHITE);
-        buttonCreateAccount.addActionListener(e -> {
-            String createUsernameText = fieldCreateUsername.getText();
-            String createPasswordText = fieldCreatePassword.getText();
-            String createProfileText = Objects.requireNonNull(createProfileType.getSelectedItem()).toString();
-            AddUserController addUserController = new AddUserController();
-            // validateCreate() method located in AddUserController.java
-            if ((createUsernameText.isEmpty()) || (createPasswordText.isEmpty())){
-                JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                if (addUserController.validateCreate(createUsernameText, createPasswordText, createProfileText)){
-                    JOptionPane.showMessageDialog(null, "Account is created successfully.", "Account Creation", JOptionPane.INFORMATION_MESSAGE);
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Account already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+        buttonCreateAccount.addActionListener(e -> createButton_Onclick());
 
         // Add components to the JPanel
         panelCreate.setPreferredSize(new Dimension(420, 270));
@@ -238,12 +211,31 @@ public class UserAdminPageUI extends JFrame{
         userAdminUIFrame.add(panelCreate);
     }
 
+    // 1b) Create button function to allow the user to create an account by passing the data to the controller
+    public void createButton_Onclick(){
+        String createUsernameText = fieldCreateUsername.getText();
+        String createPasswordText = fieldCreatePassword.getText();
+        String createProfileText = Objects.requireNonNull(createProfileType.getSelectedItem()).toString();
+        // validateCreate() method located in AddUserController.java
+        if ((createUsernameText.isEmpty()) || (createPasswordText.isEmpty())){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            AddUserController addUserController = new AddUserController();
+            if (addUserController.validateCreate(createUsernameText, createPasswordText, createProfileText)){
+                JOptionPane.showMessageDialog(null, "Account is created successfully.", "Account Creation", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Account already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
 
     /* 2. EDIT function
-    * 2a) displayEditPanel(String usernameLoggedIn) - Display JPanel for User Admin to edit an account's details
-    * 2b) editTableConstruction() - Construction of the JTable, Mouse Click Listener to display an account's details in the text field (JTable type returned as a JScrollPane type)
-    * 2c) editUserDetails(String newUsername, String newPassword, String newProfile) - Method to pass data to the controller before updating the DB
-    * 2d) refreshEditTable() - Used to refresh only the JScrollPane for Edit page
+    * 2a) void displayEditPanel(String usernameLoggedIn) - Display JPanel for User Admin to edit an account's details
+    * 2b) Component editTableConstruction() - Construction of the JTable, Mouse Click Listener to display an account's details in the text field (JTable type returned as a JScrollPane type)
+    * 2c) void editButton_Onclick() - Edit button function to allow the user to edit an account details by passing the data to the controller
     */
     // 2a) Method for User Admin to EDIT a user account details
     public void displayEditPanel(){
@@ -253,7 +245,7 @@ public class UserAdminPageUI extends JFrame{
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
         // Table Construction called in method, converted to a JScrollPane
-        JScrollPane scrollPane = (JScrollPane) editTableConstruction();
+        JScrollPane editScrollPane1 = (JScrollPane) editTableConstruction();
 
         // Labels
         labelEditUsername.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
@@ -270,24 +262,11 @@ public class UserAdminPageUI extends JFrame{
         buttonEditChanges.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonEditChanges.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonEditChanges.setBackground(Color.WHITE);
-        buttonEditChanges.addActionListener(e -> {
-            String username = fieldEditUsername.getText();
-            String password = fieldEditPassword.getText();
-            String profile = fieldEditProfile.getText();
-            // Check if text field are left empty by the user
-            if (username.isEmpty() || password.isEmpty() || profile.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                editUserDetails(username, password, profile);
-                //After Edit, refresh edit table
-                refreshEditTable();
-            }
-        });
+        buttonEditChanges.addActionListener(e -> editButton_Onclick());
 
         panelEdit.setPreferredSize(new Dimension(500, 490));
         panelEdit.setBackground(Color.WHITE);
-        panelEdit.add(scrollPane);
+        panelEdit.add(editScrollPane1);
         panelEdit.add(labelEditUsername);
         panelEdit.add(fieldEditUsername);
         panelEdit.add(labelEditPassword);
@@ -307,10 +286,10 @@ public class UserAdminPageUI extends JFrame{
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
         tableEditUsers = new JTable(data, columnTableNames);
-        JScrollPane sp = new JScrollPane(tableEditUsers);
-        sp.setPreferredSize(new Dimension(485, 200)); // width then height
+        JScrollPane editScrollPane2 = new JScrollPane(tableEditUsers);
+        editScrollPane2.setPreferredSize(new Dimension(485, 200)); // width then height
 
-        // Table Mouse Listener
+        // Table Mouse Click Listener
         tableEditUsers.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -321,33 +300,10 @@ public class UserAdminPageUI extends JFrame{
                 fieldEditProfile.setText(tableEditUsers.getModel().getValueAt(getRow, 2).toString());
             }
         });
-        return sp;
-    }
 
-    // 2c) Method to pass data to the controller before updating the DB
-    public void editUserDetails(String newUsername, String newPassword, String newProfile){
-
-        EditUserController editUserController = new EditUserController();
-        int rowSelected = tableEditUsers.getSelectedRow();
-        if (rowSelected != -1){
-            String oldUsername = tableEditUsers.getModel().getValueAt(rowSelected,0).toString();
-            if (editUserController.editUserAccount(oldUsername, newUsername, newPassword, newProfile)){
-                JOptionPane.showMessageDialog(null, "Account has been successful updated.", "Account Update", JOptionPane.INFORMATION_MESSAGE);
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Account has not been successful updated.", "Account Update", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        else{
-            JOptionPane.showMessageDialog(null, "No such account!", "Account Update", JOptionPane.ERROR_MESSAGE);
-        }
-    } // end of the method updateUserDetails()
-
-    // 2d) Used to refresh only the JScrollPane for Edit page
-    public void refreshEditTable(){
-        //Get the components in the panel
+        // Get the components in the panel
         Component[] componentList = panelEdit.getComponents();
-        //Loop through the components
+        // Loop through the components
         for(Component c : componentList){
             //Find the components you want to remove
             if(c instanceof JScrollPane){
@@ -355,32 +311,62 @@ public class UserAdminPageUI extends JFrame{
                 panelEdit.remove(c);
             }
         }
-        panelEdit.add(editTableConstruction(),0);
+        panelEdit.add(editScrollPane2, 0);
         panelEdit.revalidate();
         panelEdit.repaint();
+
+        return editScrollPane2;
+    }
+
+    // 2d) Create button function to allow the user to edit an account by passing the data to the controller
+    public void editButton_Onclick(){
+        String newUsername = fieldEditUsername.getText();
+        String newPassword = fieldEditPassword.getText();
+        String newProfile = fieldEditProfile.getText();
+        // Check if text field are left empty by the user
+        if (newUsername.isEmpty() || newPassword.isEmpty() || newProfile.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty.", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            int rowSelected = tableEditUsers.getSelectedRow();
+            if (rowSelected != -1){
+                String oldUsername = tableEditUsers.getModel().getValueAt(rowSelected,0).toString();
+                EditUserController editUserController = new EditUserController();
+                if (editUserController.editUserAccount(oldUsername, newUsername, newPassword, newProfile)){
+                    JOptionPane.showMessageDialog(null, "Account has been successful updated.", "Account Update", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Account has not been successful updated.", "Account Update", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "No such account!", "Account Update", JOptionPane.ERROR_MESSAGE);
+            }
+            //After Edit, refresh edit table
+            editTableConstruction();
+        }
     }
 
 
     /* 3. VIEW function
-    * 3a) displaySearchPanel() - Display JPanel for User Admin to View accounts' details
-    * 3b) viewTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type, to display search results
-    * 3c) refreshViewTable(String usernameKeyedIn) - Used to refresh only the JScrollPane for View page
+    * 3a) void displaySearchPanel() - Display JPanel for User Admin to View accounts' details
+    * 3b) Component viewTableConstruction(String [][] data) - Construction of the JTable, JTable type returned as a JScrollPane type, to display search results
+    * 3c) void viewButton_Onclick(String nameOfButton) - View button function to allow the user to search for a username or user profile by passing the 2 data to the controller
     * */
     // 3a) Method for User Admin to VIEW a user account details
     public void displaySearchPanel(){
-        panelView.removeAll();
         // Border
         titledBorder = new TitledBorder("View Users");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
-        // Table Construction called in method, converted to a JScrollPane
-        JScrollPane scrollPane = (JScrollPane) viewTableConstruction("default", "default");
-        panelView.add(scrollPane);
+        // Initial Table Construction
+        ViewUserController viewUserController = new ViewUserController();
+        String [][] ini_data = viewUserController.getUserInfo();
+        JScrollPane searchScrollPane1 = (JScrollPane) viewTableConstruction(ini_data);
 
         // Text field
         fieldSearchUser.setPreferredSize(new Dimension(60, 30));
-        panelView.add(fieldSearchUser);
 
         // Search Buttons (Username & User Profile)
         JButton [] butttonsForViewUsers = {buttonSearchUser, buttonSearchProfile};
@@ -388,64 +374,36 @@ public class UserAdminPageUI extends JFrame{
             jButton.setPreferredSize(new Dimension(220, 30));
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
-            panelView.add(jButton);
         }
-        // Search Username Button
-        buttonSearchUser.addActionListener(e -> {
-            String usernameKeyedIn = fieldSearchUser.getText();
-            if (usernameKeyedIn.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                //Refresh View Table with search query results
-                refreshViewTable(usernameKeyedIn, "search_by_username");
-            }
-        });
-        // Search User Profile Button
-        buttonSearchProfile.addActionListener(e -> {
-            String userProfileKeyedIn = fieldSearchUser.getText();
-            if (userProfileKeyedIn.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                //Refresh View Table with search query results
-                refreshViewTable(userProfileKeyedIn, "search_by_profile");
-            }
-        });
+        buttonSearchUser.setActionCommand("Search By Username");
+        buttonSearchProfile.setActionCommand("Search By Profile");
+
+        // SEARCH USERNAME Button Click Listener
+        buttonSearchUser.addActionListener(e -> viewButton_Onclick(e.getActionCommand()));
+
+        // SEARCH USERPROFILE Button Click Listener
+        buttonSearchProfile.addActionListener(e -> viewButton_Onclick(e.getActionCommand()));
 
         // Components of JPanel
-        panelView.setPreferredSize(new Dimension(500, 390));
+        panelView.setPreferredSize(new Dimension(500, 450));
         panelView.setBackground(Color.WHITE);
         panelView.setBorder(titledBorder);
-        panelView.repaint();
-        panelView.revalidate();
-        panelView.setVisible(true);
+        panelView.add(searchScrollPane1);
+        panelView.add(fieldSearchUser);
+        panelView.add(buttonSearchUser);
+        panelView.add(buttonSearchProfile);
         userAdminUIFrame.add(panelView);
+        panelView.setVisible(true);
     }
 
-    // 3b) viewTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type, to display search results
-    public Component viewTableConstruction(String usernameKeyedIn, String searchStatus){
-        ViewUserController viewUserController = new ViewUserController();
+    // 3b) Construction of the JTable, JTable type returned as a JScrollPane type, to display search results
+    public Component viewTableConstruction(String [][] data){
+        // Display data in a table format
         String [] columnTableNames = {"Username", "Password", "User Profile", "Active"};
+        tableViewUsers = new JTable(data, columnTableNames);
+        JScrollPane searchScrollPane2 = new JScrollPane(tableViewUsers);
+        searchScrollPane2.setPreferredSize(new Dimension(485, 200)); // width then height
 
-        if (searchStatus.equals("default")){
-            String [][] data = viewUserController.getUserInfo();
-            tableViewUsers = new JTable(data, columnTableNames);
-        }
-        // Search by username or user profile
-        else {
-            String [][] displaySearchResults = viewUserController.searchByUsername(usernameKeyedIn, searchStatus);
-            // Display data in a table format
-            tableViewUsers = new JTable(displaySearchResults, columnTableNames);
-        }
-
-        JScrollPane sp = new JScrollPane(tableViewUsers);
-        sp.setPreferredSize(new Dimension(485, 200)); // width then height
-        return sp;
-    }
-
-    // 3c) Used to refresh only the JScrollPane for View page
-    public void refreshViewTable(String searchResult, String searchStatus){
         //Get the components in the panel
         Component[] componentList = panelView.getComponents();
         //Loop through the components
@@ -456,16 +414,28 @@ public class UserAdminPageUI extends JFrame{
                 panelView.remove(c);
             }
         }
-        panelView.add(viewTableConstruction(searchResult, searchStatus),0);
+        panelView.add(searchScrollPane2, 0);
         panelView.revalidate();
         panelView.repaint();
+
+        return searchScrollPane2;
+    }
+
+    // 3c) View button function to allow the user to search for a username or user profile by passing the 2 data to the controller
+    public void viewButton_Onclick(String nameOfButton){
+        String dataKeyedIn = fieldSearchUser.getText();
+        ViewUserController viewUserController = new ViewUserController();
+        String [][] data = viewUserController.searchBy(dataKeyedIn, nameOfButton); // get data from controller which gets it from entity User Admin
+        viewTableConstruction(data); // Construct table
     }
 
 
+
+
     /* 4. SUSPEND function
-    * 4a) displaySuspendPanel() - Display JPanel for User Admin to suspend an account's details
-    * 4b) suspendTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type
-    * 4c) refreshSuspendTable(String usernameKeyedIn) - Used to refresh only the JScrollPane for Suspend page
+    * 4a) void displaySuspendPanel() - Display JPanel for User Admin to suspend an account's details
+    * 4b) Component suspendTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type
+    * 4c) void suspendButton_Onclick() - Suspend button function to allow the user to suspend a user by passing the selected username into the controller
     */
     // 4a) Method for the User Admin to SUSPEND a user account
     public void displaySuspendPanel(){
@@ -475,51 +445,22 @@ public class UserAdminPageUI extends JFrame{
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
         // Table Construction called in method, converted to a JScrollPane
-        JScrollPane scrollPane3 = (JScrollPane) suspendTableConstruction();
+        JScrollPane suspendScrollPane1 = (JScrollPane) suspendTableConstruction();
 
         // Suspend Button
         buttonSuspendChanges.setPreferredSize(new Dimension(250, 30));
         buttonSuspendChanges.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonSuspendChanges.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonSuspendChanges.setBackground(Color.WHITE);
-        buttonSuspendChanges.addActionListener(e -> {
-            int getRow = tableSuspendUsers.getSelectedRow();
-            // Ensure the User has selected a row from the table displaying all the user accounts
-            if (getRow != -1){
-                // Get the selected username by getting the value of the
-                String selectedUsername = (String) tableSuspendUsers.getModel().getValueAt(getRow, 0);
-                String currentActiveStatus = (String) tableSuspendUsers.getModel().getValueAt(getRow, 3);
-                String newActiveStatus = switch (currentActiveStatus) {
-                    case "Y" -> "N";
-                    case "N" -> "Y";
-                    default -> "";
-                    // Change active status to the opposite and update the database
-                };
-                if (new SuspendUserController().suspendUser(selectedUsername, newActiveStatus)){
-                    if (newActiveStatus.equals("N")){
-                        JOptionPane.showMessageDialog(null, "Account has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
-                        refreshSuspendTable();
-                    }
-                    else if (newActiveStatus.equals("Y"))
-                    {
-                        JOptionPane.showMessageDialog(null, "Account has been successfully un-suspended!", "Un-suspend User", JOptionPane.INFORMATION_MESSAGE);
-                        refreshSuspendTable();
-                    }
 
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Account suspension failed.", "Suspend User", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Please select a user account to suspend from the table.", "Error!", JOptionPane.ERROR_MESSAGE);
-            }
+        buttonSuspendChanges.addActionListener(e -> {
+            suspendButton_Onclick();
         });
 
         // Add components to the JPanel
         panelSuspend.setPreferredSize(new Dimension(500, 330));
         panelSuspend.setBackground(Color.WHITE);
-        panelSuspend.add(scrollPane3);
+        panelSuspend.add(suspendScrollPane1);
         panelSuspend.add(buttonSuspendChanges);
         panelSuspend.setBorder(titledBorder);
         panelSuspend.setVisible(true);
@@ -533,13 +474,9 @@ public class UserAdminPageUI extends JFrame{
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
         tableSuspendUsers = new JTable(data, columnTableNames);
-        JScrollPane sp = new JScrollPane(tableSuspendUsers);
-        sp.setPreferredSize(new Dimension(485, 200)); // width then height
-        return sp;
-    }
+        JScrollPane suspendScrollPane2 = new JScrollPane(tableSuspendUsers);
+        suspendScrollPane2.setPreferredSize(new Dimension(485, 200)); // width then height
 
-    // 4c) Used to refresh only the JScrollPane for Suspend page
-    public void refreshSuspendTable(){
         //Get the components in the panel
         Component[] componentList = panelSuspend.getComponents();
         //Loop through the components
@@ -550,9 +487,46 @@ public class UserAdminPageUI extends JFrame{
                 panelSuspend.remove(c);
             }
         }
-        panelSuspend.add(suspendTableConstruction(),0);
+        panelSuspend.add(suspendScrollPane2, 0);
         panelSuspend.revalidate();
         panelSuspend.repaint();
+
+        return suspendScrollPane2;
+    }
+
+    // 4c) Suspend button function to allow the user to suspend a user by passing the selected username into the controller
+    public void suspendButton_Onclick(){
+        int getRow = tableSuspendUsers.getSelectedRow();
+        // Ensure the User has selected a row from the table displaying all the user accounts
+        if (getRow != -1){
+            // Get the selected username by getting the value of the
+            String selectedUsername = (String) tableSuspendUsers.getModel().getValueAt(getRow, 0);
+            String currentActiveStatus = (String) tableSuspendUsers.getModel().getValueAt(getRow, 3);
+            String newActiveStatus = switch (currentActiveStatus) {
+                case "Y" -> "N";
+                case "N" -> "Y";
+                default -> "";
+                // Change active status to the opposite and update the database
+            };
+            if (new SuspendUserController().suspendUser(selectedUsername, newActiveStatus)){
+                if (newActiveStatus.equals("N")){
+                    JOptionPane.showMessageDialog(null, "Account has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
+                    suspendTableConstruction();
+                }
+                else if (newActiveStatus.equals("Y"))
+                {
+                    JOptionPane.showMessageDialog(null, "Account has been successfully un-suspended!", "Un-suspend User", JOptionPane.INFORMATION_MESSAGE);
+                    suspendTableConstruction();
+                }
+
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Account suspension failed.", "Suspend User", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Please select a user account to suspend from the table.", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 }
