@@ -430,8 +430,6 @@ public class UserAdminPageUI extends JFrame{
     }
 
 
-
-
     /* 4. SUSPEND function
     * 4a) void displaySuspendPanel() - Display JPanel for User Admin to suspend an account's details
     * 4b) Component suspendTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type
@@ -453,9 +451,7 @@ public class UserAdminPageUI extends JFrame{
         buttonSuspendChanges.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonSuspendChanges.setBackground(Color.WHITE);
 
-        buttonSuspendChanges.addActionListener(e -> {
-            suspendButton_Onclick();
-        });
+        buttonSuspendChanges.addActionListener(e -> suspendButton_Onclick());
 
         // Add components to the JPanel
         panelSuspend.setPreferredSize(new Dimension(500, 330));
