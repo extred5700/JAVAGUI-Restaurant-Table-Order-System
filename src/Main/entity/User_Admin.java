@@ -89,7 +89,7 @@ public class User_Admin extends Staff {
     }
 
     // Function to Search for user accounts #5
-    public String [][] searchAccount(String usernameKeyedIn, String searchStatus) {
+    public String [][] searchAccount(String dataKeyedIn, String searchStatus) {
         ArrayList<String> arrayListSearchedUsernames = new ArrayList<>();
         ArrayList<String> arrayListSearchedPasswords = new ArrayList<>();
         ArrayList<String> arrayListSearchedProfiles = new ArrayList<>();
@@ -97,11 +97,11 @@ public class User_Admin extends Staff {
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
 
         switch (searchStatus){
-            case "search_by_username":
+            case "Search By Username":
                 try{
                     Statement statement = dbConnection.createStatement();
                     //SQL query stuff
-                    ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE username LIKE '%" + usernameKeyedIn + "%'");
+                    ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE username LIKE '%" + dataKeyedIn + "%'");
 
                     while (rs.next()) { //This is the result set
                         // Add data to their respective array list
@@ -115,11 +115,11 @@ public class User_Admin extends Staff {
                     e.printStackTrace();
                 }
                 break;
-            case "search_by_profile":
+            case "Search By Profile":
                 try{
                     Statement statement = dbConnection.createStatement();
                     //SQL query stuff
-                    ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE user_profile LIKE '%" + usernameKeyedIn + "%'");
+                    ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE user_profile LIKE '%" + dataKeyedIn + "%'");
 
                     while (rs.next()) { //This is the result set
                         // Add data to their respective array list
@@ -189,34 +189,4 @@ public class User_Admin extends Staff {
     public void suspendProfile(String userID, String profile) {
 
     }
-
-    public boolean checkUserExistence(String username, String password, String profile){
-        boolean userExistence = false;
-        Connection dbConnection = dbConnection(); // Set up connection with the DB
-        try{
-            Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM user WHERE username ='"
-                            +username+
-                            "' AND password = '"
-                            +password+
-                            "' AND user_profile = '"
-                            +profile+
-                            "'");
-            if (!rs.next()){
-                //This means no account found
-                System.out.println("No account found.");
-            }
-            else{
-                //This means account found
-                System.out.println("Account is valid.");
-                userExistence = true;
-            }
-        }catch (SQLException e){
-            // Catches any SQL query issues
-            System.out.println(e);
-        }
-        return userExistence;
-    } // end of method checkUserExistence()
 }
