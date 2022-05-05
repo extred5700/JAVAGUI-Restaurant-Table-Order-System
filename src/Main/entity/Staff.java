@@ -1,6 +1,7 @@
 package Main.entity;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Staff{
     // Variable Declaration
@@ -79,5 +80,5 @@ public class Staff{
             System.out.println(e);
         }
         return userExistence;
-    } // end of method login()
+    } // end of method checkUserExistence()
 }
