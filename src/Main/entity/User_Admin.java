@@ -166,16 +166,16 @@ public class User_Admin extends Staff {
                 break;
         }
         // Convert Array List to a 2D array
-        String [][] arrayAllSearchedData = new String[arrayListSearchedUsernames.size()][4];
-        for (int row = 0; row < arrayAllSearchedData.length; row++){
-            for (int column = 0; column < arrayAllSearchedData[row].length; column++){
-                arrayAllSearchedData[row][0] = arrayListSearchedUsernames.get(row);
-                arrayAllSearchedData[row][1] = arrayListSearchedPasswords.get(row);
-                arrayAllSearchedData[row][2] = arrayListSearchedProfiles.get(row);
-                arrayAllSearchedData[row][3] = arrayListSearchedActive.get(row);
+        String [][] searchData = new String[arrayListSearchedUsernames.size()][4];
+        for (int row = 0; row < searchData.length; row++){
+            for (int column = 0; column < searchData[row].length; column++){
+                searchData[row][0] = arrayListSearchedUsernames.get(row);
+                searchData[row][1] = arrayListSearchedPasswords.get(row);
+                searchData[row][2] = arrayListSearchedProfiles.get(row);
+                searchData[row][3] = arrayListSearchedActive.get(row);
             }
         }
-        return arrayAllSearchedData;
+        return searchData;
     }
 
     // Function to View user accounts #6

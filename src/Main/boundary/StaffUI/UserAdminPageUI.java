@@ -397,10 +397,10 @@ public class UserAdminPageUI extends JFrame{
     }
 
     // 3b) Construction of the JTable, JTable type returned as a JScrollPane type, to display search results
-    public Component viewTableConstruction(String [][] data){
+    public Component viewTableConstruction(String [][] searchData){
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password", "User Profile", "Active"};
-        tableViewUsers = new JTable(data, columnTableNames);
+        tableViewUsers = new JTable(searchData, columnTableNames);
         JScrollPane searchScrollPane2 = new JScrollPane(tableViewUsers);
         searchScrollPane2.setPreferredSize(new Dimension(485, 200)); // width then height
 
@@ -422,16 +422,17 @@ public class UserAdminPageUI extends JFrame{
     }
 
     // 3c) View button function to allow the user to search for a username or user profile by passing the 2 data to the controller
-    public void viewButton_Onclick(String nameOfButton){
+    public void viewButton_Onclick(String searchStatus){
         String dataKeyedIn = fieldSearchUser.getText();
         ViewUserController viewUserController = new ViewUserController();
-        String [][] data = viewUserController.searchBy(dataKeyedIn, nameOfButton); // get data from controller which gets it from entity User Admin
+        String [][] data = viewUserController.searchBy(dataKeyedIn, searchStatus); // get data from controller which gets it from entity User Admin
         viewTableConstruction(data); // Construct table
     }
 
 
     /* 4. SUSPEND function
-    * 4a) void displaySuspendPanel() - Display JPanel for User Admin to suspend an account's details
+    * 4a) void displaySuspendPanel() - Display JPanel for User Admi
+    * n to suspend an account's details
     * 4b) Component suspendTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type
     * 4c) void suspendButton_Onclick() - Suspend button function to allow the user to suspend a user by passing the selected username into the controller
     */
