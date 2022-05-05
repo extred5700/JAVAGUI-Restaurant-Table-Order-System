@@ -1,6 +1,7 @@
 package Main;
 
 import Main.boundary.*;
+import Main.boundary.CustomerPageUI;
 import Main.boundary.StaffLoginPage;
 import Main.boundary.StaffUI.*;
 
