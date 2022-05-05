@@ -14,7 +14,7 @@ public class ViewUserController {
         return userAdmin.getUserInfoFromDB();
     }
 
-    public String [][] searchByUsername(String usernameKeyedIn, String searchStatus){
-        return userAdmin.searchAccount(usernameKeyedIn, searchStatus);
+    public String [][] searchBy(String dataKeyedIn, String searchStatus){
+        return userAdmin.searchAccount(dataKeyedIn, searchStatus);
     }
 }
