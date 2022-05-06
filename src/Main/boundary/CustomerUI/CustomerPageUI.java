@@ -37,11 +37,11 @@ public class CustomerPageUI extends JFrame {
     private JTable tableMenuItems;
     private final JLabel labelItemId = new JLabel("Item Number: ");
     private final JTextField fieldItemId = new JTextField(20);
-    private final JLabel labelItemName = new JLabel("Selected: ");
+    private final JLabel labelItemName = new JLabel("Selected:        ");
     private final JTextField fieldItemName = new JTextField(20);
-    private final JLabel labelItemQty = new JLabel("Quantity: ");
+    private final JLabel labelItemQty = new JLabel("Quantity:        ");
     private final JTextField fieldItemQty = new JTextField(20);
-    private final JLabel labelItemPrice = new JLabel("Total Price: ");
+    private final JLabel labelItemPrice = new JLabel("Total Price:    ");
     private final JTextField fieldItemPrice = new JTextField(20);
     private final JButton buttonAddToCart = new JButton("Add To Cart");
 
@@ -250,10 +250,10 @@ public class CustomerPageUI extends JFrame {
         mouseClickListenerViewMenu();
 
         // Labels
-        labelItemId.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
-        labelItemName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
-        labelItemQty.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
-        labelItemPrice.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
+        labelItemId.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+        labelItemName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+        labelItemQty.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+        labelItemPrice.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
 
         // Text Fields
         fieldItemId.setPreferredSize(new Dimension(50, 30));
