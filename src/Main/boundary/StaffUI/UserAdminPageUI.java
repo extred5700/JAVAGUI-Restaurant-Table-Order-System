@@ -147,19 +147,21 @@ public class UserAdminPageUI extends JFrame{
                 panelSuspend.setVisible(false);
             }
             case "Edit" -> {
+                displayEditPanel();
                 panelEdit.setVisible(true);
                 panelView.setVisible(false);
                 panelSuspend.setVisible(false);
                 panelCreate.setVisible(false);
             }
             case "View" -> {
+                displaySearchPanel();
                 panelView.setVisible(true);
                 panelSuspend.setVisible(false);
                 panelCreate.setVisible(false);
                 panelEdit.setVisible(false);
             }
             case "Suspend" -> {
-                //dispose();
+                displaySuspendPanel();
                 panelSuspend.setVisible(true);
                 panelCreate.setVisible(false);
                 panelEdit.setVisible(false);
@@ -469,8 +471,8 @@ public class UserAdminPageUI extends JFrame{
 
     // 4b) Construction of the JTable, Mouse Click Listener to display an account's details in the text field (JTable type returned as a JScrollPane type)
     public Component suspendTableConstruction(){
-        ViewUserController viewUserController = new ViewUserController();
-        String [][] data = viewUserController.getUserInfo();
+        SuspendUserController suspendUserController = new SuspendUserController();
+        String [][] data = suspendUserController.getUserInfo();
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
         tableSuspendUsers = new JTable(data, columnTableNames);
