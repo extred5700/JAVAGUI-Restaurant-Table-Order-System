@@ -166,16 +166,16 @@ public class User_Admin extends Staff {
                 break;
         }
         // Convert Array List to a 2D array
-        String [][] searchData = new String[arrayListSearchedUsernames.size()][4];
-        for (int row = 0; row < searchData.length; row++){
-            for (int column = 0; column < searchData[row].length; column++){
-                searchData[row][0] = arrayListSearchedUsernames.get(row);
-                searchData[row][1] = arrayListSearchedPasswords.get(row);
-                searchData[row][2] = arrayListSearchedProfiles.get(row);
-                searchData[row][3] = arrayListSearchedActive.get(row);
+        String [][] arrayAllSearchedData = new String[arrayListSearchedUsernames.size()][4];
+        for (int row = 0; row < arrayAllSearchedData.length; row++){
+            for (int column = 0; column < arrayAllSearchedData[row].length; column++){
+                arrayAllSearchedData[row][0] = arrayListSearchedUsernames.get(row);
+                arrayAllSearchedData[row][1] = arrayListSearchedPasswords.get(row);
+                arrayAllSearchedData[row][2] = arrayListSearchedProfiles.get(row);
+                arrayAllSearchedData[row][3] = arrayListSearchedActive.get(row);
             }
         }
-        return searchData;
+        return arrayAllSearchedData;
     }
 
     // Function to View user accounts #6
@@ -217,7 +217,16 @@ public class User_Admin extends Staff {
     }
 
     // Function to Suspend user profile #12
-    public void suspendProfile(String userID, String profile) {
-
+    public boolean suspendProfile(String selectedUsername, String newActiveStatus) {
+        boolean isProfileSuspended = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "UPDATE user SET active ='" + newActiveStatus + "' WHERE username='" + selectedUsername + "'";
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query);
+            isProfileSuspended = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return isProfileSuspended;
     }
 }
