@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class OwnerPageUI extends JFrame {
@@ -40,10 +41,18 @@ public class OwnerPageUI extends JFrame {
         labelTopHeader.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         ownerUIFrame.add(labelTopHeader);
 
-        // Add buttons & functions
+        // Logout button on the top of the GUI
         JButton buttonLogout = new JButton("Logout");
-        JButton [] buttons = {buttonLogout, buttonGenerateData};
-        constructButtons(buttons);
+        buttonLogout.setPreferredSize(new Dimension(200, 30));
+        buttonLogout.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+        buttonLogout.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        buttonLogout.setBackground(Color.WHITE);
+        // Button LOGOUT on click listener
+        buttonLogout.addActionListener(e -> {
+            ownerUIFrame.dispose();
+            ownerUIFrame.setVisible(false);
+            new StaffLoginPage();
+        });
         ownerUIFrame.add(buttonLogout);
 
         // Display respective labels, fields and buttons
@@ -52,45 +61,11 @@ public class OwnerPageUI extends JFrame {
         ownerUIFrame.setVisible(true);
     }
 
-    // Method to display buttons for Restaurant Owner
-    public void constructButtons(JButton [] buttons){
-        for (JButton jButton : buttons){
-            jButton.setPreferredSize(new Dimension(200, 30));
-            jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-            jButton.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-            jButton.setBackground(Color.WHITE);
-            jButton.addActionListener(topButtonsListener);
-        }
-    }
-
-    // Buttons listener
-    ActionListener topButtonsListener = e -> {
-        JButton buttonPressed = (JButton)e.getSource();
-        String action = buttonPressed.getText();
-        switch (action){
-            case "Logout":
-                ownerUIFrame.dispose();
-                ownerUIFrame.setVisible(false);
-                new StaffLoginPage();
-                break;
-            case "Generate Data":
-                if (buttonGroup.getSelection() == null) {
-                    JOptionPane.showMessageDialog(null, "Please select a radio button!", "Error!", JOptionPane.ERROR_MESSAGE);
-                }
-                else{
-                    String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
-                    // Table
-                    displayDataTableConstruction(radioButtonSelected);
-                }
-
-                break;
-        }
-    };
-
     /* 1. GENERATE REPORT/DATA function
      * 1a) void displayGenerateDataPanel() - Display JPanel for Restaurant Owner to display the data generation functions
      * 1b) void constructAndAddAvgSpendFields(JRadioButton [] radioButtons, String [] actionCommand) - Construct and add Radio Buttons to the JPanel
      * 1c) Component displayDataTableConstruction(String radioButtonSelected) - Construction of the JTable (JTable type returned as a JScrollPane type)
+     * 1d) void generateDataButton_Onclick() - GENERATE DATA button actions,
      */
 
     // 1a) Method for Restaurant Owner to display the data generation functions
@@ -101,7 +76,8 @@ public class OwnerPageUI extends JFrame {
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
         // Table Construction called in method, converted to a JScrollPane
-        JScrollPane scrollPane3 = (JScrollPane) displayDataTableConstruction("default");
+        String [][] defaultTableValues = {{"", "", ""}};
+        JScrollPane scrollPane3 = (JScrollPane) displayDataTableConstruction(defaultTableValues);
         panelReport.add(scrollPane3);
 
         // Radio Buttons
@@ -110,6 +86,11 @@ public class OwnerPageUI extends JFrame {
         constructAndAddAvgSpendFields(radioButtons, actionCommand);
 
         // Generate Data Button
+        buttonGenerateData.setPreferredSize(new Dimension(200, 30));
+        buttonGenerateData.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+        buttonGenerateData.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        buttonGenerateData.setBackground(Color.WHITE);
+        buttonGenerateData.addActionListener(e -> generateDataButton_Onclick()); // Button on click listener
         panelReport.add(buttonGenerateData);
 
         // Add components to the JPanel
@@ -133,12 +114,11 @@ public class OwnerPageUI extends JFrame {
             buttonGroup.add(radioButtons[i]);
             panelReport.add(radioButtons[i]);
         }
+        radioButtons[0].setSelected(true);
     }
 
     // 1c) Construction of the JTable (JTable type returned as a JScrollPane type)
-    public Component displayDataTableConstruction(String radioButtonSelected){
-        GenerateReportController generateReportController = new GenerateReportController();
-        String [][] data = generateReportController.getReport(radioButtonSelected);
+    public Component displayDataTableConstruction(String [][] data){
         // Display data in a table format
         String [] columnTableNames = {"Daily", "Weekly", "Monthly"};
         // Table
@@ -161,6 +141,15 @@ public class OwnerPageUI extends JFrame {
         panelReport.repaint();
 
         return generatedDataScrollPane;
+    }
+
+    // 1d) GENERATE DATA button actions
+    public void generateDataButton_Onclick(){
+        String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
+        GenerateReportController generateReportController = new GenerateReportController();
+        String [][] data = generateReportController.getReport(radioButtonSelected);
+        // Refresh Table
+        displayDataTableConstruction(data);
     }
 
 }
