@@ -13,7 +13,7 @@ public class SuspendUserController{
         return userAdmin.suspendAccount(selectedUsername, newActiveStatus);
     }
 
-    public boolean suspendUserProfile(String selectedUsername, String newActiveStatus){
-        return userAdmin.suspendProfile(selectedUsername, newActiveStatus);
+    public boolean suspendUserProfile(String selectedUserProfile, String newActiveStatus){
+        return userAdmin.suspendProfile(selectedUserProfile, newActiveStatus);
     }
 }
