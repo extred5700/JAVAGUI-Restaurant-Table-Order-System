@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Objects;
 
 public class UserAdminPageUI extends JFrame{
     /* Variable declaration */
@@ -30,7 +29,8 @@ public class UserAdminPageUI extends JFrame{
     private final JTextField fieldCreateUsername = new JTextField(20);
     private final JLabel labelCreatePassword = new JLabel("Password: ");
     private final JTextField fieldCreatePassword = new JTextField(20);
-    private final JComboBox <String> createProfileType = new JComboBox<>(new String[]{"User Admin", "Restaurant Owner", "Restaurant Manager", "Restaurant Staff"});
+    private final JLabel labelCreateProfile = new JLabel("User Profile: ");
+    private final JTextField fieldCreateProfile = new JTextField(20);
     private final JButton buttonCreateAccount = new JButton("Create Account");
 
     /* 2. EDIT Function */
@@ -54,7 +54,8 @@ public class UserAdminPageUI extends JFrame{
     /* 4. SUSPEND Function */
     private JTable tableSuspendUsers;
     private final JPanel panelSuspend = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
-    private final JButton buttonSuspendChanges = new JButton("Suspend/Un-suspend Account");
+    private final JButton buttonSuspendAccount = new JButton("Suspend/Un-suspend Account");
+    private final JButton buttonSuspendProfile = new JButton("Suspend/Un-suspend Profile");
 
 
     public UserAdminPageUI(String usernameLoggedIn, String setDisplayPage){
@@ -182,13 +183,12 @@ public class UserAdminPageUI extends JFrame{
         // Labels
         labelCreateUsername.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
         labelCreatePassword.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
+        labelCreateProfile.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
 
         // Text Fields
         fieldCreateUsername.setPreferredSize(new Dimension(50, 30));
         fieldCreatePassword.setPreferredSize(new Dimension(50, 30));
-
-        // JComboBox/Dropdown List
-        createProfileType.setPreferredSize(new Dimension(230, 20));
+        fieldCreateProfile.setPreferredSize(new Dimension(50, 30));
 
         // Create Account Button
         buttonCreateAccount.setPreferredSize(new Dimension(150, 30));
@@ -204,7 +204,8 @@ public class UserAdminPageUI extends JFrame{
         panelCreate.add(fieldCreateUsername);
         panelCreate.add(labelCreatePassword);
         panelCreate.add(fieldCreatePassword);
-        panelCreate.add(createProfileType);
+        panelCreate.add(labelCreateProfile);
+        panelCreate.add(fieldCreateProfile);
         panelCreate.add(buttonCreateAccount);
         panelCreate.setBorder(titledBorder);
         panelCreate.setVisible(true);
@@ -213,11 +214,12 @@ public class UserAdminPageUI extends JFrame{
 
     // 1b) Create button function to allow the user to create an account by passing the data to the controller
     public void createButton_Onclick(){
-        String createUsernameText = fieldCreateUsername.getText();
-        String createPasswordText = fieldCreatePassword.getText();
-        String createProfileText = Objects.requireNonNull(createProfileType.getSelectedItem()).toString();
+        // Convert input parameters for account creation to all capital letters
+        String createUsernameText = fieldCreateUsername.getText().toUpperCase();
+        String createPasswordText = fieldCreatePassword.getText().toUpperCase();
+        String createProfileText = fieldCreateProfile.getText().toUpperCase();
         // validateCreate() method located in AddUserController.java
-        if ((createUsernameText.isEmpty()) || (createPasswordText.isEmpty())){
+        if (createUsernameText.isEmpty() || createPasswordText.isEmpty() || createProfileText.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
         }
         else{
@@ -374,15 +376,11 @@ public class UserAdminPageUI extends JFrame{
             jButton.setPreferredSize(new Dimension(220, 30));
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
+            // SEARCH USERNAME & PROFILE Button Click Listener
+            jButton.addActionListener(e -> viewButton_Onclick(e.getActionCommand()));
         }
         buttonSearchUser.setActionCommand("Search By Username");
         buttonSearchProfile.setActionCommand("Search By Profile");
-
-        // SEARCH USERNAME Button Click Listener
-        buttonSearchUser.addActionListener(e -> viewButton_Onclick(e.getActionCommand()));
-
-        // SEARCH USERPROFILE Button Click Listener
-        buttonSearchProfile.addActionListener(e -> viewButton_Onclick(e.getActionCommand()));
 
         // Components of JPanel
         panelView.setPreferredSize(new Dimension(500, 450));
@@ -431,8 +429,7 @@ public class UserAdminPageUI extends JFrame{
 
 
     /* 4. SUSPEND function
-    * 4a) void displaySuspendPanel() - Display JPanel for User Admi
-    * n to suspend an account's details
+    * 4a) void displaySuspendPanel() - Display JPanel for User Admin to suspend an account's details
     * 4b) Component suspendTableConstruction() - Construction of the JTable, JTable type returned as a JScrollPane type
     * 4c) void suspendButton_Onclick() - Suspend button function to allow the user to suspend a user by passing the selected username into the controller
     */
@@ -446,19 +443,25 @@ public class UserAdminPageUI extends JFrame{
         // Table Construction called in method, converted to a JScrollPane
         JScrollPane suspendScrollPane1 = (JScrollPane) suspendTableConstruction();
 
-        // Suspend Button
-        buttonSuspendChanges.setPreferredSize(new Dimension(250, 30));
-        buttonSuspendChanges.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-        buttonSuspendChanges.setBorder(BorderFactory.createLineBorder(Color.RED,1));
-        buttonSuspendChanges.setBackground(Color.WHITE);
+        // Suspend Buttons
+        JButton [] buttonsForSuspend = {buttonSuspendAccount, buttonSuspendProfile};
+        for (JButton jButton : buttonsForSuspend){
+            jButton.setPreferredSize(new Dimension(220, 30));
+            jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+            jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
+            jButton.setBackground(Color.WHITE);
+        }
+        // SUSPEND USERNAME & PROFILE Button Click Listener
+        buttonSuspendAccount.addActionListener(e -> suspendUserButton_Onclick());
+        buttonSuspendProfile.addActionListener(e -> suspendProfileButton_Onclick());
 
-        buttonSuspendChanges.addActionListener(e -> suspendButton_Onclick());
 
         // Add components to the JPanel
         panelSuspend.setPreferredSize(new Dimension(500, 330));
         panelSuspend.setBackground(Color.WHITE);
         panelSuspend.add(suspendScrollPane1);
-        panelSuspend.add(buttonSuspendChanges);
+        panelSuspend.add(buttonSuspendAccount);
+        panelSuspend.add(buttonSuspendProfile);
         panelSuspend.setBorder(titledBorder);
         panelSuspend.setVisible(true);
         userAdminUIFrame.add(panelSuspend);
@@ -466,8 +469,8 @@ public class UserAdminPageUI extends JFrame{
 
     // 4b) Construction of the JTable, Mouse Click Listener to display an account's details in the text field (JTable type returned as a JScrollPane type)
     public Component suspendTableConstruction(){
-        SuspendUserController suspendUserController = new SuspendUserController();
-        String [][] data = suspendUserController.getUserInfo();
+        ViewUserController viewUserController = new ViewUserController();
+        String [][] data = viewUserController.getUserInfo();
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
         tableSuspendUsers = new JTable(data, columnTableNames);
@@ -491,8 +494,8 @@ public class UserAdminPageUI extends JFrame{
         return suspendScrollPane2;
     }
 
-    // 4c) Suspend button function to allow the user to suspend a user by passing the selected username into the controller
-    public void suspendButton_Onclick(){
+    // 4c) Suspend button function to allow the user to suspend a USER ACCOUNT by passing the selected username into the controller
+    public void suspendUserButton_Onclick(){
         int getRow = tableSuspendUsers.getSelectedRow();
         // Ensure the User has selected a row from the table displaying all the user accounts
         if (getRow != -1){
@@ -505,7 +508,8 @@ public class UserAdminPageUI extends JFrame{
                 default -> "";
                 // Change active status to the opposite and update the database
             };
-            if (new SuspendUserController().suspendUser(selectedUsername, newActiveStatus)){
+            SuspendUserController suspendUserController = new SuspendUserController();
+            if (suspendUserController.suspendUserAccount(selectedUsername, newActiveStatus)){
                 if (newActiveStatus.equals("N")){
                     JOptionPane.showMessageDialog(null, "Account has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
                     suspendTableConstruction();
@@ -526,4 +530,39 @@ public class UserAdminPageUI extends JFrame{
         }
     }
 
+    // 4d) Suspend button function to allow the user to suspend a USER PROFILE by passing the selected username into the controller
+    public void suspendProfileButton_Onclick(){
+        int getRow = tableSuspendUsers.getSelectedRow();
+        // Ensure the User has selected a row from the table displaying all the user accounts
+        if (getRow != -1){
+            // Get the selected username by getting the value of the
+            String selectedUsername = (String) tableSuspendUsers.getModel().getValueAt(getRow, 0);
+            String currentActiveStatus = (String) tableSuspendUsers.getModel().getValueAt(getRow, 3);
+            String newActiveStatus = switch (currentActiveStatus) {
+                case "Y" -> "N";
+                case "N" -> "Y";
+                default -> "";
+                // Change active status to the opposite and update the database
+            };
+            SuspendUserController suspendUserController = new SuspendUserController();
+            if (suspendUserController.suspendUserProfile(selectedUsername, newActiveStatus)){
+                if (newActiveStatus.equals("N")){
+                    JOptionPane.showMessageDialog(null, "Profile has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
+                    suspendTableConstruction();
+                }
+                else if (newActiveStatus.equals("Y"))
+                {
+                    JOptionPane.showMessageDialog(null, "Profile has been successfully un-suspended!", "Un-suspend User", JOptionPane.INFORMATION_MESSAGE);
+                    suspendTableConstruction();
+                }
+
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Profile suspension failed.", "Suspend User", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Please select a user profile to suspend from the table.", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
