@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class OwnerPageUI extends JFrame {
     /* Variable declaration */
@@ -63,9 +61,8 @@ public class OwnerPageUI extends JFrame {
 
     /* 1. GENERATE REPORT/DATA function
      * 1a) void displayGenerateDataPanel() - Display JPanel for Restaurant Owner to display the data generation functions
-     * 1b) void constructAndAddAvgSpendFields(JRadioButton [] radioButtons, String [] actionCommand) - Construct and add Radio Buttons to the JPanel
-     * 1c) Component displayDataTableConstruction(String radioButtonSelected) - Construction of the JTable (JTable type returned as a JScrollPane type)
-     * 1d) void generateDataButton_Onclick() - GENERATE DATA button actions,
+     * 1b) Component constructDataTable(String radioButtonSelected) - Construction of the JTable (JTable type returned as a JScrollPane type)
+     * 1c) void generateDataButton_Onclick() - GENERATE DATA button actions
      */
 
     // 1a) Method for Restaurant Owner to display the data generation functions
@@ -77,13 +74,23 @@ public class OwnerPageUI extends JFrame {
 
         // Table Construction called in method, converted to a JScrollPane
         String [][] defaultTableValues = {{"", "", ""}};
-        JScrollPane scrollPane3 = (JScrollPane) displayDataTableConstruction(defaultTableValues);
+        JScrollPane scrollPane3 = (JScrollPane) constructDataTableConstruction(defaultTableValues);
         panelReport.add(scrollPane3);
 
         // Radio Buttons
         JRadioButton [] radioButtons = {radioAvgSpend, radioFreqVisit, radioFoodPreference};
         String [] actionCommand = {"Average Spend", "Frequency of Visits", "Food Preference"};
-        constructAndAddAvgSpendFields(radioButtons, actionCommand);
+        for (int i = 0; i < radioButtons.length; i++){
+            radioButtons[i].setBackground(Color.WHITE);
+            radioButtons[i].setAlignmentX(SwingConstants.CENTER);
+            radioButtons[i].setAlignmentY(SwingConstants.CENTER);
+            radioButtons[i].setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+            radioButtons[i].setPreferredSize(new Dimension(240, 15));
+            radioButtons[i].setActionCommand(actionCommand[i]);
+            buttonGroup.add(radioButtons[i]);
+            panelReport.add(radioButtons[i]);
+        }
+        radioButtons[0].setSelected(true);
 
         // Generate Data Button
         buttonGenerateData.setPreferredSize(new Dimension(200, 30));
@@ -101,24 +108,8 @@ public class OwnerPageUI extends JFrame {
         ownerUIFrame.add(panelReport);
     }
 
-    // 1b) Method to construct and add Radio Buttons to the JPanel
-    public void constructAndAddAvgSpendFields(JRadioButton [] radioButtons, String [] actionCommand){
-        // Radio Buttons
-        for (int i = 0; i < radioButtons.length; i++){
-            radioButtons[i].setBackground(Color.WHITE);
-            radioButtons[i].setAlignmentX(SwingConstants.CENTER);
-            radioButtons[i].setAlignmentY(SwingConstants.CENTER);
-            radioButtons[i].setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-            radioButtons[i].setPreferredSize(new Dimension(240, 15));
-            radioButtons[i].setActionCommand(actionCommand[i]);
-            buttonGroup.add(radioButtons[i]);
-            panelReport.add(radioButtons[i]);
-        }
-        radioButtons[0].setSelected(true);
-    }
-
-    // 1c) Construction of the JTable (JTable type returned as a JScrollPane type)
-    public Component displayDataTableConstruction(String [][] data){
+    // 1b) Construction of the JTable (JTable type returned as a JScrollPane type)
+    public Component constructDataTableConstruction(String [][] data){
         // Display data in a table format
         String [] columnTableNames = {"Daily", "Weekly", "Monthly"};
         // Table
@@ -143,13 +134,13 @@ public class OwnerPageUI extends JFrame {
         return generatedDataScrollPane;
     }
 
-    // 1d) GENERATE DATA button actions
+    // 1c) GENERATE DATA button actions
     public void generateDataButton_Onclick(){
         String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
         GenerateReportController generateReportController = new GenerateReportController();
         String [][] data = generateReportController.getReport(radioButtonSelected);
         // Refresh Table
-        displayDataTableConstruction(data);
+        constructDataTableConstruction(data);
     }
 
 }
