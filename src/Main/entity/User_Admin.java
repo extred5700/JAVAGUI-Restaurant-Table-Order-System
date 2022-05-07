@@ -217,10 +217,10 @@ public class User_Admin extends Staff {
     }
 
     // Function to Suspend user profile #12
-    public boolean suspendProfile(String selectedUsername, String newActiveStatus) {
+    public boolean suspendProfile(String selectedUserProfile, String newActiveStatus) {
         boolean isProfileSuspended = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "UPDATE user SET active ='" + newActiveStatus + "' WHERE username='" + selectedUsername + "'";
+        String query = "UPDATE user SET active ='" + newActiveStatus + "' WHERE user_profile='" + selectedUserProfile + "'";
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query);
             isProfileSuspended = true;
