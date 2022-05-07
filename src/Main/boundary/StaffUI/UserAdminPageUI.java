@@ -537,9 +537,9 @@ public class UserAdminPageUI extends JFrame{
         int getRow = tableSuspendUsers.getSelectedRow();
         // Ensure the User has selected a row from the table displaying all the user accounts
         if (getRow != -1){
-            // Get the selected username by getting the value of the
-            String selectedUsername = (String) tableSuspendUsers.getModel().getValueAt(getRow, 0);
-            String currentActiveStatus = (String) tableSuspendUsers.getModel().getValueAt(getRow, 3);
+            // Get the selected user profile by getting the value of the
+            String selectedUserProfile = (String) tableSuspendUsers.getModel().getValueAt(getRow, 2); // User Profile Column
+            String currentActiveStatus = (String) tableSuspendUsers.getModel().getValueAt(getRow, 3); // Active Column
             String newActiveStatus = switch (currentActiveStatus) {
                 case "Y" -> "N";
                 case "N" -> "Y";
@@ -547,20 +547,20 @@ public class UserAdminPageUI extends JFrame{
                 // Change active status to the opposite and update the database
             };
             SuspendUserController suspendUserController = new SuspendUserController();
-            if (suspendUserController.suspendUserProfile(selectedUsername, newActiveStatus)){
+            if (suspendUserController.suspendUserProfile(selectedUserProfile, newActiveStatus)){
                 if (newActiveStatus.equals("N")){
-                    JOptionPane.showMessageDialog(null, "Profile has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Profile has been successfully suspended!", "Suspend User Profile", JOptionPane.INFORMATION_MESSAGE);
                     suspendTableConstruction();
                 }
                 else if (newActiveStatus.equals("Y"))
                 {
-                    JOptionPane.showMessageDialog(null, "Profile has been successfully un-suspended!", "Un-suspend User", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Profile has been successfully un-suspended!", "Un-suspend User Profile", JOptionPane.INFORMATION_MESSAGE);
                     suspendTableConstruction();
                 }
 
             }
             else{
-                JOptionPane.showMessageDialog(null, "Profile suspension failed.", "Suspend User", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Profile suspension failed.", "Suspend User Profile", JOptionPane.ERROR_MESSAGE);
             }
         }
         else{
