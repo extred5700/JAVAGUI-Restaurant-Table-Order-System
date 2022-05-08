@@ -57,7 +57,7 @@ public class Customer {
 
     // Function for view cart items #32
     public String [][] viewCart() {
-        return cart.viewCart(cart.getTransaction_id());
+        return cart.viewCart();
     }
 
     // Function for delete cart items #33

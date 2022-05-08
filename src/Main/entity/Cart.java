@@ -71,9 +71,8 @@ public class Cart {
     }
 
     // Get Cart items using the transaction ID
-    public String [][] viewCart(int transaction_id){
+    public String [][] viewCart(){
         ArrayList<String> arrayListOrderId = new ArrayList<>(); //Arraylist of order_id
-        ArrayList<String> arrayListItemId = new ArrayList<>(); //Arraylist of orderids
         ArrayList<String> arrayListName = new ArrayList<>(); //Arraylist of item names
         ArrayList<String> arrayListQty = new ArrayList<>(); //Arraylist of quantity
         ArrayList<String> arrayListPrice = new ArrayList<>(); //Arraylist of price of row
@@ -158,6 +157,64 @@ public class Cart {
             System.out.println(e);
         }
         return isItemDeleted;
+    }
+
+    // Returns float of total price of current cart - for any payment displays
+    public float getTotalPrice(){
+        float x = 0;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "SELECT total_price FROM transaction_history WHERE transaction_id = " + transaction_id; //query
+        try {
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(query); //execute query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) { //This is the result set
+                x = rs.getFloat("total_price");
+            }
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return x;
+    }
+
+    //Checks for valid discount and applies it, if successful, return true
+    public boolean applyDiscount(String discount_code){
+        boolean discountApplied = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "SELECT discount_value FROM discount WHERE coupon = '" + discount_code+"'"; //query
+        try {
+            //SQL query stuff
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(query);//execute query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) { //This is the result set
+                float x = rs.getFloat("discount_value"); //save discount value temporarily
+                //update total price in transaction history
+                String query2 = "UPDATE transaction_history SET total_price = total_price * " + x + " WHERE transaction_id = " + transaction_id;
+                Statement statement = dbConnection.createStatement();
+                statement.executeUpdate(query2);
+                discountApplied = true;
+            }
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return discountApplied;
+    }
+
+    //Updates transaction history with payment - requires phone number of customer. upon success, return true
+    public boolean makePayment (String phoneNumber){
+        boolean isPaymentSuccessful = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "UPDATE transaction_history SET date = current_date(), pNum = '" + phoneNumber + "', paid = Y WHERE transaction_id = " + transaction_id; //query
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query); //execute query
+            isPaymentSuccessful = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return isPaymentSuccessful;
     }
 
 }
