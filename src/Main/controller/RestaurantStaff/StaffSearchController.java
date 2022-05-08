@@ -2,10 +2,10 @@ package Main.controller.RestaurantStaff;
 
 import Main.entity.Restaurant_Staff;
 
-public class StaffViewController {
+public class StaffSearchController {
     Restaurant_Staff restaurant_staff = new Restaurant_Staff();
 
-    public String [][] displayOrders(){
-        return restaurant_staff.viewAllOrders();
+    public String [][] searchBy(int table_num){
+        return restaurant_staff.searchOrder(table_num);
     }
 }
