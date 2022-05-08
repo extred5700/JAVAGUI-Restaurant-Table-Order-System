@@ -93,7 +93,7 @@ public class RestaurantStaffPageUI extends JFrame {
 
         // 4. DELETE function
         displayDeletePanel();
-        panelDeleteOrder.setVisible(true);
+        panelDeleteOrder.setVisible(false);
 
 
         staffUIFrame.setVisible(true);
@@ -299,7 +299,8 @@ public class RestaurantStaffPageUI extends JFrame {
                 else{
                     int orderIDSelected = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 0).toString());
                     // Check if the data keyed in Quantity Text Field is a numeric data type
-                    if ((fieldEditQuantity.getText() != null) && (fieldEditQuantity.getText().matches("[1-9.]+"))){
+                    //if ((fieldEditQuantity.getText() != null) && (fieldEditQuantity.getText().matches("[1-9.]+"))){
+                    if ((fieldEditQuantity.getText() != null) && (fieldEditQuantity.getText().matches("\\b([1-9]|[1-9][0-9]|100)\\b"))){ // Update: Max Quantity for a dish is 100 (Range is 1 - 100)
                         int oldQuantity = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 2).toString());
                         // Check if quantity text field is edited to a new value
                         int newQuantity = Integer.parseInt(fieldEditQuantity.getText());
