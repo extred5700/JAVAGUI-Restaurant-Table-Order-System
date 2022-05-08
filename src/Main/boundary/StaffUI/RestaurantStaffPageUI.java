@@ -72,7 +72,7 @@ public class RestaurantStaffPageUI extends JFrame {
         labelTopHeader.setPreferredSize(new Dimension(500, 30));
         labelTopHeader.setBorder(new LineBorder(Color.WHITE));
         labelTopHeader.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-        staffUIFrame.add(labelTopHeader);
+        //staffUIFrame.add(labelTopHeader);
 
         // Add buttons & functions for the top of the GUI
         displayStaffUserButton();
