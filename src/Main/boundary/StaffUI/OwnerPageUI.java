@@ -61,7 +61,7 @@ public class OwnerPageUI extends JFrame {
 
     /* 1. GENERATE REPORT/DATA function
      * 1a) void displayGenerateDataPanel() - Display JPanel for Restaurant Owner to display the data generation functions
-     * 1b) Component constructDataTable(String radioButtonSelected) - Construction of the JTable (JTable type returned as a JScrollPane type)
+     * 1b) Component generateDataTableConstruction(String [][] data) - Construction of the JTable (JTable type returned as a JScrollPane type)
      * 1c) void generateDataButton_Onclick() - GENERATE DATA button actions
      */
 
@@ -74,7 +74,7 @@ public class OwnerPageUI extends JFrame {
 
         // Table Construction called in method, converted to a JScrollPane
         String [][] defaultTableValues = {{"", "", ""}};
-        JScrollPane scrollPane3 = (JScrollPane) constructDataTableConstruction(defaultTableValues);
+        JScrollPane scrollPane3 = (JScrollPane) generateDataTableConstruction(defaultTableValues);
         panelReport.add(scrollPane3);
 
         // Radio Buttons
@@ -109,7 +109,7 @@ public class OwnerPageUI extends JFrame {
     }
 
     // 1b) Construction of the JTable (JTable type returned as a JScrollPane type)
-    public Component constructDataTableConstruction(String [][] data){
+    public Component generateDataTableConstruction(String [][] data){
         // Display data in a table format
         String [] columnTableNames = {"Daily", "Weekly", "Monthly"};
         // Table
@@ -140,7 +140,7 @@ public class OwnerPageUI extends JFrame {
         GenerateReportController generateReportController = new GenerateReportController();
         String [][] data = generateReportController.getReport(radioButtonSelected);
         // Refresh Table
-        constructDataTableConstruction(data);
+        generateDataTableConstruction(data);
     }
 
 }
