@@ -4,17 +4,23 @@ import java.util.ArrayList;
 
 public class Cart {
 
-    //variables
-    private int transaction_id = 0;
+    // Variables
+    private int transaction_id;
 
     // Default Constructor
     public Cart() {
-
+        transaction_id = 0;
     }
 
     // Other Constructor
     public Cart(int table_no) {
+        // initialise transaction_id
         setTransaction_id(table_no);
+    }
+
+    // get transaction_id
+    public int getTransaction_id() {
+        return transaction_id;
     }
 
     // Set up DB Connection
@@ -31,7 +37,7 @@ public class Cart {
         return dbConnection;
     } // end of method dbConnection()
 
-    // Get TransactionID from Table Number
+    // Set TransactionID from Table Number
     public void setTransaction_id(int table_no){
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         while (transaction_id <1) {
@@ -66,14 +72,14 @@ public class Cart {
 
     // Get Cart items using the transaction ID
     public String [][] viewCart(int transaction_id){
-        ArrayList<String> arrayListItemId = new ArrayList<>(); //Arraylist of orderids
+        ArrayList<String> arrayListOrderId = new ArrayList<>(); //Arraylist of order_id
         ArrayList<String> arrayListName = new ArrayList<>(); //Arraylist of item names
         ArrayList<String> arrayListQty = new ArrayList<>(); //Arraylist of quantity
         ArrayList<String> arrayListPrice = new ArrayList<>(); //Arraylist of price of row
         ArrayList<String> arrayListFulfilled = new ArrayList<>(); //Arraylist of fulfilled or not
 
         Connection dbConnection = dbConnection();
-        String query = "SELECT order_history.item_id, name, qty, price, fulfilled FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id WHERE transaction_id =" + transaction_id;
+        String query = "SELECT order_id, name, qty, price, fulfilled FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id WHERE transaction_id =" + transaction_id;
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
             //SQL query stuff
@@ -81,7 +87,7 @@ public class Cart {
 
             while (rs.next()) { //This is the result set
                 // Add data to their respective category
-                arrayListItemId.add(Integer.toString(rs.getInt("item_id")));
+                arrayListOrderId.add(Integer.toString(rs.getInt("order_id")));
                 arrayListName.add(rs.getString("name"));
                 arrayListQty.add(Integer.toString(rs.getInt("qty")));
                 arrayListPrice.add(Float.toString(rs.getFloat("price")));
@@ -93,10 +99,10 @@ public class Cart {
         }
 
         // Convert Array List to a 2D array
-        String [][] cartItems = new String[arrayListItemId.size()][5];
+        String [][] cartItems = new String[arrayListOrderId.size()][5];
         for (int row = 0; row < cartItems.length; row++){
             for (int column = 0; column < cartItems[row].length; column++){
-                cartItems[row][0] = arrayListItemId.get(row);
+                cartItems[row][0] = arrayListOrderId.get(row);
                 cartItems[row][1] = arrayListName.get(row);
                 cartItems[row][2] = arrayListQty.get(row);
                 cartItems[row][3] = arrayListPrice.get(row);
