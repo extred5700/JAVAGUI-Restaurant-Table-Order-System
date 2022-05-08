@@ -1,6 +1,7 @@
 package Main.boundary.CustomerUI;
 
 import Main.controller.Customer.AddToCartController;
+import Main.controller.Customer.EditCartController;
 import Main.controller.Customer.ViewCartController;
 import Main.controller.Customer.ViewMenuController;
 import Main.entity.Customer;
@@ -14,27 +15,33 @@ import java.sql.*;
 
 public class CustomerPageUI extends JFrame {
     /* Variable declaration */
-    private int table_no; // capture table number
     private Customer customer; // Create Customer object
 
+    // JFrame
     private final JFrame customerUIFrame = new JFrame("Customer Homepage");
+
     // Buttons
     private final JButton buttonMenu = new JButton("View Menu");
     private final JButton buttonEdit = new JButton("Edit Cart");
     private final JButton buttonView = new JButton("View Cart");
     private final JButton buttonPayment = new JButton("Payment");
 
+    // Title Border
     private TitledBorder titledBorder;
 
-    // Displaying Menu
+    // Panel for Displaying Menu
     private final JPanel panelMenu = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
 
-    // Radio buttons
+    // Category Buttons
     private final JButton buttonPasta = new JButton("Pasta");
     private final JButton buttonPizza = new JButton("Pizza");
     private final JButton buttonBakedRice = new JButton("Baked Rice");
-    //    JLabel labelCategory = new JLabel("Categories", JLabel.CENTER);
+    private final JButton buttonDrinks = new JButton("Drinks");
+
+    // Table to display menu items
     private JTable tableMenuItems;
+
+    // Labels, TextFields, and Button
     private final JLabel labelItemId = new JLabel("Item Number: ");
     private final JTextField fieldItemId = new JTextField(20);
     private final JLabel labelItemName = new JLabel("Selected:        ");
@@ -45,10 +52,21 @@ public class CustomerPageUI extends JFrame {
     private final JTextField fieldItemPrice = new JTextField(20);
     private final JButton buttonAddToCart = new JButton("Add To Cart");
 
-    // Panel for Editing Order
+    // Panel for Editing Cart
     private final JPanel panelEdit = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
 
-    // Panel for Viewing Order
+    // Labels, TextFields, and Button
+    private final JLabel labelEditOrderId = new JLabel("Item Number: ");
+    private final JTextField fieldEditOrderId = new JTextField(20);
+    private final JLabel labelEditItemName = new JLabel("Selected:        ");
+    private final JTextField fieldEditItemName = new JTextField(20);
+    private final JLabel labelEditItemQty = new JLabel("Quantity:        ");
+    private final JTextField fieldEditItemQty = new JTextField(20);
+    private final JLabel labelEditItemPrice = new JLabel("Total Price:    ");
+    private final JTextField fieldEditItemPrice = new JTextField(20);
+    private final JButton buttonUpdateCart = new JButton("Update Cart");
+
+    // Panel for Viewing Cart
     private final JPanel panelView = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     private JTable tableViewCart;
 
@@ -57,7 +75,6 @@ public class CustomerPageUI extends JFrame {
 
     public CustomerPageUI(int table_no){
         // initialise variables
-        this.table_no = table_no;
         customer = new Customer(table_no);
 
         customerUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,19 +98,19 @@ public class CustomerPageUI extends JFrame {
         viewMenu("All");
 
         // Edit order page
-        // editCart();
+        editCart();
 
         // View order page
         viewCart();
 
         // Payment page
-        // payment();
+        payment();
 
         customerUIFrame.setVisible(true);
     }
 
     // Method to display buttons for Customer
-    public void constructTopButtons(){
+    private void constructTopButtons(){
         JButton [] topButtons = {buttonMenu, buttonEdit, buttonView, buttonPayment};
         for (JButton jButton : topButtons){
             jButton.setPreferredSize(new Dimension(120, 30));
@@ -106,14 +123,10 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Category buttons - only display in menu page
-    public void constructCategoryButtons() {
-        /*labelCategory.setPreferredSize(new Dimension(400, 30));
-        labelCategory.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
-        customerUIFrame.add(labelCategory);*/
-
-        JButton [] categoryButtons = {buttonPasta, buttonPizza, buttonBakedRice};
+    private void constructCategoryButtons() {
+        JButton [] categoryButtons = {buttonPasta, buttonPizza, buttonBakedRice, buttonDrinks};
         for (JButton jButton : categoryButtons){
-            jButton.setPreferredSize(new Dimension(120, 30));
+            jButton.setPreferredSize(new Dimension(90, 30));
             jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
             jButton.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
             jButton.setBackground(Color.WHITE);
@@ -121,10 +134,10 @@ public class CustomerPageUI extends JFrame {
             panelMenu.add(jButton);
         }
     }
-
     // end of actionPerformed
+
     // Button Listener
-    ActionListener topButtonsListener = e -> {
+    private ActionListener topButtonsListener = e -> {
         JButton buttonPressed = (JButton)e.getSource();
         String action = buttonPressed.getText();
         switch(action){
@@ -136,18 +149,21 @@ public class CustomerPageUI extends JFrame {
                 panelPayment.setVisible(false);
             }
             case "Edit Cart" -> {
+                editCart();
                 panelMenu.setVisible(false);
                 panelEdit.setVisible(true);
                 panelView.setVisible(false);
                 panelPayment.setVisible(false);
             }
             case "View Cart" -> {
+                viewCart();
                 panelMenu.setVisible(false);
                 panelEdit.setVisible(false);
                 panelView.setVisible(true);
                 panelPayment.setVisible(false);
             }
             case "Payment" -> {
+                payment();
                 panelMenu.setVisible(false);
                 panelEdit.setVisible(false);
                 panelView.setVisible(false);
@@ -156,28 +172,28 @@ public class CustomerPageUI extends JFrame {
         } // end of switch statements
     };
 
-    // Button Listener
+    // Button Listener - for category buttons in the Menu page
     ActionListener categoryButtonsListener = e -> {
         JButton buttonPressed = (JButton)e.getSource();
         String action = buttonPressed.getText();
         switch(action){
             case "Pasta" -> {
                 viewMenu("Pasta");
-//                refreshMenuTable("Pasta");
             }
             case "Pizza" -> {
                 viewMenu("Pizza");
-//                refreshMenuTable("Pizza");
             }
             case "Baked Rice" -> {
                 viewMenu("Baked Rice");
-//                refreshMenuTable("Baked Rice");
+            }
+            case "Drinks" -> {
+                viewMenu("Drinks");
             }
         } // end of switch statements
     };
 
     // Set up DB Connection
-    protected Connection dbConnection(){
+    private Connection dbConnection(){
         String dbUsername = "root";
         String dbPassword = "hopium314_";
         Connection dbConnection = null;
@@ -190,7 +206,6 @@ public class CustomerPageUI extends JFrame {
         return dbConnection;
     }
 
-    // Start of Menu Page
     // View Menu
     public void viewMenu(String category) {
         // Border
@@ -202,27 +217,29 @@ public class CustomerPageUI extends JFrame {
         constructCategoryButtons();
 
         // Refresh the menu table - after every click/choosing of category
-        refreshMenuTable(category);
+        refreshTable(panelMenu);
 
         // Table Construction called in method, converted to a JScrollPane
         JScrollPane scrollPane = (JScrollPane) menuTableConstruction(category);
 
-        // Add components to the JPanel
+        // Add components to the panelMenu
         panelMenu.setPreferredSize(new Dimension(500, 590));
         panelMenu.setBackground(Color.WHITE);
         panelMenu.add(scrollPane);
         panelMenu.setBorder(titledBorder);
         panelMenu.setVisible(true);
-
         // Allow users to add items to cart while browsing menu
-        constructAddingToCartUI();
+        addToCartComponents();
+        // Add mouse click listener for selecting menu items
+        menuMouseClickListener();
+
         customerUIFrame.add(panelMenu);
     }
 
     // Construct table to display menu items
-    public Component menuTableConstruction(String category){
+    private Component menuTableConstruction(String category){
         ViewMenuController viewMenuController = new ViewMenuController();
-        String [][] data = viewMenuController.viewMenu(customer, category);
+        String [][] data = viewMenuController.viewMenu(category);
         // Display data in a table format
         String [] columnTableNames = {"Item_Number","Name", "Price"};
         tableMenuItems = new JTable(data, columnTableNames);
@@ -231,24 +248,22 @@ public class CustomerPageUI extends JFrame {
         return sp;
     }
 
-    public void refreshMenuTable(String category){
-        //Get the components in the panel
-        Component[] componentList = panelMenu.getComponents();
-        //Loop through the components
+    // Refresh the display table
+    private void refreshTable(JPanel jPanel){
+        // Get the components in the panel
+        Component[] componentList = jPanel.getComponents();
+        // Loop through the components
         for(Component c : componentList){
-            //Find the components you want to remove
+            // Find the components you want to remove
             if(c instanceof JScrollPane){
-                //Remove it
-                panelMenu.remove(c);
+                // Remove it
+                jPanel.remove(c);
             }
         }
     }
 
-    // Construct the UI in the Menu page for Customers to add menu items to cart
-    public void constructAddingToCartUI() {
-        // Create mouse click listener for menu items
-        mouseClickListenerViewMenu();
-
+    // Construct the Components for Customers to add menu items to cart
+    public void addToCartComponents() {
         // Labels
         labelItemId.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
         labelItemName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
@@ -257,6 +272,7 @@ public class CustomerPageUI extends JFrame {
 
         // Text Fields
         fieldItemId.setPreferredSize(new Dimension(50, 30));
+        fieldItemId.setEditable(false);
         // Ensure user only can type in numbers/integers
         fieldItemId.addKeyListener(new KeyAdapter() {
             @Override
@@ -284,35 +300,43 @@ public class CustomerPageUI extends JFrame {
         });
 
         fieldItemPrice.setPreferredSize(new Dimension(50, 30));
-        fieldItemPrice.setEditable(false); // name cannot be edited by Customer
+        fieldItemPrice.setEditable(false); // Price cannot be edited by Customer
 
         // Add To Cart Button
         buttonAddToCart.setPreferredSize(new Dimension(150, 30));
         buttonAddToCart.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonAddToCart.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
         buttonAddToCart.setBackground(Color.WHITE);
-        buttonAddToCart.addActionListener(e -> {
-            // Call Controller
-            AddToCartController addToCartController = new AddToCartController();
-            String item_id = fieldItemId.getText();
-            String qty = fieldItemQty.getText();
-            // Check if text field are left empty by the user
-            if (item_id.isEmpty() || qty.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            // Ensure that quantity entered is not 0
-            else if (Integer.parseInt(qty) == 0) {
-                JOptionPane.showMessageDialog(null, "Quantity cannot be 0.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            // Check whether item_id is out of bounds
-            else if (!addToCartController.validateItemID(customer, Integer.parseInt(item_id))){
-                JOptionPane.showMessageDialog(null, "Invalid Item Number.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            else {
-                addToCartController.addToCart(customer, Integer.parseInt(item_id), Integer.parseInt(qty));
-            }
-        });
 
+        // Create Action Listener
+        if (buttonAddToCart.getActionListeners().length == 0) {
+            buttonAddToCart.addActionListener(e -> {
+                // Create Controller Object
+                AddToCartController addToCartController = new AddToCartController();
+
+                String item_id = fieldItemId.getText();
+                String qty = fieldItemQty.getText();
+
+                // Check if text field are left empty by the user
+                if (item_id.isEmpty() || qty.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty.", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                // Ensure that quantity entered is not 0
+                else if (Integer.parseInt(qty) == 0) {
+                    JOptionPane.showMessageDialog(null, "Quantity cannot be 0.", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                else {
+                    addToCartController.addToCart(customer, Integer.parseInt(item_id), Integer.parseInt(qty));
+                    JOptionPane.showMessageDialog(null, "Item has been added to your cart!", "Success!", JOptionPane.WARNING_MESSAGE);
+                    fieldItemId.setText("");
+                    fieldItemName.setText("");
+                    fieldItemPrice.setText("");
+                    fieldItemQty.setText("");
+                }
+            });
+        }
+
+        // Add Components to panelMenu
         panelMenu.add(labelItemId);
         panelMenu.add(fieldItemId);
         panelMenu.add(labelItemName);
@@ -324,9 +348,8 @@ public class CustomerPageUI extends JFrame {
         panelMenu.add(buttonAddToCart);
     } // End of Menu Page
 
-    // Create a mouse click listener to allow Customers to click on the menu item
-    public void mouseClickListenerViewMenu() {
-        // Table Mouse Listener
+    // Create mouse click listener for menu items
+    private void menuMouseClickListener(){
         tableMenuItems.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -340,33 +363,47 @@ public class CustomerPageUI extends JFrame {
         });
     }
 
-/*    public void propertyChange(PropertyChangeEvent e) {
-        Object source = e.getSource();
-        int unitPrice = Integer.parseInt(tableMenuItems.getModel().getValueAt(tableMenuItems.getSelectedRow(), 2).toString());
-
-        if (source == fieldItemQty) {
-            fieldItemPrice.setText(String.valueOf((Integer.parseInt(fieldItemQty.getText()) * unitPrice)));
-        }
-    }*/
-
     public void editCart() {
         // Border
-        titledBorder = new TitledBorder("Edit Your Order");
+        titledBorder = new TitledBorder("View Your Order");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
+        // create Components
+        editCartComponents();
 
+        fieldEditOrderId.setText("");
+        fieldEditItemName.setText("");
+        fieldEditItemQty.setText("");
+        fieldEditItemPrice.setText("");
 
+        // Table Construction called in method, converted to a JScrollPane
+        JScrollPane scrollPane = (JScrollPane) cartTableConstruction();
 
+        // Update Cart Table
+        refreshTable(panelEdit);
+
+        // mouse listener for cart items
+        cartMouseClickListener();
+
+        // Add Components to JPanel
         panelEdit.setPreferredSize(new Dimension(500, 490));
         panelEdit.setBackground(Color.WHITE);
-//        panelEdit.add(scrollPane);
+        panelEdit.add(scrollPane);
         panelEdit.setBorder(titledBorder);
         panelEdit.setVisible(false);
+        panelEdit.add(labelEditItemName);
+        panelEdit.add(fieldEditItemName);
+        panelEdit.add(labelEditItemQty);
+        panelEdit.add(fieldEditItemQty);
+        panelEdit.add(labelEditItemPrice);
+        panelEdit.add(fieldEditItemPrice);
+        panelEdit.add(buttonUpdateCart);
+
         customerUIFrame.add(panelEdit);
     }
 
-    // view cart
+    // View cart
     public void viewCart() {
         // Border
         titledBorder = new TitledBorder("View Your Order");
@@ -376,13 +413,87 @@ public class CustomerPageUI extends JFrame {
         // Table Construction called in method, converted to a JScrollPane
         JScrollPane scrollPane = (JScrollPane) cartTableConstruction();
 
-        customerUIFrame.remove(panelView);
+        // Update Cart Table
+        refreshTable(panelView);
+
+        // Add Components to JPanel
         panelView.setPreferredSize(new Dimension(500, 490));
         panelView.setBackground(Color.WHITE);
         panelView.add(scrollPane);
         panelView.setBorder(titledBorder);
         panelView.setVisible(false);
+
         customerUIFrame.add(panelView);
+    }
+
+    private void editCartComponents() {
+        // Labels
+        labelEditOrderId.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+        labelEditItemName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+        labelEditItemQty.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+        labelEditItemPrice.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+
+        // Text Fields
+        fieldEditOrderId.setPreferredSize(new Dimension(50, 30));
+        fieldEditOrderId.setEditable(false); // item_id cannot be edited by Customer
+
+        fieldEditItemName.setPreferredSize(new Dimension(50, 30));
+        fieldEditItemName.setEditable(false); // Name cannot be edited by Customer
+
+        fieldEditItemQty.setPreferredSize(new Dimension(50, 30));
+        // Ensure user only can type in numbers/integers
+        fieldEditItemQty.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+
+        fieldEditItemPrice.setPreferredSize(new Dimension(50, 30));
+        fieldEditItemPrice.setEditable(false); // Price cannot be edited by Customer
+
+        // Add To Cart Button
+        buttonUpdateCart.setPreferredSize(new Dimension(150, 30));
+        buttonUpdateCart.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+        buttonUpdateCart.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        buttonUpdateCart.setBackground(Color.WHITE);
+
+        // Create Action Listener
+        if (buttonUpdateCart.getActionListeners().length == 0) {
+            buttonUpdateCart.addActionListener(e -> {
+                // Call Controller
+                EditCartController editCartController = new EditCartController();
+                String order_id = fieldEditOrderId.getText(); // get order_id
+                String qty = fieldEditItemQty.getText(); // get quantity
+                // Check if text field are left empty by the user
+                if (qty.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "You have not entered a quantity!", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                else if (order_id.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "You have not selected an item!", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                // Ensure that quantity entered is not 0
+                else if (Integer.parseInt(qty) < 0) {
+                    JOptionPane.showMessageDialog(null, "Quantity cannot be less than 0!", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                else if (Integer.parseInt(qty) == 0) {
+                    editCartController.deleteItem(customer, Integer.parseInt(order_id));
+                    // Refresh the cart items
+                    editCart();
+                    panelEdit.setVisible(true);
+                }
+                else {
+                    editCartController.editQty(customer, Integer.parseInt(order_id), Integer.parseInt(qty));
+                    JOptionPane.showMessageDialog(null, "Your Cart has been Updated!", "Success!", JOptionPane.WARNING_MESSAGE);
+                    // Refresh the cart items
+                    editCart();
+                    panelEdit.setVisible(true);
+                }
+            });
+        }
     }
 
     // Construct table to display Customer cart
@@ -390,11 +501,26 @@ public class CustomerPageUI extends JFrame {
         ViewCartController viewCartController = new ViewCartController();
         String [][] data = viewCartController.viewCart(customer);
         // Display data in a table format
-        String [] columnTableNames = {"Item Number","Name", "Quantity", "Price"};
+        String [] columnTableNames = {"Order_Id","Name", "Quantity", "Price"};
         tableViewCart = new JTable(data, columnTableNames);
         JScrollPane sp = new JScrollPane(tableViewCart);
         sp.setPreferredSize(new Dimension(485, 200)); // width then height
         return sp;
+    }
+
+    // Create mouse click listener for cart items
+    private void cartMouseClickListener(){
+        tableViewCart.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int getRow = tableViewCart.getSelectedRow();
+                // Display details on the text fields
+                fieldEditOrderId.setText(tableViewCart.getModel().getValueAt(getRow, 0).toString());
+                fieldEditItemName.setText(tableViewCart.getModel().getValueAt(getRow, 1).toString());
+                fieldEditItemQty.setText(tableViewCart.getModel().getValueAt(getRow, 2).toString());
+                fieldEditItemPrice.setText(tableViewCart.getModel().getValueAt(getRow, 3).toString());
+            }
+        });
     }
 
     // make payment
@@ -404,12 +530,17 @@ public class CustomerPageUI extends JFrame {
         titledBorder.setBorder(new LineBorder(Color.BLACK));
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
+        // Table Construction called in method, converted to a JScrollPane
+        JScrollPane scrollPane = (JScrollPane) cartTableConstruction();
+
+        // Update Cart Table
+        refreshTable(panelPayment);
 
 
-
+        // Add Components to JPanel
         panelPayment.setPreferredSize(new Dimension(500, 490));
         panelPayment.setBackground(Color.WHITE);
-//        panelPayment.add(scrollPane);
+        panelPayment.add(scrollPane);
         panelPayment.setBorder(titledBorder);
         panelPayment.setVisible(false);
         customerUIFrame.add(panelPayment);
