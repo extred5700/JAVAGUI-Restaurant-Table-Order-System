@@ -365,7 +365,7 @@ public class CustomerPageUI extends JFrame {
 
     public void editCart() {
         // Border
-        titledBorder = new TitledBorder("View Your Order");
+        titledBorder = new TitledBorder("Edit Your Order");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
