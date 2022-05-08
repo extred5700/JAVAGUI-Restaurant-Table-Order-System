@@ -78,7 +78,7 @@ public class RestaurantStaffPageUI extends JFrame {
         displayStaffUserButton();
 
 
-        /* Button Function for Administrator */
+        /* Button Function for Restaurant Staff */
         // 1. EDIT function
         displayEditPanel();
         panelEditOrder.setVisible(false);

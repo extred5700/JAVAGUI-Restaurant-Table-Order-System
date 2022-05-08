@@ -16,9 +16,34 @@ public class Restaurant_Manager extends Staff {
         this.menuItems = menuItems;
     }
 
-    // Function to Create menu items #15
-    public void createMenuItems(Menu_Items menuItems) {
+    public boolean checkMenuItemExistenece(String food_name, Float item_price, String category){
+        boolean menuItemExistence = false;
+        // SQL codes here
+        // Cna follow User_Admin Entity checkUserExistence()
+        return menuItemExistence;
+    }
 
+    // Function to Create menu items #15
+    public boolean createMenuItems(String food_name, Float item_price, String category) {
+        boolean isMenuItemCreated = false;
+        // SQL Codes here
+        // Need to increment item_id before proceeding with sql queries
+        // Can follow User_Admin Entity createAccount()
+        return isMenuItemCreated;
+    }
+
+    public boolean checkCouponExistence(String coupon, Float discount){
+        boolean couponExistence = false;
+        // SQL codes here
+        // Cna follow User_Admin Entity checkUserExistence()
+        return couponExistence;
+    }
+
+    public boolean createCoupon(String coupon, Float discount){
+        boolean isCouponCreated = false;
+        // SQL Codes here
+        // Can follow User_Admin Entity createAccount()
+        return isCouponCreated;
     }
 
     // Function to Edit menu items #16
