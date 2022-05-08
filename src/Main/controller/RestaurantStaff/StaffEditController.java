@@ -14,7 +14,7 @@ public class StaffEditController{
         return restaurant_staff.editOrder(orderIDSelected, newQuantity);
     }
 
-    // FULFILLMENT or orders
+    // FULFILLMENT of orders
     public boolean fulfillOrder(int orderIDSelected){
         return restaurant_staff.editOrderStatus(orderIDSelected);
     }
