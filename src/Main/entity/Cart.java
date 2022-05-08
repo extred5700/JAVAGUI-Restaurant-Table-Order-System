@@ -65,7 +65,7 @@ public class Cart {
     }
 
     // Get Cart items using the transaction ID
-    public String [][] viewCart(int transaction_id){
+    public String [][] viewCart(){
         ArrayList<String> arrayListItemId = new ArrayList<>(); //Arraylist of orderids
         ArrayList<String> arrayListName = new ArrayList<>(); //Arraylist of item names
         ArrayList<String> arrayListQty = new ArrayList<>(); //Arraylist of quantity
