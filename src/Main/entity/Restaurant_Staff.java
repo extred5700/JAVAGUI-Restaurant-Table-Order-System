@@ -26,6 +26,7 @@ public class Restaurant_Staff extends Staff {
 
     // Function to Edit order status #22
     public boolean editOrderStatus(int orderIDSelected) {
+        // Not calling Cart Entity class as Cart Entity class do not have Edit Order Status method
         boolean isOrderFulfilled = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         String query = "UPDATE order_history SET fulfilled ='" + "Y" + "' WHERE order_id='" + orderIDSelected + "'";
@@ -41,6 +42,8 @@ public class Restaurant_Staff extends Staff {
 
     // Function to Edit customer orders #23
     public boolean editOrder(int orderIDSelected, int newQuantity) {
+        // Option 1) Edit DB stuff here
+        /*
         boolean isOrderEdited = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         String query = "UPDATE order_history SET qty ='" + newQuantity + "' WHERE order_id='" + orderIDSelected + "'";
@@ -52,15 +55,22 @@ public class Restaurant_Staff extends Staff {
         }
 
         return isOrderEdited;
+        */
+
+        // Option 2) Edit DB stuff by calling Cart Entity first
+        Cart cart = new Cart();
+        return cart.editCart(orderIDSelected, newQuantity);
     }
 
     // Function to Search customer orders #24
-    public void searchOrder(Order order) {
-
+    public String [][] searchOrder(int table_num) {
+        // Edit DB stuff by calling Cart Entity first
+        Cart cart = new Cart(table_num);
+        return cart.viewCart();
     }
 
     // Function to View customer orders #25
-    public String [][] viewOrders() {
+    public String [][] viewAllOrders() {
         ArrayList<String> arrayListOrderID = new ArrayList<>();
         ArrayList<String> arrayListFoodName = new ArrayList<>();
         ArrayList<String> arrayListQuantity = new ArrayList<>();
@@ -97,7 +107,9 @@ public class Restaurant_Staff extends Staff {
     }
 
     // Function to Delete customer orders #26
-    public void deleteOrder(Order order) {
-
+    public boolean deleteOrder(int order_id) {
+        // Edit DB stuff by calling Cart Entity first
+        Cart cart = new Cart();
+        return cart.deleteFromCart(order_id);
     }
 }
