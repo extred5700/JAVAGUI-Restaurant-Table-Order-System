@@ -1,5 +1,6 @@
 package Main.boundary.CustomerUI;
 
+import Main.boundary.CustomerLoginPage;
 import Main.controller.Customer.*;
 import Main.entity.Customer;
 
@@ -45,8 +46,8 @@ public class CustomerPageUI extends JFrame {
     private final JTextField fieldItemName = new JTextField(20);
     private final JLabel labelItemQty = new JLabel("Quantity:        ");
     private final JTextField fieldItemQty = new JTextField(20);
-    private final JLabel labelItemPrice = new JLabel("Total Price:    ");
-    private final JTextField fieldItemPrice = new JTextField(20);
+    /*private final JLabel labelItemPrice = new JLabel("Total Price:    ");
+    private final JTextField fieldItemPrice = new JTextField(20);*/
     private final JButton buttonAddToCart = new JButton("Add To Cart");
 
     // Panel for Editing Cart
@@ -59,8 +60,8 @@ public class CustomerPageUI extends JFrame {
     private final JTextField fieldEditItemName = new JTextField(20);
     private final JLabel labelEditItemQty = new JLabel("Quantity:        ");
     private final JTextField fieldEditItemQty = new JTextField(20);
-    private final JLabel labelEditItemPrice = new JLabel("Total Price:    ");
-    private final JTextField fieldEditItemPrice = new JTextField(20);
+    /*private final JLabel labelEditItemPrice = new JLabel("Total Price:    ");
+    private final JTextField fieldEditItemPrice = new JTextField(20);*/
     private final JButton buttonUpdateCart = new JButton("Update Cart");
     private final JButton buttonDeleteItem = new JButton("Delete Item");
 
@@ -273,7 +274,7 @@ public class CustomerPageUI extends JFrame {
         labelItemId.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
         labelItemName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
         labelItemQty.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
-        labelItemPrice.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+//        labelItemPrice.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
 
         // Text Fields
         fieldItemId.setPreferredSize(new Dimension(50, 30));
@@ -304,8 +305,8 @@ public class CustomerPageUI extends JFrame {
             }
         });
 
-        fieldItemPrice.setPreferredSize(new Dimension(50, 30));
-        fieldItemPrice.setEditable(false); // Price cannot be edited by Customer
+        /*fieldItemPrice.setPreferredSize(new Dimension(50, 30));
+        fieldItemPrice.setEditable(false); // Price cannot be edited by Customer*/
 
         // Add To Cart Button
         buttonAddToCart.setPreferredSize(new Dimension(150, 30));
@@ -335,7 +336,7 @@ public class CustomerPageUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Item has been added to your cart!", "Success!", JOptionPane.WARNING_MESSAGE);
                     fieldItemId.setText("");
                     fieldItemName.setText("");
-                    fieldItemPrice.setText("");
+//                    fieldItemPrice.setText("");
                     fieldItemQty.setText("");
                 }
             });
@@ -348,8 +349,8 @@ public class CustomerPageUI extends JFrame {
         panelMenu.add(fieldItemName);
         panelMenu.add(labelItemQty);
         panelMenu.add(fieldItemQty);
-        panelMenu.add(labelItemPrice);
-        panelMenu.add(fieldItemPrice);
+        /*panelMenu.add(labelItemPrice);
+        panelMenu.add(fieldItemPrice);*/
         panelMenu.add(buttonAddToCart);
     } // End of Menu Page
 
@@ -362,7 +363,7 @@ public class CustomerPageUI extends JFrame {
                 // Display details on the text fields
                 fieldItemId.setText(tableMenuItems.getModel().getValueAt(getRow, 0).toString());
                 fieldItemName.setText(tableMenuItems.getModel().getValueAt(getRow, 1).toString());
-                fieldItemPrice.setText(tableMenuItems.getModel().getValueAt(getRow, 2).toString());
+                /*fieldItemPrice.setText(tableMenuItems.getModel().getValueAt(getRow, 2).toString());*/
                 fieldItemQty.setText("1"); // set default quantity value
             }
         });
@@ -380,7 +381,7 @@ public class CustomerPageUI extends JFrame {
         fieldEditOrderId.setText("");
         fieldEditItemName.setText("");
         fieldEditItemQty.setText("");
-        fieldEditItemPrice.setText("");
+        /*fieldEditItemPrice.setText("");*/
 
         // Table Construction called in method, converted to a JScrollPane
         JScrollPane scrollPane = (JScrollPane) cartTableConstruction();
@@ -392,7 +393,7 @@ public class CustomerPageUI extends JFrame {
         cartMouseClickListener();
 
         // Add Components to JPanel
-        panelEdit.setPreferredSize(new Dimension(500, 490));
+        panelEdit.setPreferredSize(new Dimension(500, 450));
         panelEdit.setBackground(Color.WHITE);
         panelEdit.add(scrollPane);
         panelEdit.setBorder(titledBorder);
@@ -401,8 +402,8 @@ public class CustomerPageUI extends JFrame {
         panelEdit.add(fieldEditItemName);
         panelEdit.add(labelEditItemQty);
         panelEdit.add(fieldEditItemQty);
-        panelEdit.add(labelEditItemPrice);
-        panelEdit.add(fieldEditItemPrice);
+        /*panelEdit.add(labelEditItemPrice);
+        panelEdit.add(fieldEditItemPrice);*/
         panelEdit.add(buttonDeleteItem);
         panelEdit.add(buttonUpdateCart);
 
@@ -437,7 +438,7 @@ public class CustomerPageUI extends JFrame {
         labelEditOrderId.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
         labelEditItemName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
         labelEditItemQty.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
-        labelEditItemPrice.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+        /*labelEditItemPrice.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));*/
 
         // Text Fields
         fieldEditOrderId.setPreferredSize(new Dimension(50, 30));
@@ -458,8 +459,8 @@ public class CustomerPageUI extends JFrame {
             }
         });
 
-        fieldEditItemPrice.setPreferredSize(new Dimension(50, 30));
-        fieldEditItemPrice.setEditable(false); // Price cannot be edited by Customer
+        /*fieldEditItemPrice.setPreferredSize(new Dimension(50, 30));
+        fieldEditItemPrice.setEditable(false); // Price cannot be edited by Customer*/
 
         // Update Cart and Delete Item Buttons
         JButton [] topButtons = {buttonUpdateCart, buttonDeleteItem};
@@ -546,7 +547,7 @@ public class CustomerPageUI extends JFrame {
                 fieldEditOrderId.setText(tableViewCart.getModel().getValueAt(getRow, 0).toString());
                 fieldEditItemName.setText(tableViewCart.getModel().getValueAt(getRow, 1).toString());
                 fieldEditItemQty.setText(tableViewCart.getModel().getValueAt(getRow, 2).toString());
-                fieldEditItemPrice.setText(tableViewCart.getModel().getValueAt(getRow, 3).toString());
+                /*fieldEditItemPrice.setText(tableViewCart.getModel().getValueAt(getRow, 3).toString());*/
             }
         });
     }
@@ -628,6 +629,10 @@ public class CustomerPageUI extends JFrame {
                 else {
                     if (paymentController.payment(customer, pNum)) { // payment method returns true - payment successful
                         JOptionPane.showMessageDialog(null, "Payment successful!", "Success!", JOptionPane.WARNING_MESSAGE);
+                        // Go back to CustomerLoginPage
+                        dispose();
+                        customerUIFrame.setVisible(false);
+                        new CustomerLoginPage();
                     }
                     else { // payment method returns false - payment unsuccessful
                         JOptionPane.showMessageDialog(null, "Payment unsuccessful. Please try again.", "Error!", JOptionPane.WARNING_MESSAGE);
