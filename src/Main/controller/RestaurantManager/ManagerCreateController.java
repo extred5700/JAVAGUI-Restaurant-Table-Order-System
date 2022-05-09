@@ -7,7 +7,7 @@ public class ManagerCreateController {
 
     public boolean validateCreateFoodItem(String food_name, Float item_price, String category){
         // If Menu Item already exist
-        if (restaurant_manager.checkMenuItemExistence(food_name, item_price, category)){
+        if (restaurant_manager.checkMenuItemExistence(food_name)){
             return false; // return false as Menu Item exist, does not validate creation of Menu Item
         }
         else{
@@ -15,5 +15,14 @@ public class ManagerCreateController {
         }
     }
 
+    public boolean validateCreateCoupon(String coupon, Float discount){
+        // If coupon already exist
+        if (restaurant_manager.checkCouponExistence(coupon)){
+            return false; // return false as Coupon exist, does not validate creation of Coupon
+        }
+        else{
+            return restaurant_manager.createCoupon(coupon, discount);
+        }
+    }
 
 }

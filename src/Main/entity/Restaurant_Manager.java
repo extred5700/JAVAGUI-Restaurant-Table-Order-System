@@ -19,7 +19,7 @@ public class Restaurant_Manager extends Staff {
     }
 
     //Function to check if menu item already exists, returns true if it already exists
-    public boolean checkMenuItemExistence(String food_name, Float item_price, String category){
+    public boolean checkMenuItemExistence(String food_name){
         boolean menuItemExistence = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         String query = "SELECT * FROM menu_item WHERE name = '" + food_name + "'";
@@ -42,7 +42,7 @@ public class Restaurant_Manager extends Staff {
         return menuItemExistence;
     }
 
-    //Will return true upon successful creation of menu item
+    // Will return true upon successful creation of menu item
     // Function to Create menu items #15
     public boolean createMenuItems(String food_name, Float item_price, String category) {
         boolean isMenuItemCreated = false;
@@ -62,7 +62,8 @@ public class Restaurant_Manager extends Staff {
         return isMenuItemCreated;
     }
 
-    public boolean checkCouponExistence(String coupon, Float discount){
+    //Function to check if Coupon already exists, returns true if it already exists
+    public boolean checkCouponExistence(String coupon){
         boolean couponExistence = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         String query = "SELECT * FROM discount WHERE coupon = '" + coupon + "'";
@@ -85,11 +86,12 @@ public class Restaurant_Manager extends Staff {
         return couponExistence;
     }
 
+    // Will return true upon successful creation of Coupon
     public boolean createCoupon(String coupon, Float discount){
         boolean isCouponCreated = false;
         Connection dbConnection = dbConnection();
         try {
-            String query = "insert into discount (coupon, discount_value)" + " values (?, ?,) ";
+            String query = "insert into discount (coupon, discount_value)" + " values (?, ?) ";
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
             preparedStatement.setString(1, coupon);
             preparedStatement.setFloat(2, discount);

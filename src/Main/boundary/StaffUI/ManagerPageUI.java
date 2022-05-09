@@ -23,7 +23,7 @@ public class ManagerPageUI extends JFrame {
 
     /* 1. CREATE function */
     private final JPanel panelCreateOrder = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
-    // Buttons
+    // Display Buttons
     private final JButton buttonDisplayCreateMenuItem = new JButton("Menu Items");
     private final JButton buttonDisplayCreateCoupon = new JButton("Coupon");
 
@@ -42,6 +42,16 @@ public class ManagerPageUI extends JFrame {
     private final ButtonGroup buttonGroupCreate = new ButtonGroup();
     // Button
     private final JButton buttonCreateMenuItem = new JButton("Create Menu Item");
+
+    /* 1b) Create Coupons */
+    // Labels
+    private final JLabel labelCreateCouponName = new JLabel("Coupon Name: ", SwingConstants.CENTER);
+    private final JLabel labelCreateCouponDiscount = new JLabel("Discount: ", SwingConstants.CENTER);
+    // Text Fields
+    private final JTextField fieldCreateCouponName = new JTextField(25);
+    private final JTextField fieldCreateCouponDiscount = new JTextField(25);
+    // Button
+    private final JButton buttonCreateCoupon = new JButton("Create Coupon");
 
 
 
@@ -126,7 +136,8 @@ public class ManagerPageUI extends JFrame {
     * 1a) void displayCreatePanel() - Method to display JPanel for Restaurant Manager to create menu items and coupons
     * 1b) void buttonCreateChoices_Onclick(String buttonPressed) - Allows the user to choose between creation of Menu Items OR coupon
     * 1c) void buttonCreateMenuItem_Onclick() - Create Menu Item button function to allow the user to create a Menu Item by passing the data to the controller
-    * */
+    * 1d) void buttonCreateCoupon_Onclick() - Create Coupon button function to allow the user to create a Menu Item by passing the data to the controller
+    */
     // 1a) Method to display JPanel for Restaurant Manager to create menu items and coupons
     public void displayCreatePanel(){
         displayTitledBorder(panelCreateOrder, "Create Menu Items/Coupons");
@@ -144,11 +155,8 @@ public class ManagerPageUI extends JFrame {
         buttonDisplayCreateCoupon.addActionListener(e -> buttonCreateChoices_Onclick("Coupon"));
 
 
-
-
-
         // Add components to the JPanel
-        panelCreateOrder.setPreferredSize(new Dimension(500, 550));
+        panelCreateOrder.setPreferredSize(new Dimension(500, 430));
         panelCreateOrder.setBackground(Color.WHITE);
         managerUIFrame.add(panelCreateOrder);
         panelCreateOrder.setVisible(true);
@@ -189,7 +197,7 @@ public class ManagerPageUI extends JFrame {
                     jTextField.setPreferredSize(new Dimension(50, 30));
                 }
 
-                // Add components to the JPanel
+                // Add labels and text fields to the JPanel
                 panelCreateOrder.add(labelCreateFoodName);
                 panelCreateOrder.add(fieldCreateFoodName);
                 panelCreateOrder.add(labelCreateFoodPrice);
@@ -221,24 +229,33 @@ public class ManagerPageUI extends JFrame {
                 // Disable pressed button
                 buttonDisplayCreateCoupon.setEnabled(false);
                 buttonDisplayCreateMenuItem.setEnabled(true);
+
+                // Labels
+                JLabel [] labelForCoupon = {labelCreateCouponName, labelCreateCouponDiscount};
+                for (JLabel jLabel : labelForCoupon){
+                    jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 18));
+                }
+                // Text Fields
+                JTextField [] textFieldsForCoupon = {fieldCreateCouponName, fieldCreateCouponDiscount};
+                for (JTextField jTextField : textFieldsForCoupon){
+                    jTextField.setPreferredSize(new Dimension(50, 30));
+                }
+
+                // Add labels and text fields to the JPanel
+                panelCreateOrder.add(labelCreateCouponName);
+                panelCreateOrder.add(fieldCreateCouponName);
+                panelCreateOrder.add(labelCreateCouponDiscount);
+                panelCreateOrder.add(fieldCreateCouponDiscount);
+
+                // Button
+                buttonCreateCoupon.setPreferredSize(new Dimension(250, 30));
+                buttonCreateCoupon.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+                buttonCreateCoupon.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+                buttonCreateCoupon.setBackground(Color.WHITE);
+                buttonCreateCoupon.addActionListener(e -> buttonCreateCoupon_Onclick());
+                panelCreateOrder.add(buttonCreateCoupon);
                 break;
         } // end of switch statements
-
-        /*
-        if (fieldCreateFoodName.getText().isEmpty() || fieldCreateFoodPrice.getText().matches("[+-]?[0-9]+") || fieldCreateFoodCategory.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "Please enter the correct values in the text fields.", "Error!", JOptionPane.WARNING_MESSAGE);
-        }
-        else{
-            String foodName = fieldCreateFoodName.getText();
-            Float item_price = Float.parseFloat(fieldCreateFoodPrice.getText());
-            String category = fieldCreateFoodCategory.getText();
-            System.out.println(item_price);
-            ManagerCreateController managerCreateController = new ManagerCreateController();
-            if (managerCreateController.validateCreateFoodItem(foodName, item_price, category)){
-
-            }
-        }
-        */
     }
 
     // 1c) Create Menu Item button function to allow the user to create a Menu Item by passing the data to the controller
@@ -248,7 +265,7 @@ public class ManagerPageUI extends JFrame {
         }
         // If text fields are not left empty
         else{
-            float item_price = 0.00f;
+            Float item_price = 0.00f;
             try {
                 item_price = Float.parseFloat(fieldCreateFoodPrice.getText());
                 // Convert item price to 2 decimal places
@@ -256,22 +273,48 @@ public class ManagerPageUI extends JFrame {
                 item_price = Float.parseFloat(df.format(item_price));
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null, "Please enter a valid number for the price of the food item.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
+            } // end of try-catch statements
             // Get Food Name from Text Field and the radio button selected
             String food_name = fieldCreateFoodName.getText();
             String category = buttonGroupCreate.getSelection().getActionCommand();
             // Pass values to the controller
             ManagerCreateController managerCreateController = new ManagerCreateController();
             if (managerCreateController.validateCreateFoodItem(food_name, item_price, category)){
-                JOptionPane.showMessageDialog(null, "Menu Item is created successfully.", "Account Creation", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Menu Item is created successfully.", "Menu Item Creation", JOptionPane.INFORMATION_MESSAGE);
             }
             else{
                 JOptionPane.showMessageDialog(null, "Menu Item already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
             }
-        }
+        } // end of if-else statements
     }
 
-
+    // 1d) Create Coupon button function to allow the user to create a Menu Item by passing the data to the controller
+    public void buttonCreateCoupon_Onclick(){
+        if (fieldCreateCouponName.getText().isEmpty() || fieldCreateCouponDiscount.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty!", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            // If text fields are not left empty
+            Float discount = 0.00f;
+            try{
+                discount = Float.parseFloat(fieldCreateCouponDiscount.getText());
+                // Convert item price to 2 decimal places
+                DecimalFormat df = new DecimalFormat("#.##");
+                discount = Float.parseFloat(df.format(discount));
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Please enter a valid number for the price of the food item.", "Error!", JOptionPane.WARNING_MESSAGE);
+            } // end of try-catch statements
+            String coupon = fieldCreateCouponName.getText().toUpperCase(); // Get Coupon name from Text Field, coupon name in UPPER case
+            // Pass values to the controller
+            ManagerCreateController managerCreateController = new ManagerCreateController();
+            if (managerCreateController.validateCreateCoupon(coupon, discount)){
+                JOptionPane.showMessageDialog(null, "Coupon is created successfully.", "Coupon Creation", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Coupon already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+        } // end of if-else statements
+    }
 
 
 
