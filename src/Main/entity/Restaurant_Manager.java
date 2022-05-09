@@ -32,7 +32,7 @@ public class Restaurant_Manager extends Staff {
             }
             else{
                 //This means menu_item found
-                System.out.println("menu item already exists.");
+                System.out.println("Menu Item already exists.");
                 menuItemExistence = true;
             }
         }catch (SQLException e){
@@ -75,7 +75,7 @@ public class Restaurant_Manager extends Staff {
             }
             else{
                 //This means coupon found
-                System.out.println("coupon already exists.");
+                System.out.println("Coupon already exists.");
                 couponExistence = true;
             }
         }catch (SQLException e){
