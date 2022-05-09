@@ -40,6 +40,11 @@ public class Customer {
         return dbConnection;
     } // end of method dbConnection()
 
+    // Get cart
+    public Cart getCart() {
+        return cart;
+    }
+
     // Function for adding items to cart #29
     public void addToCart(int item_id, int qty) {
         cart.addToCart(item_id, qty, cart.getTransaction_id());
@@ -66,7 +71,8 @@ public class Customer {
     }
 
     // Function for making epayment #34
-    public void ePayment() {
-
+    public boolean ePayment(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        return cart.makePayment(phoneNumber);
     }
 }

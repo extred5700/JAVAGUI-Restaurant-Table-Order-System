@@ -1,4 +1,7 @@
 package Main.entity;
+import com.mysql.cj.protocol.Resultset;
+
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -149,7 +152,7 @@ public class Cart {
     public boolean deleteFromCart(int order_id){
         boolean isItemDeleted = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "DELETE FROM order_history WHERE order_id='" + order_id + "'";
+        String query = "DELETE FROM order_history WHERE order_id = '" + order_id + "'";
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query);
             isItemDeleted = true;
@@ -203,9 +206,10 @@ public class Cart {
         return discountApplied;
     }
 
-    //Updates transaction history with payment - requires phone number of customer. upon success, return true
+    // Updates transaction history with payment - requires phone number of customer. upon success, return true
     public boolean makePayment (String phoneNumber){
         boolean isPaymentSuccessful = false;
+
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         String query = "UPDATE transaction_history SET date = current_date(), pNum = '" + phoneNumber + "', paid = Y WHERE transaction_id = " + transaction_id; //query
         try (Statement statement = dbConnection.createStatement()){
@@ -215,6 +219,11 @@ public class Cart {
             System.out.println(e);
         }
         return isPaymentSuccessful;
+    }
+
+    // Validate Customer's phone number
+    public boolean validatePhoneNumber(String phoneNumber) {
+        return phoneNumber.length() == 8 && phoneNumber.charAt(0) == '8' && phoneNumber.charAt(0) == '9';
     }
 
 }

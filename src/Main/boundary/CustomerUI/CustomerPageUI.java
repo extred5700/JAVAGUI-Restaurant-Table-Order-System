@@ -1,9 +1,6 @@
 package Main.boundary.CustomerUI;
 
-import Main.controller.Customer.AddToCartController;
-import Main.controller.Customer.EditCartController;
-import Main.controller.Customer.ViewCartController;
-import Main.controller.Customer.ViewMenuController;
+import Main.controller.Customer.*;
 import Main.entity.Customer;
 
 import javax.swing.*;
@@ -21,10 +18,10 @@ public class CustomerPageUI extends JFrame {
     private final JFrame customerUIFrame = new JFrame("Customer Homepage");
 
     // Buttons
-    private final JButton buttonMenu = new JButton("View Menu");
-    private final JButton buttonEdit = new JButton("Edit Cart");
-    private final JButton buttonView = new JButton("View Cart");
-    private final JButton buttonPayment = new JButton("Payment");
+    private final JButton buttonMenuPage = new JButton("View Menu");
+    private final JButton buttonEditPage = new JButton("Edit Cart");
+    private final JButton buttonViewPage = new JButton("View Cart");
+    private final JButton buttonPaymentPage = new JButton("Payment");
 
     // Title Border
     private TitledBorder titledBorder;
@@ -65,6 +62,7 @@ public class CustomerPageUI extends JFrame {
     private final JLabel labelEditItemPrice = new JLabel("Total Price:    ");
     private final JTextField fieldEditItemPrice = new JTextField(20);
     private final JButton buttonUpdateCart = new JButton("Update Cart");
+    private final JButton buttonDeleteItem = new JButton("Delete Item");
 
     // Panel for Viewing Cart
     private final JPanel panelView = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
@@ -72,6 +70,13 @@ public class CustomerPageUI extends JFrame {
 
     // Panel for Payment
     private final JPanel panelPayment = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+
+    // Labels, TextFields, and Button
+    private final JLabel labelPaymentPhoneNumber = new JLabel("Phone Number:");
+    private final JTextField fieldPaymentPhoneNumber = new JTextField(20);
+    private final JLabel labelPaymentTotalPrice = new JLabel("Total Price:");
+    private final JTextField fieldPaymentTotalPrice = new JTextField(20);
+    private final JButton buttonPayment = new JButton("Payment");
 
     public CustomerPageUI(int table_no){
         // initialise variables
@@ -111,7 +116,7 @@ public class CustomerPageUI extends JFrame {
 
     // Method to display buttons for Customer
     private void constructTopButtons(){
-        JButton [] topButtons = {buttonMenu, buttonEdit, buttonView, buttonPayment};
+        JButton [] topButtons = {buttonMenuPage, buttonEditPage, buttonViewPage, buttonPaymentPage,};
         for (JButton jButton : topButtons){
             jButton.setPreferredSize(new Dimension(120, 30));
             jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
@@ -398,6 +403,7 @@ public class CustomerPageUI extends JFrame {
         panelEdit.add(fieldEditItemQty);
         panelEdit.add(labelEditItemPrice);
         panelEdit.add(fieldEditItemPrice);
+        panelEdit.add(buttonDeleteItem);
         panelEdit.add(buttonUpdateCart);
 
         customerUIFrame.add(panelEdit);
@@ -417,7 +423,7 @@ public class CustomerPageUI extends JFrame {
         refreshTable(panelView);
 
         // Add Components to JPanel
-        panelView.setPreferredSize(new Dimension(500, 490));
+        panelView.setPreferredSize(new Dimension(500, 350));
         panelView.setBackground(Color.WHITE);
         panelView.add(scrollPane);
         panelView.setBorder(titledBorder);
@@ -455,13 +461,16 @@ public class CustomerPageUI extends JFrame {
         fieldEditItemPrice.setPreferredSize(new Dimension(50, 30));
         fieldEditItemPrice.setEditable(false); // Price cannot be edited by Customer
 
-        // Add To Cart Button
-        buttonUpdateCart.setPreferredSize(new Dimension(150, 30));
-        buttonUpdateCart.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-        buttonUpdateCart.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-        buttonUpdateCart.setBackground(Color.WHITE);
+        // Update Cart and Delete Item Buttons
+        JButton [] topButtons = {buttonUpdateCart, buttonDeleteItem};
+        for (JButton jButton : topButtons){
+            jButton.setPreferredSize(new Dimension(150, 30));
+            jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+            jButton.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+            jButton.setBackground(Color.WHITE);
+        }
 
-        // Create Action Listener
+        // Create Action Listener for Update Cart Button
         if (buttonUpdateCart.getActionListeners().length == 0) {
             buttonUpdateCart.addActionListener(e -> {
                 // Call Controller
@@ -469,25 +478,44 @@ public class CustomerPageUI extends JFrame {
                 String order_id = fieldEditOrderId.getText(); // get order_id
                 String qty = fieldEditItemQty.getText(); // get quantity
                 // Check if text field are left empty by the user
-                if (qty.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "You have not entered a quantity!", "Error!", JOptionPane.WARNING_MESSAGE);
-                }
-                else if (order_id.isEmpty()) {
+                if (order_id.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "You have not selected an item!", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                else if (qty.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "You have not entered a quantity!", "Error!", JOptionPane.WARNING_MESSAGE);
                 }
                 // Ensure that quantity entered is not 0
                 else if (Integer.parseInt(qty) < 0) {
                     JOptionPane.showMessageDialog(null, "Quantity cannot be less than 0!", "Error!", JOptionPane.WARNING_MESSAGE);
                 }
-                else if (Integer.parseInt(qty) == 0) {
-                    editCartController.deleteItem(customer, Integer.parseInt(order_id));
+                else {
+                    if (Integer.parseInt(qty) == 0) {
+                        editCartController.deleteItem(customer, Integer.parseInt(order_id));
+                    }
+                    else {
+                        editCartController.editQty(customer, Integer.parseInt(order_id), Integer.parseInt(qty));
+                    }
+                    JOptionPane.showMessageDialog(null, "Your Cart has been Updated!", "Success!", JOptionPane.WARNING_MESSAGE);
                     // Refresh the cart items
                     editCart();
                     panelEdit.setVisible(true);
                 }
+            });
+        }
+
+        // Create Action Listener for Delete Item Button
+        if (buttonDeleteItem.getActionListeners().length == 0) {
+            buttonDeleteItem.addActionListener(e -> {
+                // Call Controller
+                EditCartController editCartController = new EditCartController();
+                String order_id = fieldEditOrderId.getText(); // get order_id
+                // Check if customer has selected an item to delete
+                if (order_id.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "You have not selected an item!", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
                 else {
-                    editCartController.editQty(customer, Integer.parseInt(order_id), Integer.parseInt(qty));
-                    JOptionPane.showMessageDialog(null, "Your Cart has been Updated!", "Success!", JOptionPane.WARNING_MESSAGE);
+                    editCartController.deleteItem(customer, Integer.parseInt(order_id));
+                    JOptionPane.showMessageDialog(null, "Item has been deleted from your cart!", "Success!", JOptionPane.WARNING_MESSAGE);
                     // Refresh the cart items
                     editCart();
                     panelEdit.setVisible(true);
@@ -536,6 +564,8 @@ public class CustomerPageUI extends JFrame {
         // Update Cart Table
         refreshTable(panelPayment);
 
+        paymentComponents();
+
 
         // Add Components to JPanel
         panelPayment.setPreferredSize(new Dimension(500, 490));
@@ -543,6 +573,67 @@ public class CustomerPageUI extends JFrame {
         panelPayment.add(scrollPane);
         panelPayment.setBorder(titledBorder);
         panelPayment.setVisible(false);
+        panelPayment.add(labelPaymentPhoneNumber);
+        panelPayment.add(fieldPaymentPhoneNumber);
+        panelPayment.add(labelPaymentTotalPrice);
+        panelPayment.add(fieldPaymentTotalPrice);
+        panelPayment.add(buttonPayment);
         customerUIFrame.add(panelPayment);
+    }
+
+    private void paymentComponents() {
+        // Labels
+        labelPaymentPhoneNumber.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+        labelPaymentTotalPrice.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
+
+        // Text Fields
+        fieldPaymentPhoneNumber.setPreferredSize(new Dimension(50, 30));
+        // Ensure user only can type in numbers/integers
+        fieldPaymentPhoneNumber.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+
+        fieldPaymentTotalPrice.setPreferredSize(new Dimension(50, 30));
+        fieldPaymentTotalPrice.setEditable(false); // Total Price cannot be edited by Customer
+
+        // Call Controller
+        PaymentController paymentController = new PaymentController();
+
+        fieldPaymentTotalPrice.setText(String.valueOf(paymentController.getTotalPrice(customer)));
+
+        // Payment Button
+        buttonPayment.setPreferredSize(new Dimension(150, 30));
+        buttonPayment.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+        buttonPayment.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        buttonPayment.setBackground(Color.WHITE);
+
+        // Create Action Listener
+        if (buttonPayment.getActionListeners().length == 0) {
+            buttonPayment.addActionListener(e -> {
+                String pNum = fieldPaymentPhoneNumber.getText(); // get phone number
+
+                if (pNum.isEmpty()) { // Check if text field is left empty by the user
+                    JOptionPane.showMessageDialog(null, "You have not entered your phone number!", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                // Validate phone number
+                else if (!paymentController.validatePhoneNumber(customer, pNum)) { // validate phone number method returns false - invalid phone number
+                    JOptionPane.showMessageDialog(null, "Please enter a valid phone number!", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+                else {
+                    if (paymentController.payment(customer, pNum)) { // payment method returns true - payment successful
+                        JOptionPane.showMessageDialog(null, "Payment successful!", "Success!", JOptionPane.WARNING_MESSAGE);
+                    }
+                    else { // payment method returns false - payment unsuccessful
+                        JOptionPane.showMessageDialog(null, "Payment unsuccessful. Please try again.", "Error!", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+        }
     }
 }
