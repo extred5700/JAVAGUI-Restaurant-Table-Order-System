@@ -3,6 +3,7 @@ package Main.entity;
 // Variable and Function Parameters are just a placeholder - May change depending on future designs
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Restaurant_Manager extends Staff {
     // Variable Declaration
@@ -18,7 +19,44 @@ public class Restaurant_Manager extends Staff {
         this.menuItems = menuItems;
     }
 
-    //Function to check if menu item already exists, returns true if it already exists
+
+    /* 1) MENU ITEMS */
+
+    // 1a) Function to View menu items #18
+    public String [][] viewMenuItems(){
+        ArrayList<String> arrayListItemID = new ArrayList<>();
+        ArrayList<String> arrayListName = new ArrayList<>();
+        ArrayList<String> arrayListItemPrice = new ArrayList<>();
+        ArrayList<String> arrayListCategory = new ArrayList<>();
+
+        Connection dbConnection = dbConnection(); // Set up connection with DB
+        String query = "SELECT * from menu_item";
+        try (Statement statement = dbConnection.createStatement()){
+            ResultSet set = statement.executeQuery(query);
+            while (set.next()){
+                // Add data to their respective array list
+                arrayListItemID.add(set.getString("item_id"));
+                arrayListName.add(set.getString("name"));
+                arrayListItemPrice.add(set.getString("item_price"));
+                arrayListCategory.add(set.getString("category"));
+            }
+        } catch(SQLException e){
+            System.out.println(e);
+        }
+        // Convert Array List to a 2D array
+        String [][] arrayAllMenuItems = new String[arrayListItemID.size()][4];
+        for (int row = 0; row < arrayAllMenuItems.length; row++){
+            for (int column = 0; column < arrayAllMenuItems[row].length; column++){
+                arrayAllMenuItems[row][0] = arrayListItemID.get(row);
+                arrayAllMenuItems[row][1] = arrayListName.get(row);
+                arrayAllMenuItems[row][2] = arrayListItemPrice.get(row);
+                arrayAllMenuItems[row][3] = arrayListCategory.get(row);
+            }
+        }
+        return arrayAllMenuItems;
+    }
+
+    // 1b) Function to check if menu item already exists, returns true if it already exists
     public boolean checkMenuItemExistence(String food_name){
         boolean menuItemExistence = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -43,10 +81,10 @@ public class Restaurant_Manager extends Staff {
     }
 
     // Will return true upon successful creation of menu item
-    // Function to Create menu items #15
+    // 1c) Function to Create menu items #15
     public boolean createMenuItems(String food_name, Float item_price, String category) {
         boolean isMenuItemCreated = false;
-        Connection dbConnection = dbConnection();
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
         try {
             String query = "insert into menu_item (name, item_price, category )" + " values (?, ?, ?) ";
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
@@ -62,7 +100,51 @@ public class Restaurant_Manager extends Staff {
         return isMenuItemCreated;
     }
 
-    //Function to check if Coupon already exists, returns true if it already exists
+    // 1d) Function to Edit menu items #16
+    public boolean editMenuItems(int item_id, String food_name, Float new_price) {
+        boolean isMenuItemEdited = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "UPDATE menu_item SET name ='" + food_name + "',item_price='" + new_price + "' WHERE item_id='" + item_id + "'";
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query);
+            isMenuItemEdited = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return isMenuItemEdited;
+    }
+
+    /* 2) COUPONS */
+
+    // 2a) Function to view all coupons
+    public String [][] viewCoupons(){
+        ArrayList<String> arrayListCouponName = new ArrayList<>();
+        ArrayList<String> arrayListDiscountValue = new ArrayList<>();
+
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "SELECT * from discount";
+        try (Statement statement = dbConnection.createStatement()){
+            ResultSet set = statement.executeQuery(query);
+            while (set.next()){
+                // Add data to their respective array list
+                arrayListCouponName.add(set.getString("coupon"));
+                arrayListDiscountValue.add(set.getString("discount_value"));
+            }
+        } catch(SQLException e){
+            System.out.println(e);
+        }
+        // Convert Array List to a 2D array
+        String [][] arrayAllCoupons = new String[arrayListCouponName.size()][2];
+        for (int row = 0; row < arrayAllCoupons.length; row++){
+            for (int column = 0; column < arrayAllCoupons[row].length; column++){
+                arrayAllCoupons[row][0] = arrayListCouponName.get(row);
+                arrayAllCoupons[row][1] = arrayListDiscountValue.get(row);
+            }
+        }
+        return arrayAllCoupons;
+    }
+
+    // 2b) Function to check if Coupon already exists, returns true if it already exists
     public boolean checkCouponExistence(String coupon){
         boolean couponExistence = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -86,10 +168,10 @@ public class Restaurant_Manager extends Staff {
         return couponExistence;
     }
 
-    // Will return true upon successful creation of Coupon
+    // 2c)Will return true upon successful creation of Coupon
     public boolean createCoupon(String coupon, Float discount){
         boolean isCouponCreated = false;
-        Connection dbConnection = dbConnection();
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
         try {
             String query = "insert into discount (coupon, discount_value)" + " values (?, ?) ";
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
@@ -104,20 +186,32 @@ public class Restaurant_Manager extends Staff {
         return isCouponCreated;
     }
 
-    // Function to Edit menu items #16
-    public void editMenuItems(Menu_Items menuItems) {
-
+    public boolean editCoupon(String oldCouponName, String newCouponName, Float discount){
+        boolean isCouponEdited = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "UPDATE discount SET coupon ='" + newCouponName + "',discount_value='" + discount + "' WHERE coupon='" + oldCouponName + "'";
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query);
+            isCouponEdited = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return isCouponEdited;
     }
+
+
+
+
+
+
+
+
 
     // Function to Search menu items #17
     public void searchMenuItems(Menu_Items menuItems) {
 
     }
 
-    // Function to View menu items #18
-    public void viewMenuItems() {
-
-    }
 
     // Function to Delete menu items #19
     public void deleteMenuItems(Menu_Items menuItems) {

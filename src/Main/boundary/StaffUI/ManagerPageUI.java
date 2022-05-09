@@ -2,12 +2,15 @@ package Main.boundary.StaffUI;
 
 import Main.boundary.StaffLoginPage;
 import Main.controller.RestaurantManager.ManagerCreateController;
+import Main.controller.RestaurantManager.ManagerEditController;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 
 public class ManagerPageUI extends JFrame {
@@ -22,11 +25,10 @@ public class ManagerPageUI extends JFrame {
     private final JButton buttonDelete = new JButton("Delete");
 
     /* 1. CREATE function */
-    private final JPanel panelCreateOrder = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+    private final JPanel panelCreate = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     // Display Buttons
     private final JButton buttonDisplayCreateMenuItem = new JButton("Menu Items");
     private final JButton buttonDisplayCreateCoupon = new JButton("Coupon");
-
     /* 1a) Create Menu Items */
     // Labels
     private final JLabel labelCreateFoodName = new JLabel("Food Name: ", SwingConstants.CENTER);
@@ -42,7 +44,6 @@ public class ManagerPageUI extends JFrame {
     private final ButtonGroup buttonGroupCreate = new ButtonGroup();
     // Button
     private final JButton buttonCreateMenuItem = new JButton("Create Menu Item");
-
     /* 1b) Create Coupons */
     // Labels
     private final JLabel labelCreateCouponName = new JLabel("Coupon Name: ", SwingConstants.CENTER);
@@ -53,6 +54,37 @@ public class ManagerPageUI extends JFrame {
     // Button
     private final JButton buttonCreateCoupon = new JButton("Create Coupon");
 
+    /*2. EDIT function */
+    private final JPanel panelEdit = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+    // Display Buttons
+    private final JButton buttonDisplayEditMenuItem = new JButton("Menu Items");
+    private final JButton buttonDisplayEditCoupon = new JButton("Coupon");
+    /* 2a) Menu Items */
+    // Table
+    private JTable tableEditMenuItems;
+    // Labels
+    private final JLabel labelEditItemID = new JLabel("Item ID: ", SwingConstants.CENTER);
+    private final JLabel labelEditFoodName = new JLabel("Food Name: ", SwingConstants.CENTER);
+    private final JLabel labelEditPrice = new JLabel("Price: ", SwingConstants.CENTER);
+    private final JLabel labelEditCategory = new JLabel("Category: ", SwingConstants.CENTER);
+    // Text Fields
+    private final JTextField fieldEditItemID = new JTextField(25);
+    private final JTextField fieldEditFoodName = new JTextField(25);
+    private final JTextField fieldEditFoodPrice = new JTextField(25);
+    private final JTextField fieldEditFoodCategory = new JTextField(25);
+    // Button
+    private final JButton buttonEditMenuItem = new JButton("Edit Menu Item");
+    /* 2b) Coupons */
+    // Table
+    private JTable tableEditCoupons;
+    // Labels
+    private final JLabel labelEditCouponName = new JLabel("Coupon Name: ", SwingConstants.CENTER);
+    private final JLabel labelEditCouponDiscountValue = new JLabel("Discount Value: ", SwingConstants.CENTER);
+    // Text Field
+    private final JTextField fieldEditCouponName = new JTextField(25);
+    private final JTextField fieldEditCouponDiscountValue = new JTextField(25);
+    // Button
+    private final JButton buttonEditCoupon = new JButton("Edit Coupon");
 
 
 
@@ -75,9 +107,13 @@ public class ManagerPageUI extends JFrame {
         displayManagerUserButtons();
 
         /* Button Function for Restaurant Manager */
-        // 1. Create menu items
+        // 1. Create menu items & coupons
         displayCreatePanel();
-        panelCreateOrder.setVisible(true);
+        panelCreate.setVisible(false);
+
+        // 2. Edit menu items & coupons
+        displayEditPanel();
+        panelEdit.setVisible(true);
 
         managerUIFrame.setVisible(true);
     }
@@ -112,9 +148,12 @@ public class ManagerPageUI extends JFrame {
                 new StaffLoginPage();
                 break;
             case "Create":
-                panelCreateOrder.setVisible(true);
+                panelCreate.setVisible(true);
+                panelEdit.setVisible(false);
                 break;
             case "Edit":
+                panelEdit.setVisible(true);
+                panelCreate.setVisible(false);
                 break;
             case "Search":
                 break;
@@ -132,6 +171,7 @@ public class ManagerPageUI extends JFrame {
         panel.setBorder(titledBorder);
     }
 
+
     /* 1. CREATE function
     * 1a) void displayCreatePanel() - Method to display JPanel for Restaurant Manager to create menu items and coupons
     * 1b) void buttonCreateChoices_Onclick(String buttonPressed) - Allows the user to choose between creation of Menu Items OR coupon
@@ -140,7 +180,7 @@ public class ManagerPageUI extends JFrame {
     */
     // 1a) Method to display JPanel for Restaurant Manager to create menu items and coupons
     public void displayCreatePanel(){
-        displayTitledBorder(panelCreateOrder, "Create Menu Items/Coupons");
+        displayTitledBorder(panelCreate, "Create Menu Items/Coupons");
 
         // Choice buttons on top
         JButton [] buttonChoices = {buttonDisplayCreateMenuItem, buttonDisplayCreateCoupon};
@@ -149,70 +189,70 @@ public class ManagerPageUI extends JFrame {
             jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
-            panelCreateOrder.add(jButton);
+            panelCreate.add(jButton);
         }
         buttonDisplayCreateMenuItem.addActionListener(e -> buttonCreateChoices_Onclick("Menu Items"));
         buttonDisplayCreateCoupon.addActionListener(e -> buttonCreateChoices_Onclick("Coupon"));
 
 
         // Add components to the JPanel
-        panelCreateOrder.setPreferredSize(new Dimension(500, 430));
-        panelCreateOrder.setBackground(Color.WHITE);
-        managerUIFrame.add(panelCreateOrder);
-        panelCreateOrder.setVisible(true);
+        panelCreate.setPreferredSize(new Dimension(500, 430));
+        panelCreate.setBackground(Color.WHITE);
+        managerUIFrame.add(panelCreate);
+        panelCreate.setVisible(true);
     }
 
     // 1b) Allows the user to choose between creation of Menu Items OR coupon, then display the respective GUI components
     public void buttonCreateChoices_Onclick(String buttonPressed){
         /* REMOVE COMPONENTS */
-        Component[] componentList = panelCreateOrder.getComponents();
+        Component[] componentList = panelCreate.getComponents();
         // Loop through the components
         for(Component c : componentList){
             //Find the components you want to remove
             if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JRadioButton){
                 //Remove it
-                panelCreateOrder.remove(c);
+                panelCreate.remove(c);
             }
         }
-        panelCreateOrder.add(buttonDisplayCreateMenuItem, 0);
-        panelCreateOrder.add(buttonDisplayCreateCoupon, 1);
-        panelCreateOrder.revalidate();
-        panelCreateOrder.repaint();
+        panelCreate.add(buttonDisplayCreateMenuItem, 0);
+        panelCreate.add(buttonDisplayCreateCoupon, 1);
+        panelCreate.revalidate();
+        panelCreate.repaint();
 
         // Display relevant components based on the button PRESSED
-        switch (buttonPressed){
-            case "Menu Items":
+        switch (buttonPressed) {
+            case "Menu Items" -> {
                 // Disable pressed button
                 buttonDisplayCreateMenuItem.setEnabled(false);
                 buttonDisplayCreateCoupon.setEnabled(true);
 
                 // Labels
-                JLabel [] labelForFoodItems = {labelCreateFoodName, labelCreateFoodPrice};
-                for (JLabel jLabel : labelForFoodItems){
+                JLabel[] arrayCreateFoodItemLabels = {labelCreateFoodName, labelCreateFoodPrice};
+                for (JLabel jLabel : arrayCreateFoodItemLabels) {
                     jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 18));
                 }
                 // Text Fields
-                JTextField [] textFieldsForFoodItems = {fieldCreateFoodName, fieldCreateFoodPrice};
-                for (JTextField jTextField : textFieldsForFoodItems){
+                JTextField[] arrayCreateFoodItemsTextFields = {fieldCreateFoodName, fieldCreateFoodPrice};
+                for (JTextField jTextField : arrayCreateFoodItemsTextFields) {
                     jTextField.setPreferredSize(new Dimension(50, 30));
                 }
 
                 // Add labels and text fields to the JPanel
-                panelCreateOrder.add(labelCreateFoodName);
-                panelCreateOrder.add(fieldCreateFoodName);
-                panelCreateOrder.add(labelCreateFoodPrice);
-                panelCreateOrder.add(fieldCreateFoodPrice);
+                panelCreate.add(labelCreateFoodName);
+                panelCreate.add(fieldCreateFoodName);
+                panelCreate.add(labelCreateFoodPrice);
+                panelCreate.add(fieldCreateFoodPrice);
 
                 // Radio Buttons
-                JRadioButton [] tempRadioButtons = {radioCreatePasta, radioCreatePizza, radioCreateBakedRice, radioCreateDrinks};
-                String [] actionCommandForMenuItems = {"Pasta", "Pizza", "Baked Rice", "Drinks"};
-                for (int i = 0; i < tempRadioButtons.length; i++){
+                JRadioButton[] tempRadioButtons = {radioCreatePasta, radioCreatePizza, radioCreateBakedRice, radioCreateDrinks};
+                String[] actionCommandForMenuItems = {"Pasta", "Pizza", "Baked Rice", "Drinks"};
+                for (int i = 0; i < tempRadioButtons.length; i++) {
                     tempRadioButtons[i].setBackground(Color.WHITE);
                     tempRadioButtons[i].setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
                     tempRadioButtons[i].setPreferredSize(new Dimension(240, 15));
                     tempRadioButtons[i].setActionCommand(actionCommandForMenuItems[i]);
                     buttonGroupCreate.add(tempRadioButtons[i]);
-                    panelCreateOrder.add(tempRadioButtons[i]);
+                    panelCreate.add(tempRadioButtons[i]);
                 }
                 tempRadioButtons[0].setSelected(true);
 
@@ -222,30 +262,28 @@ public class ManagerPageUI extends JFrame {
                 buttonCreateMenuItem.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
                 buttonCreateMenuItem.setBackground(Color.WHITE);
                 buttonCreateMenuItem.addActionListener(e -> buttonCreateMenuItem_Onclick());
-                panelCreateOrder.add(buttonCreateMenuItem);
-                break;
-
-            case "Coupon":
+                panelCreate.add(buttonCreateMenuItem);
+            }
+            case "Coupon" -> {
                 // Disable pressed button
                 buttonDisplayCreateCoupon.setEnabled(false);
                 buttonDisplayCreateMenuItem.setEnabled(true);
 
                 // Labels
-                JLabel [] labelForCoupon = {labelCreateCouponName, labelCreateCouponDiscount};
-                for (JLabel jLabel : labelForCoupon){
+                JLabel[] labelForCoupon = {labelCreateCouponName, labelCreateCouponDiscount};
+                for (JLabel jLabel : labelForCoupon) {
                     jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 18));
                 }
                 // Text Fields
-                JTextField [] textFieldsForCoupon = {fieldCreateCouponName, fieldCreateCouponDiscount};
-                for (JTextField jTextField : textFieldsForCoupon){
+                JTextField[] textFieldsForCoupon = {fieldCreateCouponName, fieldCreateCouponDiscount};
+                for (JTextField jTextField : textFieldsForCoupon) {
                     jTextField.setPreferredSize(new Dimension(50, 30));
                 }
-
                 // Add labels and text fields to the JPanel
-                panelCreateOrder.add(labelCreateCouponName);
-                panelCreateOrder.add(fieldCreateCouponName);
-                panelCreateOrder.add(labelCreateCouponDiscount);
-                panelCreateOrder.add(fieldCreateCouponDiscount);
+                panelCreate.add(labelCreateCouponName);
+                panelCreate.add(fieldCreateCouponName);
+                panelCreate.add(labelCreateCouponDiscount);
+                panelCreate.add(fieldCreateCouponDiscount);
 
                 // Button
                 buttonCreateCoupon.setPreferredSize(new Dimension(250, 30));
@@ -253,8 +291,8 @@ public class ManagerPageUI extends JFrame {
                 buttonCreateCoupon.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
                 buttonCreateCoupon.setBackground(Color.WHITE);
                 buttonCreateCoupon.addActionListener(e -> buttonCreateCoupon_Onclick());
-                panelCreateOrder.add(buttonCreateCoupon);
-                break;
+                panelCreate.add(buttonCreateCoupon);
+            }
         } // end of switch statements
     }
 
@@ -316,6 +354,276 @@ public class ManagerPageUI extends JFrame {
         } // end of if-else statements
     }
 
+
+    /* 2. EDIT function
+    * 2a) void displayEditPanel() - Method to display JPanel for Restaurant Manager to edit menu items and coupons
+    * 2b) void buttonEditChoices_Onclick(String buttonPressed) - Allows the user to choose between editing of Menu Items OR coupon, then display the respective GUI components
+    * Methods 2c and 2d belongs to Editing MENU ITEMS
+    * 2c) Component editMenuItemTableConstruction() - Construction of table variables for EDIT MENU ITEM functions
+    * 2d) void buttonEditMenuItem_Onclick() - Edit Menu Item button function to allow the user to edit a Menu Item by passing the data to the controller
+    * Methods 2e and 2f belongs to Editing COUPONS
+    * 2e) Component editCouponTableConstruction() - Construction of table variables for EDIT COUPON functions
+    * 2f) void buttonEditCoupon_Onclick() - Edit Coupon button function to allow the user to edit a Menu Item by passing the data to the controller
+    * */
+    // 2a) Method to display JPanel for Restaurant Manager to edit menu items and coupons
+    public void displayEditPanel(){
+        displayTitledBorder(panelEdit, "Edit Menu Items/Coupons");
+
+        // Choice buttons on top
+        JButton [] buttonChoices = {buttonDisplayEditMenuItem, buttonDisplayEditCoupon};
+        for (JButton jButton : buttonChoices){
+            jButton.setPreferredSize(new Dimension(220, 30));
+            jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+            jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
+            jButton.setBackground(Color.WHITE);
+            panelEdit.add(jButton);
+        }
+        buttonDisplayEditMenuItem.addActionListener(e -> buttonEditChoices_Onclick("Menu Items"));
+        buttonDisplayEditCoupon.addActionListener(e -> buttonEditChoices_Onclick("Coupon"));
+
+        // Add components to the JPanel
+        panelEdit.setPreferredSize(new Dimension(500, 590));
+        panelEdit.setBackground(Color.WHITE);
+        managerUIFrame.add(panelEdit);
+        panelEdit.setVisible(true);
+    }
+
+    // 2b) Allows the user to choose between editing of Menu Items OR coupon, then display the respective GUI components
+    public void buttonEditChoices_Onclick(String buttonPressed){
+        /* REMOVE COMPONENTS */
+        // Remove all components then add choice buttons on the top
+        Component[] componentList = panelEdit.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JScrollPane){
+                //Remove it
+                panelEdit.remove(c);
+            }
+        }
+        panelEdit.add(buttonDisplayEditMenuItem, 0);
+        panelEdit.add(buttonDisplayEditCoupon, 1);
+        panelEdit.revalidate();
+        panelEdit.repaint();
+
+        // Display relevant components based on the button pressed
+        switch (buttonPressed) {
+            case "Menu Items" -> {
+                buttonDisplayEditMenuItem.setEnabled(false);
+                buttonDisplayEditCoupon.setEnabled(true);
+                // Table
+                JScrollPane editMenuItemScrollPane = (JScrollPane) editMenuItemTableConstruction();
+                panelEdit.add(editMenuItemScrollPane); // Add table to JPanel
+                // Labels
+                JLabel[] arrayEditFoodItemLabels = {labelEditItemID, labelEditFoodName, labelEditPrice, labelEditCategory};
+                for (JLabel jLabel : arrayEditFoodItemLabels) {
+                    jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 18));
+                }
+                // Text Fields
+                JTextField[] arrayEditFoodItemsTextFields = {fieldEditItemID, fieldEditFoodName, fieldEditFoodPrice, fieldEditFoodCategory};
+                for (int i = 0; i < arrayEditFoodItemsTextFields.length; i++) {
+                    arrayEditFoodItemsTextFields[i].setPreferredSize(new Dimension(50, 30));
+                    if (i == 0 || i == 3) {
+                        arrayEditFoodItemsTextFields[i].setEditable(false);
+                    }
+                }
+                // Add labels and text fields to the JPanel
+                panelEdit.add(labelEditItemID);
+                panelEdit.add(fieldEditItemID);
+                panelEdit.add(labelEditFoodName);
+                panelEdit.add(fieldEditFoodName);
+                panelEdit.add(labelEditPrice);
+                panelEdit.add(fieldEditFoodPrice);
+                panelEdit.add(labelEditCategory);
+                panelEdit.add(fieldEditFoodCategory);
+                // Button
+                buttonEditMenuItem.setPreferredSize(new Dimension(250, 30));
+                buttonEditMenuItem.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+                buttonEditMenuItem.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+                buttonEditMenuItem.setBackground(Color.WHITE);
+                buttonEditMenuItem.addActionListener(e -> buttonEditMenuItem_Onclick());
+                panelEdit.add(buttonEditMenuItem);
+            }
+            case "Coupon" -> {
+                buttonDisplayEditCoupon.setEnabled(false);
+                buttonDisplayEditMenuItem.setEnabled(true);
+                // Table
+                JScrollPane editCouponScrollPane = (JScrollPane) editCouponTableConstruction();
+                panelEdit.add(editCouponScrollPane); // Add table to JPanel
+                // Labels
+                JLabel[] arrayEditCouponLabels = {labelEditCouponName, labelEditCouponDiscountValue};
+                for (JLabel jLabel : arrayEditCouponLabels){
+                    jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 18));
+                }
+                // Text Fields
+                JTextField[] arrayEditFoodItemsTextFields = {fieldEditCouponName, fieldEditCouponDiscountValue};
+                for (int i = 0; i < arrayEditFoodItemsTextFields.length; i++) {
+                    arrayEditFoodItemsTextFields[i].setPreferredSize(new Dimension(50, 30));
+                }
+                // Add labels and text fields to the JPanel
+                panelEdit.add(labelEditCouponName);
+                panelEdit.add(fieldEditCouponName);
+                panelEdit.add(labelEditCouponDiscountValue);
+                panelEdit.add(fieldEditCouponDiscountValue);
+                // Button
+                buttonEditCoupon.setPreferredSize(new Dimension(250, 30));
+                buttonEditCoupon.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+                buttonEditCoupon.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+                buttonEditCoupon.setBackground(Color.WHITE);
+                buttonEditCoupon.addActionListener(e -> buttonEditCoupon_Onclick());
+                panelEdit.add(buttonEditCoupon);
+            }
+        } // end of switch statements
+    }
+
+    /* Methods 2c and 2d belongs to Editing MENU ITEMS */
+    // 2c) Construction of table variables for EDIT MENU ITEM functions
+    public Component editMenuItemTableConstruction(){
+        // Display Table and table click listener
+        ManagerEditController managerEditController = new ManagerEditController();
+        String[][] data = managerEditController.displayMenuItems();
+        // Display data in a table format
+        String[] columnTableNames = {"Item ID", "Food Name", "Price", "Category"};
+        tableEditMenuItems = new JTable(data, columnTableNames);
+        JScrollPane editMenuItemScrollPane = new JScrollPane(tableEditMenuItems);
+        editMenuItemScrollPane.setPreferredSize(new Dimension(485, 200)); // width then height
+        // Table Click Listener
+        tableEditMenuItems.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int getRow = tableEditMenuItems.getSelectedRow();
+                // Display details on the text fields
+                fieldEditItemID.setText(tableEditMenuItems.getModel().getValueAt(getRow, 0).toString());
+                fieldEditFoodName.setText(tableEditMenuItems.getModel().getValueAt(getRow, 1).toString());
+                fieldEditFoodPrice.setText(tableEditMenuItems.getModel().getValueAt(getRow, 2).toString());
+                fieldEditFoodCategory.setText(tableEditMenuItems.getModel().getValueAt(getRow, 3).toString());
+            }
+        });
+        /* REMOVE COMPONENTS */
+        Component[] componentList = panelEdit.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JScrollPane){
+                //Remove it
+                panelEdit.remove(c);
+            }
+        }
+        panelEdit.add(editMenuItemScrollPane, 2);
+        panelEdit.revalidate();
+        panelEdit.repaint();
+        return editMenuItemScrollPane;
+    }
+
+    // 2d) Edit Menu Item button function to allow the user to edit a Menu Item by passing the data to the controller
+    public void buttonEditMenuItem_Onclick(){
+        if (fieldEditFoodName.getText().isEmpty() || fieldEditFoodPrice.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty!", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            /* Get the new values */
+            String newFoodName = fieldEditFoodName.getText();
+            Float new_item_price = 0.00f;
+            try{
+                new_item_price = Float.parseFloat(fieldEditFoodPrice.getText());
+                // Convert NEW item price to 2 decimal places
+                DecimalFormat df = new DecimalFormat("#.##");
+                new_item_price = Float.parseFloat(df.format(new_item_price));
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Please enter a valid number for the price of the food item.", "Error!", JOptionPane.WARNING_MESSAGE);
+            } // end of try-catch statements
+            // Check if price entered is > 0
+            if (new_item_price < 0){
+                JOptionPane.showMessageDialog(null, "Please ensure Price text field's input is more than 0.", "Error!", JOptionPane.WARNING_MESSAGE);
+            }
+            else{
+                int item_id = Integer.parseInt(fieldEditItemID.getText());
+                // Pass values to the controller
+                ManagerEditController managerEditController = new ManagerEditController();
+                if (managerEditController.editItem(item_id, newFoodName, new_item_price)){
+                    JOptionPane.showMessageDialog(null, "Menu Item has been successful updated.", "Menu Item Update", JOptionPane.INFORMATION_MESSAGE);
+                    editMenuItemTableConstruction(); // After edit, refresh edit Menu Item table
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Menu Item has not been successful updated.", "Menu Item Update", JOptionPane.ERROR_MESSAGE);
+                }
+            } // end of if-else statements
+        } // end of if-else statements
+    }
+
+    /* Methods 2e and 2f belongs to Editing COUPONS */
+    // 2e) Construction of table variables for EDIT COUPON functions
+    public Component editCouponTableConstruction(){
+        // Display Table and table click listener
+        ManagerEditController managerEditController = new ManagerEditController();
+        String[][] data = managerEditController.displayCoupons();
+        // Display data in a table format
+        String[] columnTableNames = {"Coupon Name", "Discount Value Multiplier"};
+        tableEditCoupons = new JTable(data, columnTableNames);
+        JScrollPane editCouponScrollPane = new JScrollPane(tableEditCoupons);
+        editCouponScrollPane.setPreferredSize(new Dimension(485, 200)); // width then height
+        // Table Click Listener
+        tableEditCoupons.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int getRow = tableEditCoupons.getSelectedRow();
+                // Display details on the text fields
+                fieldEditCouponName.setText(tableEditCoupons.getModel().getValueAt(getRow, 0).toString());
+                fieldEditCouponDiscountValue.setText(tableEditCoupons.getModel().getValueAt(getRow, 1).toString());
+            }
+        });
+        /* REMOVE COMPONENTS */
+        Component[] componentList = panelEdit.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JScrollPane){
+                //Remove it
+                panelEdit.remove(c);
+            }
+        }
+        panelEdit.add(editCouponScrollPane, 2);
+        panelEdit.revalidate();
+        panelEdit.repaint();
+        return editCouponScrollPane;
+    }
+
+    // 2f) Edit Coupon button function to allow the user to edit a Menu Item by passing the data to the controller
+    public void buttonEditCoupon_Onclick(){
+        if (fieldEditCouponName.getText().isEmpty() || fieldEditCouponDiscountValue.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty!", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            /* Get the new values */
+            int rowSelected = tableEditCoupons.getSelectedRow();
+            String oldCouponName = tableEditCoupons.getModel().getValueAt(rowSelected,0).toString();
+            String newCouponName = fieldEditCouponName.getText().toUpperCase();
+            Float new_discount_value = 0.0f;
+            try{
+                new_discount_value = Float.parseFloat(fieldEditCouponDiscountValue.getText());
+                // Convert NEW discount value to 1 decimal place
+                DecimalFormat df = new DecimalFormat("#.#");
+                new_discount_value = Float.parseFloat(df.format(new_discount_value));
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Please enter a valid number for the discount value of the coupon.", "Error!", JOptionPane.WARNING_MESSAGE);
+            } // end of try-catch statements
+            // Check if the discount value is > 1
+            if (new_discount_value > 1.0){
+                JOptionPane.showMessageDialog(null, "Please ensure Discount Value text field's input is less than 1.", "Error!", JOptionPane.WARNING_MESSAGE);
+            }
+            else{
+                // Pass values to the controller
+                ManagerEditController managerEditController = new ManagerEditController();
+                if (managerEditController.editCouponValues(oldCouponName, newCouponName, new_discount_value)){
+                    JOptionPane.showMessageDialog(null, "Coupon has been successful updated.", "Coupon Update", JOptionPane.INFORMATION_MESSAGE);
+                    editCouponTableConstruction(); // After edit, refresh edit Menu Item table
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Coupon has not been successful updated.", "Coupon Update", JOptionPane.ERROR_MESSAGE);
+                }
+            } // end of if-else statements
+        } // end of if-else statements
+    }
 
 
 }
