@@ -142,7 +142,7 @@ public class CustomerPageUI extends JFrame {
     // end of actionPerformed
 
     // Button Listener
-    private ActionListener topButtonsListener = e -> {
+    private final ActionListener topButtonsListener = e -> {
         JButton buttonPressed = (JButton)e.getSource();
         String action = buttonPressed.getText();
         switch(action){
@@ -178,7 +178,7 @@ public class CustomerPageUI extends JFrame {
     };
 
     // Button Listener - for category buttons in the Menu page
-    ActionListener categoryButtonsListener = e -> {
+    private final ActionListener categoryButtonsListener = e -> {
         JButton buttonPressed = (JButton)e.getSource();
         String action = buttonPressed.getText();
         switch(action){
@@ -212,7 +212,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // View Menu
-    public void viewMenu(String category) {
+    private void viewMenu(String category) {
         // Border
         titledBorder = new TitledBorder("Menu/Add to Cart");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -268,7 +268,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Construct the Components for Customers to add menu items to cart
-    public void addToCartComponents() {
+    private void addToCartComponents() {
         // Labels
         labelItemId.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
         labelItemName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
@@ -368,7 +368,7 @@ public class CustomerPageUI extends JFrame {
         });
     }
 
-    public void editCart() {
+    private void editCart() {
         // Border
         titledBorder = new TitledBorder("Edit Your Order");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -410,7 +410,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // View cart
-    public void viewCart() {
+    private void viewCart() {
         // Border
         titledBorder = new TitledBorder("View Your Order");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -525,7 +525,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Construct table to display Customer cart
-    public Component cartTableConstruction(){
+    private Component cartTableConstruction(){
         ViewCartController viewCartController = new ViewCartController();
         String [][] data = viewCartController.viewCart(customer);
         // Display data in a table format
@@ -552,7 +552,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // make payment
-    public void payment() {
+    private void payment() {
         // Border
         titledBorder = new TitledBorder("Payment");
         titledBorder.setBorder(new LineBorder(Color.BLACK));

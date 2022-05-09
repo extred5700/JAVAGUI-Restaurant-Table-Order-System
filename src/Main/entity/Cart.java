@@ -211,7 +211,7 @@ public class Cart {
         boolean isPaymentSuccessful = false;
 
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "UPDATE transaction_history SET date = current_date(), pNum = '" + phoneNumber + "', paid = Y WHERE transaction_id = " + transaction_id; //query
+        String query = "UPDATE transaction_history SET date = current_date(), pNum = '" + phoneNumber + "', paid = 'Y' WHERE transaction_id = " + transaction_id; //query
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query); //execute query
             isPaymentSuccessful = true;
@@ -223,7 +223,7 @@ public class Cart {
 
     // Validate Customer's phone number
     public boolean validatePhoneNumber(String phoneNumber) {
-        return phoneNumber.length() == 8 && phoneNumber.charAt(0) == '8' && phoneNumber.charAt(0) == '9';
+        return phoneNumber.length() == 8 && (phoneNumber.charAt(0) == '8' || phoneNumber.charAt(0) == '9');
     }
 
 }
