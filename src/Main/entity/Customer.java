@@ -42,7 +42,7 @@ public class Customer {
 
     // Function for adding items to cart #29
     public void addToCart(int item_id, int qty) {
-        cart.addToCart(item_id, qty, cart.getTransaction_id());
+        cart.addToCart(item_id, qty);
     }
 
     // Function for remove items from cart #30
