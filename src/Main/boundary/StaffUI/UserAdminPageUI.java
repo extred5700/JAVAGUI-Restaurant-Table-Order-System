@@ -217,8 +217,8 @@ public class UserAdminPageUI extends JFrame{
     // 1b) Create button function to allow the user to create an account by passing the data to the controller
     public void createButton_Onclick(){
         // Convert input parameters for account creation to all capital letters
-        String createUsernameText = fieldCreateUsername.getText().toUpperCase();
-        String createPasswordText = fieldCreatePassword.getText().toUpperCase();
+        String createUsernameText = fieldCreateUsername.getText().toLowerCase();
+        String createPasswordText = fieldCreatePassword.getText().toLowerCase();
         String createProfileText = fieldCreateProfile.getText().toUpperCase();
         // validateCreate() method located in AddUserController.java
         if (createUsernameText.isEmpty() || createPasswordText.isEmpty() || createProfileText.isEmpty()){
