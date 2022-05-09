@@ -24,20 +24,13 @@ public class OwnerPageUI extends JFrame {
     private final JPanel panelReport = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
 
 
-    public OwnerPageUI(String usernameLoggedIn){
+    public OwnerPageUI(){
         ownerUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ownerUIFrame.getContentPane().setLayout(new FlowLayout());
         ownerUIFrame.setSize(520, 705);
         ownerUIFrame.setResizable(false);
         ownerUIFrame.setLocationRelativeTo(null); // Window will display in the middle of the screen
         ownerUIFrame.getContentPane().setBackground(Color.WHITE);
-
-        // Display Manager's Username
-        JLabel labelTopHeader = new JLabel("You are currently logged in as: " + usernameLoggedIn, JLabel.CENTER);
-        labelTopHeader.setPreferredSize(new Dimension(500, 30));
-        labelTopHeader.setBorder(new LineBorder(Color.WHITE));
-        labelTopHeader.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-        ownerUIFrame.add(labelTopHeader);
 
         // Logout button on the top of the GUI
         JButton buttonLogout = new JButton("Logout");

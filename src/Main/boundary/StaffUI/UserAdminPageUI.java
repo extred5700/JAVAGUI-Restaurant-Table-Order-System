@@ -58,20 +58,13 @@ public class UserAdminPageUI extends JFrame{
     private final JButton buttonSuspendProfile = new JButton("Suspend/Un-suspend Profile");
 
 
-    public UserAdminPageUI(String usernameLoggedIn, String setDisplayPage){
+    public UserAdminPageUI(String setDisplayPage){
         userAdminUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userAdminUIFrame.getContentPane().setLayout(new FlowLayout());
         userAdminUIFrame.setSize(520, 705);
         userAdminUIFrame.setResizable(false);
         userAdminUIFrame.setLocationRelativeTo(null); // Window will display in the middle of the screen
         userAdminUIFrame.getContentPane().setBackground(Color.WHITE);
-
-        // Display Admin's Username
-        JLabel labelTopHeader = new JLabel("You are currently logged in as: " + usernameLoggedIn, JLabel.CENTER);
-        labelTopHeader.setPreferredSize(new Dimension(500, 30));
-        labelTopHeader.setBorder(new LineBorder(Color.WHITE));
-        labelTopHeader.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-        userAdminUIFrame.add(labelTopHeader);
 
         // Add buttons & functions for the top of the GUI
         displayAdminUserButtons();
@@ -147,25 +140,16 @@ public class UserAdminPageUI extends JFrame{
                 panelSuspend.setVisible(false);
             }
             case "Edit" -> {
-                displayEditPanel();
-                panelEdit.setVisible(true);
-                panelView.setVisible(false);
-                panelSuspend.setVisible(false);
-                panelCreate.setVisible(false);
+                userAdminUIFrame.dispose();
+                new UserAdminPageUI("Edit");
             }
             case "View" -> {
-                displaySearchPanel();
-                panelView.setVisible(true);
-                panelSuspend.setVisible(false);
-                panelCreate.setVisible(false);
-                panelEdit.setVisible(false);
+                userAdminUIFrame.dispose();
+                new UserAdminPageUI("View");
             }
             case "Suspend" -> {
-                displaySuspendPanel();
-                panelSuspend.setVisible(true);
-                panelCreate.setVisible(false);
-                panelEdit.setVisible(false);
-                panelView.setVisible(false);
+                userAdminUIFrame.dispose();
+                new UserAdminPageUI("Suspend");
             }
         } // end of switch statements
     };
@@ -324,9 +308,9 @@ public class UserAdminPageUI extends JFrame{
 
     // 2d) Create button function to allow the user to edit an account by passing the data to the controller
     public void editButton_Onclick(){
-        String newUsername = fieldEditUsername.getText();
-        String newPassword = fieldEditPassword.getText();
-        String newProfile = fieldEditProfile.getText();
+        String newUsername = fieldEditUsername.getText().toLowerCase();
+        String newPassword = fieldEditPassword.getText().toLowerCase();
+        String newProfile = fieldEditProfile.getText().toUpperCase();
         // Check if text field are left empty by the user
         if (newUsername.isEmpty() || newPassword.isEmpty() || newProfile.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty.", "Error!", JOptionPane.WARNING_MESSAGE);
