@@ -7,7 +7,7 @@ public class ManagerCreateController {
 
     public boolean validateCreateFoodItem(String food_name, Float item_price, String category){
         // If Menu Item already exist
-        if (restaurant_manager.checkMenuItemExistenece(food_name, item_price, category)){
+        if (restaurant_manager.checkMenuItemExistence(food_name, item_price, category)){
             return false; // return false as Menu Item exist, does not validate creation of Menu Item
         }
         else{
