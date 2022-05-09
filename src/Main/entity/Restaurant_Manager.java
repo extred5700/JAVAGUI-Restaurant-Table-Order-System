@@ -4,6 +4,7 @@ package Main.entity;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Restaurant_Manager extends Staff {
     // Variable Declaration
@@ -114,6 +115,43 @@ public class Restaurant_Manager extends Staff {
         return isMenuItemEdited;
     }
 
+    // 1e) Function to Search menu items #17
+    public String [][] searchMenuItems(String searchText) {
+        ArrayList<String> arrayListSearchedItemID = new ArrayList<>();
+        ArrayList<String> arrayListSearchedFoodName = new ArrayList<>();
+        ArrayList<String> arrayListSearchedPrice = new ArrayList<>();
+        ArrayList<String> arrayListSearchedCategory = new ArrayList<>();
+
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        try{
+            Statement statement = dbConnection.createStatement();
+            // SQL Query Stuff
+            ResultSet rs = statement.executeQuery("SELECT * FROM menu_item WHERE name LIKE '%" + searchText + "%'");
+
+            while (rs.next()) { //This is the result set
+                // Add data to their respective array list
+                arrayListSearchedItemID.add(rs.getString("item_id"));
+                arrayListSearchedFoodName.add(rs.getString("name"));
+                arrayListSearchedPrice.add(rs.getString("item_price"));
+                arrayListSearchedCategory.add(rs.getString("category"));
+            }
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        // Convert Array List to a 2D array
+        String [][] arrayAllSearchData = new String[arrayListSearchedItemID.size()][4];
+        for (int row = 0; row < arrayAllSearchData.length; row++){
+            for (int column = 0; column < arrayAllSearchData[row].length; column++){
+                arrayAllSearchData[row][0] = arrayListSearchedItemID.get(row);
+                arrayAllSearchData[row][1] = arrayListSearchedFoodName.get(row);
+                arrayAllSearchData[row][2] = arrayListSearchedPrice.get(row);
+                arrayAllSearchData[row][3] = arrayListSearchedCategory.get(row);
+            }
+        }
+        return arrayAllSearchData;
+    }
+
     /* 2) COUPONS */
 
     // 2a) Function to view all coupons
@@ -168,7 +206,7 @@ public class Restaurant_Manager extends Staff {
         return couponExistence;
     }
 
-    // 2c)Will return true upon successful creation of Coupon
+    // 2c) Return true upon successful creation of Coupon
     public boolean createCoupon(String coupon, Float discount){
         boolean isCouponCreated = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -186,6 +224,7 @@ public class Restaurant_Manager extends Staff {
         return isCouponCreated;
     }
 
+    // 2d) Returns true upon successful editing of Coupon
     public boolean editCoupon(String oldCouponName, String newCouponName, Float discount){
         boolean isCouponEdited = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -199,18 +238,39 @@ public class Restaurant_Manager extends Staff {
         return isCouponEdited;
     }
 
+    // 2e) Search Coupons by Coupon name and return by 2D array
+    public String [][] searchCoupon(String searchText){
+        ArrayList<String> arrayListSearchedCouponName = new ArrayList<>();
+        ArrayList<String> arrayListSearchedDiscountValue = new ArrayList<>();
 
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        try{
+            Statement statement = dbConnection.createStatement();
+            // SQL Query Stuff
+            ResultSet rs = statement.executeQuery("SELECT * FROM discount WHERE coupon LIKE '%" + searchText + "%'");
 
-
-
-
-
-
-
-    // Function to Search menu items #17
-    public void searchMenuItems(Menu_Items menuItems) {
-
+            while (rs.next()) { //This is the result set
+                // Add data to their respective array list
+                arrayListSearchedCouponName.add(rs.getString("coupon"));
+                arrayListSearchedDiscountValue.add(rs.getString("discount_value"));
+            }
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        // Convert Array List to a 2D array
+        String [][] arrayAllSearchData = new String[arrayListSearchedCouponName.size()][2];
+        for (int row = 0; row < arrayAllSearchData.length; row++){
+            for (int column = 0; column < arrayAllSearchData[row].length; column++){
+                arrayAllSearchData[row][0] = arrayListSearchedCouponName.get(row);
+                arrayAllSearchData[row][1] = arrayListSearchedDiscountValue.get(row);
+            }
+        }
+        return arrayAllSearchData;
     }
+
+
+
 
 
     // Function to Delete menu items #19

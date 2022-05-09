@@ -3,6 +3,7 @@ package Main.boundary.StaffUI;
 import Main.boundary.StaffLoginPage;
 import Main.controller.RestaurantManager.ManagerCreateController;
 import Main.controller.RestaurantManager.ManagerEditController;
+import Main.controller.RestaurantManager.ManagerSearchController;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -54,7 +55,7 @@ public class ManagerPageUI extends JFrame {
     // Button
     private final JButton buttonCreateCoupon = new JButton("Create Coupon");
 
-    /*2. EDIT function */
+    /* 2. EDIT function */
     private final JPanel panelEdit = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     // Display Buttons
     private final JButton buttonDisplayEditMenuItem = new JButton("Menu Items");
@@ -86,6 +87,17 @@ public class ManagerPageUI extends JFrame {
     // Button
     private final JButton buttonEditCoupon = new JButton("Edit Coupon");
 
+    /* 3. SEARCH function */
+    private final JPanel panelSearch = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+    private final JTextField fieldSearch = new JTextField(25); // Common text field for search
+    /* 3a) Menu Items */
+    private final JButton buttonSearchMenuItem = new JButton("Search by Menu Item Name");
+    private JTable tableSearchMenuItems;
+    /* 3b) Coupon */
+    private final JButton buttonSearchCoupon = new JButton("Search by Coupon Name");
+    private JTable tableSearchCoupons;
+
+
 
 
     public ManagerPageUI(String usernameLoggedIn){
@@ -113,7 +125,11 @@ public class ManagerPageUI extends JFrame {
 
         // 2. Edit menu items & coupons
         displayEditPanel();
-        panelEdit.setVisible(true);
+        panelEdit.setVisible(false);
+
+        // 3. Search menu items & coupons
+        displaySearchPanel();
+        panelSearch.setVisible(true);
 
         managerUIFrame.setVisible(true);
     }
@@ -150,12 +166,17 @@ public class ManagerPageUI extends JFrame {
             case "Create":
                 panelCreate.setVisible(true);
                 panelEdit.setVisible(false);
+                panelSearch.setVisible(false);
                 break;
             case "Edit":
                 panelEdit.setVisible(true);
+                panelSearch.setVisible(false);
                 panelCreate.setVisible(false);
                 break;
             case "Search":
+                panelSearch.setVisible(true);
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(false);
                 break;
             case "Delete":
                 break;
@@ -624,6 +645,104 @@ public class ManagerPageUI extends JFrame {
             } // end of if-else statements
         } // end of if-else statements
     }
+
+
+    /* 3. SEARCH function
+    * 3a) void displaySearchPanel() - Method to display JPanel for Restaurant Manager to search menu items and coupons
+    * 3b) void buttonSearchMenuItem_Onclick() - Search by Menu Item Name button function, and then display results by constructing a table
+    * 3c) void buttonSearchCoupon_Onclick() - Search by Coupon Name button function, and then display results by constructing a table
+    */
+    // 3a) Method to display JPanel for Restaurant Manager to search menu items and coupons
+    public void displaySearchPanel(){
+        displayTitledBorder(panelSearch, "Search Menu Items/Coupons");
+
+        // Search Text Field
+        fieldSearch.setPreferredSize(new Dimension(60, 30));
+        panelSearch.add(fieldSearch);
+
+        // Choice buttons on top
+        JButton [] buttonChoices = {buttonSearchMenuItem, buttonSearchCoupon};
+        for (JButton jButton : buttonChoices){
+            jButton.setPreferredSize(new Dimension(220, 30));
+            jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+            jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
+            jButton.setBackground(Color.WHITE);
+            panelSearch.add(jButton);
+        }
+        buttonSearchMenuItem.addActionListener(e -> buttonSearchMenuItem_Onclick());
+        buttonSearchCoupon.addActionListener(e -> buttonSearchCoupon_Onclick());
+
+        // Add components to the JPanel
+        panelSearch.setPreferredSize(new Dimension(500, 390));
+        panelSearch.setBackground(Color.WHITE);
+        managerUIFrame.add(panelSearch);
+        panelSearch.setVisible(true);
+    }
+
+    // 3b) Search by Menu Item button function, and then display results by constructing a table
+    public void buttonSearchMenuItem_Onclick(){
+        String searchText = fieldSearch.getText();
+        if (searchText.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty!", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            // Pass search results into controller to get 2D array of search results
+            ManagerSearchController managerSearchController = new ManagerSearchController();
+            String [][] searchResults = managerSearchController.searchByMenuItemName(searchText);
+            // Display data in a table format
+            String [] columnTableNames = {"Item ID", "Food Name", "Price", "Category"};
+            tableSearchMenuItems = new JTable(searchResults, columnTableNames);
+            JScrollPane searchMenuItemScrollPane = new JScrollPane(tableSearchMenuItems);
+            searchMenuItemScrollPane.setPreferredSize(new Dimension(485, 200)); // width then height
+
+            //Get the components in the panel
+            Component[] componentList = panelSearch.getComponents();
+            //Loop through the components
+            for(Component c : componentList){
+                //Find the components you want to remove
+                if(c instanceof JScrollPane){
+                    //Remove it
+                    panelSearch.remove(c);
+                }
+            }
+            panelSearch.add(searchMenuItemScrollPane, 3);
+            panelSearch.revalidate();
+            panelSearch.repaint();
+        } // end of if-else statements
+    }
+
+    // 3c) Search by Coupon Name button function, and then display results by constructing a table
+    public void buttonSearchCoupon_Onclick(){
+        String searchText = fieldSearch.getText();
+        if (searchText.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty!", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            // Pass search results into controller to get 2D array of search results
+            ManagerSearchController managerSearchController = new ManagerSearchController();
+            String [][] searchResults = managerSearchController.searchByCouponName(searchText);
+            // Display data in a table format
+            String [] columnTableNames = {"Coupon Name", "Discount Value Multiplier"};
+            tableSearchCoupons = new JTable(searchResults, columnTableNames);
+            JScrollPane searchCouponScrollPane = new JScrollPane(tableSearchCoupons);
+            searchCouponScrollPane.setPreferredSize(new Dimension(485, 200)); // width then height
+
+            //Get the components in the panel
+            Component[] componentList = panelSearch.getComponents();
+            //Loop through the components
+            for(Component c : componentList){
+                //Find the components you want to remove
+                if(c instanceof JScrollPane){
+                    //Remove it
+                    panelSearch.remove(c);
+                }
+            }
+            panelSearch.add(searchCouponScrollPane, 3);
+            panelSearch.revalidate();
+            panelSearch.repaint();
+        } // end of if-else statements
+    }
+
 
 
 }
