@@ -2,6 +2,7 @@ package Main.entity;
 
 import com.mysql.cj.x.protobuf.MysqlxPrepare;
 
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -45,6 +46,12 @@ public class Customer {
         return cart;
     }
 
+    // Function for viewing menu #28 AND search for items based on categories #31
+    public String[][] viewMenu(String category) {
+        String[][] menuData = new Menu_Items().viewMenu(category);
+        return menuData;
+    }
+
     // Function for adding items to cart #29
     public void addToCart(int item_id, int qty) {
         cart.addToCart(item_id, qty);
@@ -55,14 +62,10 @@ public class Customer {
         cart.editCart(order_id, qty);
     }
 
-    // Function for search for items from menu #31
-    public void searchMenuItems(String category) {
-
-    }
-
     // Function for view cart items #32
     public String [][] viewCart() {
-        return cart.viewCart();
+        String[][] cartData = cart.viewCart();
+        return cartData;
     }
 
     // Function for delete cart items #33
@@ -70,9 +73,16 @@ public class Customer {
         cart.deleteFromCart(order_id);
     }
 
-    // Function for making epayment #34
+    // Function for making e-payment #34
     public boolean ePayment(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-        return cart.makePayment(phoneNumber);
+        boolean paymentStatus = cart.makePayment(phoneNumber);
+        return paymentStatus;
+    }
+
+    // Function for applying coupon code
+    public boolean inputDiscount(String couponCode) {
+        boolean discount = cart.applyDiscount(couponCode);
+        return discount;
     }
 }
