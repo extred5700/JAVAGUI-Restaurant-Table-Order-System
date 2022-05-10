@@ -15,7 +15,7 @@ public class HopiumRestaurant {
         // Owner
         //new OwnerPageUI("Owner Test");
         // Manager
-        new ManagerPageUI("Default");
+        new ManagerPageUI("Delete");
         // Restaurant Staff
         //new RestaurantStaffPageUI("Staff Test");
 

@@ -152,6 +152,20 @@ public class Restaurant_Manager extends Staff {
         return arrayAllSearchData;
     }
 
+    // 1f) Function to Delete menu item #19
+    public boolean deleteMenuItem(int itemID) {
+        boolean isMenuItemDeleted = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "DELETE FROM menu_item WHERE item_id = '" + itemID + "'";
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query);
+            isMenuItemDeleted = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return isMenuItemDeleted;
+    }
+
     /* 2) COUPONS */
 
     // 2a) Function to view all coupons
@@ -269,12 +283,17 @@ public class Restaurant_Manager extends Staff {
         return arrayAllSearchData;
     }
 
-
-
-
-
-    // Function to Delete menu items #19
-    public void deleteMenuItems(Menu_Items menuItems) {
-
+    // 2f) Function to Delete Coupon
+    public boolean deleteCoupon(String coupon){
+        boolean isCouponDeleted = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        String query = "DELETE FROM discount WHERE coupon = '" + coupon + "'";
+        try (Statement statement = dbConnection.createStatement()){
+            statement.executeUpdate(query);
+            isCouponDeleted = true;
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+        return isCouponDeleted;
     }
 }
