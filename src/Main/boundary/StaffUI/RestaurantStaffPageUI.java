@@ -59,20 +59,13 @@ public class RestaurantStaffPageUI extends JFrame {
     // Button
     private final JButton buttonDeleteOrder = new JButton("Delete Order");
 
-    public RestaurantStaffPageUI(String usernameLoggedIn){
+    public RestaurantStaffPageUI(String setDisplayPage){
         staffUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         staffUIFrame.getContentPane().setLayout(new FlowLayout());
         staffUIFrame.setSize(520, 705);
         staffUIFrame.setResizable(false);
         staffUIFrame.setLocationRelativeTo(null); // Window will display in the middle of the screen
         staffUIFrame.getContentPane().setBackground(Color.WHITE);
-
-        // Display Staff's Username
-        JLabel labelTopHeader = new JLabel("You are currently logged in as: " + usernameLoggedIn, JLabel.CENTER);
-        labelTopHeader.setPreferredSize(new Dimension(500, 30));
-        labelTopHeader.setBorder(new LineBorder(Color.WHITE));
-        labelTopHeader.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-        //staffUIFrame.add(labelTopHeader);
 
         // Add buttons & functions for the top of the GUI
         displayStaffUserButton();
@@ -95,6 +88,21 @@ public class RestaurantStaffPageUI extends JFrame {
         displayDeletePanel();
         panelDeleteOrder.setVisible(false);
 
+        switch (setDisplayPage){
+            case "Default":
+                break;
+            case "Edit":
+                panelEditOrder.setVisible(true);
+                break;
+            case "Search":
+                panelSearchOrder.setVisible(true);
+            case "View":
+                panelViewOrder.setVisible(true);
+                break;
+            case "Delete":
+                panelDeleteOrder.setVisible(true);
+                break;
+        }
 
         staffUIFrame.setVisible(true);
     }
@@ -127,32 +135,20 @@ public class RestaurantStaffPageUI extends JFrame {
                 new StaffLoginPage();
             }
             case "Edit" -> {
-                dispose();
-                panelEditOrder.setVisible(true);
-                panelSearchOrder.setVisible(false);
-                panelViewOrder.setVisible(false);
-                panelDeleteOrder.setVisible(false);
+                staffUIFrame.dispose();
+                new RestaurantStaffPageUI("Edit");
             }
             case "Search" -> {
-                dispose();
-                panelSearchOrder.setVisible(true);
-                panelViewOrder.setVisible(false);
-                panelDeleteOrder.setVisible(false);
-                panelEditOrder.setVisible(false);
+                staffUIFrame.dispose();
+                new RestaurantStaffPageUI("Search");
             }
             case "View" -> {
-                dispose();
-                panelViewOrder.setVisible(true);
-                panelEditOrder.setVisible(false);
-                panelSearchOrder.setVisible(false);
-                panelDeleteOrder.setVisible(false);
+                staffUIFrame.dispose();
+                new RestaurantStaffPageUI("View");
             }
             case "Delete" -> {
-                dispose();
-                panelDeleteOrder.setVisible(true);
-                panelEditOrder.setVisible(false);
-                panelSearchOrder.setVisible(false);
-                panelViewOrder.setVisible(false);
+                staffUIFrame.dispose();
+                new RestaurantStaffPageUI("Delete");
             }
         }
     };

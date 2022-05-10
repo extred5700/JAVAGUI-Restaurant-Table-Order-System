@@ -133,7 +133,7 @@ public class StaffLoginPage extends JFrame{
                 new ManagerPageUI("Default");
                 break;
             case "Restaurant Staff":
-                new RestaurantStaffPageUI(username);
+                new RestaurantStaffPageUI("Default");
                 break;
         }
     } // end of method loginSuccess
