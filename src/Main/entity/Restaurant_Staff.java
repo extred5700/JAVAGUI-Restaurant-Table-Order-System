@@ -65,8 +65,8 @@ public class Restaurant_Staff extends Staff {
     // Function to Search customer orders #24
     public String [][] searchOrder(int table_num) {
         // Edit DB stuff by calling Cart Entity first
-        Cart cart = new Cart(table_num);
-        return cart.viewCart();
+        String [][] orders = new Cart(table_num).viewCart();
+        return orders;
     }
 
     // Function to View customer orders #25

@@ -1,20 +1,16 @@
 package Main.entity;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Order;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.DisplayName.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserAdminTest {
-
-    // Make sure to remove the test entries after running the test
-    // Test are run in order to use the test account
     User_Admin userAdminTest = new User_Admin();
 
     @Test
+    @Order(1)
     @DisplayName("User_Admin_1")
     void createAccountTest() {
         // Test Create Account Function
@@ -22,6 +18,7 @@ class UserAdminTest {
     }
 
     @Test
+    @Order(2)
     @DisplayName("User_Admin_2")
     void editAccountTest() {
         // Test Edit Account Function on the testUser
@@ -29,6 +26,7 @@ class UserAdminTest {
     }
 
     @Test
+    @Order(3)
     @DisplayName("User_Admin_3")
     void getUserInfoFromDBTest() {
         // Test if data can be queried from database
@@ -36,6 +34,7 @@ class UserAdminTest {
     }
 
     @Test
+    @Order(4)
     @DisplayName("User_Admin_4")
     void searchAccountTest() {
         // Test if user can be searched from database
@@ -43,6 +42,7 @@ class UserAdminTest {
     }
 
     @Test
+    @Order(5)
     @DisplayName("User_Admin_5")
     void suspendAccountTest() {
         // Test if user account can be suspended

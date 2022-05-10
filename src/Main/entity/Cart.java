@@ -116,7 +116,7 @@ public class Cart {
     }
 
     // Add items to the cart, if successful, return true
-    public boolean addToCart (int item_id, int qty, int transaction_id){
+    public boolean addToCart (int item_id, int qty){
         boolean isItemAdded = false;
         Connection dbConnection = dbConnection();
         try {

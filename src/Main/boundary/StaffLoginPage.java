@@ -124,10 +124,10 @@ public class StaffLoginPage extends JFrame{
         staffLoginFrame.setVisible(false);
         switch (profile){
             case "User Admin":
-                new UserAdminPageUI(username, "Default"); // Display Administrator UI
+                new UserAdminPageUI( "Default"); // Display Administrator UI
                 break;
             case "Restaurant Owner":
-                new OwnerPageUI(username);
+                new OwnerPageUI();
                 break;
             case "Restaurant Manager":
                 new ManagerPageUI(username);
