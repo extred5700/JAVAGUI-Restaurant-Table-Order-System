@@ -100,20 +100,13 @@ public class ManagerPageUI extends JFrame {
 
 
 
-    public ManagerPageUI(String usernameLoggedIn){
+    public ManagerPageUI(String setDisplayPage){
         managerUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         managerUIFrame.getContentPane().setLayout(new FlowLayout());
         managerUIFrame.setSize(520, 705);
         managerUIFrame.setResizable(false);
         managerUIFrame.setLocationRelativeTo(null); // Window will display in the middle of the screen
         managerUIFrame.getContentPane().setBackground(Color.WHITE);
-
-        // Display Manager's Username
-        JLabel labelTopHeader = new JLabel("You are currently logged in as: " + usernameLoggedIn, JLabel.CENTER);
-        labelTopHeader.setPreferredSize(new Dimension(500, 30));
-        labelTopHeader.setBorder(new LineBorder(Color.WHITE));
-        labelTopHeader.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
-        managerUIFrame.add(labelTopHeader);
 
         // Add buttons & functions
         displayManagerUserButtons();
@@ -129,8 +122,25 @@ public class ManagerPageUI extends JFrame {
 
         // 3. Search menu items & coupons
         displaySearchPanel();
-        panelSearch.setVisible(true);
+        panelSearch.setVisible(false);
 
+        switch(setDisplayPage) {
+            case "Default":
+                break;
+            case "Create":
+                panelCreate.setVisible(true);
+                break;
+            case "Edit":
+                panelEdit.setVisible(true);
+                break;
+            case "Search":
+                panelSearch.setVisible(true);
+                break;
+            case "View":
+                break;
+            case "Suspend":
+                break;
+        }
         managerUIFrame.setVisible(true);
     }
 
@@ -169,18 +179,21 @@ public class ManagerPageUI extends JFrame {
                 panelSearch.setVisible(false);
                 break;
             case "Edit":
-                panelEdit.setVisible(true);
-                panelSearch.setVisible(false);
-                panelCreate.setVisible(false);
+                managerUIFrame.dispose();
+                new ManagerPageUI("Edit");
                 break;
             case "Search":
-                panelSearch.setVisible(true);
-                panelCreate.setVisible(false);
-                panelEdit.setVisible(false);
+                managerUIFrame.dispose();
+                new ManagerPageUI("Search");
+                break;
+            case "View":
+                managerUIFrame.dispose();
+                new ManagerPageUI("View");
                 break;
             case "Delete":
+                managerUIFrame.dispose();
+                new ManagerPageUI("Delete");
                 break;
-
         }
     };
 
