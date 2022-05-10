@@ -358,8 +358,8 @@ public class RestaurantStaffPageUI extends JFrame {
         displayTitledBorder(panelSearchOrder, "Search Customer Orders by Table Number"); // Display titled border
 
         // Table Construction called in method, converted to a JScrollPane
-        String [][] defaultTableValues = {{"", "", "", ""}};
-        JScrollPane searchScrollPane1 = (JScrollPane) searchTableConstruction(defaultTableValues);
+        String [][] orders = {{"", "", "", ""}};
+        JScrollPane searchScrollPane1 = (JScrollPane) searchTableConstruction(orders);
         panelSearchOrder.add(searchScrollPane1);
 
         // Label
