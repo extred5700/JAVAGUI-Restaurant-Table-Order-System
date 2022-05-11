@@ -172,7 +172,7 @@ public class UserAdminPageUI extends JFrame{
         buttonCreateAccount.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonCreateAccount.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonCreateAccount.setBackground(Color.WHITE);
-        // Action listener for displaying creation UI of User Account and User Profile, also ensuring that the action listener is only created once
+        // Action listener for creation of User Account and User Profile, also ensuring that the action listener is only created once
         if (buttonCreateAccount.getActionListeners().length == 0){
             buttonCreateAccount.addActionListener(e -> createButton_Onclick());
         }
@@ -246,7 +246,7 @@ public class UserAdminPageUI extends JFrame{
         buttonEditChanges.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonEditChanges.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonEditChanges.setBackground(Color.WHITE);
-        // Action listener for displaying editing UI of User Account and User Profile, also ensuring that the action listener is only created once
+        // Action listener for editing of User Account and User Profile, also ensuring that the action listener is only created once
         if (buttonEditChanges.getActionListeners().length == 0){
             buttonEditChanges.addActionListener(e -> editButton_Onclick());
         }
@@ -362,11 +362,11 @@ public class UserAdminPageUI extends JFrame{
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
         }
-        // Action listener for searching UI of User Account, also ensuring that the action listener is only created once
+        // Action listener for searching of User Account, also ensuring that the action listener is only created once
         if (buttonSearchUser.getActionListeners().length == 0){
             buttonSearchUser.addActionListener(e -> viewButton_Onclick("Search By Username"));
         }
-        // Action listener for searching UI of User Profile, also ensuring that the action listener is only created once
+        // Action listener for searching of User Profile, also ensuring that the action listener is only created once
         if (buttonSearchProfile.getActionListeners().length == 0){
             buttonSearchProfile.addActionListener(e -> viewButton_Onclick("Search By Profile"));
         }
@@ -440,11 +440,11 @@ public class UserAdminPageUI extends JFrame{
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
         }
-        // Action listener for displaying suspend UI of User Account, also ensuring that the action listener is only created once
+        // Action listener for suspend of User Account, also ensuring that the action listener is only created once
         if (buttonSuspendAccount.getActionListeners().length == 0){
             buttonSuspendAccount.addActionListener(e -> suspendUserButton_Onclick());
         }
-        // Action listener for displaying suspend UI of User Profile, also ensuring that the action listener is only created once
+        // Action listener for suspend of User Profile, also ensuring that the action listener is only created once
         if (buttonSuspendProfile.getActionListeners().length == 0){
             buttonSuspendProfile.addActionListener(e -> suspendProfileButton_Onclick());
         }

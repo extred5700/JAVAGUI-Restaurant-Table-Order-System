@@ -58,7 +58,7 @@ public class RestaurantStaffPageUI extends JFrame {
     // Button
     private final JButton buttonDeleteOrder = new JButton("Delete Order");
 
-    public RestaurantStaffPageUI(String setDisplayPage){
+    public RestaurantStaffPageUI(){
         staffUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         staffUIFrame.getContentPane().setLayout(new FlowLayout());
         staffUIFrame.setSize(520, 705);
@@ -72,35 +72,16 @@ public class RestaurantStaffPageUI extends JFrame {
         /* Button Function for Restaurant Staff */
         // 1. EDIT function
         displayEditPanel();
-        panelEditOrder.setVisible(false);
 
         // 2. SEARCH function
         displaySearchPanel();
-        panelSearchOrder.setVisible(false);
 
         // 3. VIEW function
         displayViewPanel();
-        panelViewOrder.setVisible(false);
 
         // 4. DELETE function
         displayDeletePanel();
-        panelDeleteOrder.setVisible(false);
 
-        switch (setDisplayPage){
-            case "Default":
-                break;
-            case "Edit":
-                panelEditOrder.setVisible(true);
-                break;
-            case "Search":
-                panelSearchOrder.setVisible(true);
-            case "View":
-                panelViewOrder.setVisible(true);
-                break;
-            case "Delete":
-                panelDeleteOrder.setVisible(true);
-                break;
-        }
         staffUIFrame.setVisible(true);
     }
 
@@ -132,20 +113,32 @@ public class RestaurantStaffPageUI extends JFrame {
                 new StaffLoginPage();
             }
             case "Edit" -> {
-                staffUIFrame.dispose();
-                new RestaurantStaffPageUI("Edit");
+                displayEditPanel();
+                panelEditOrder.setVisible(true);
+                panelSearchOrder.setVisible(false);
+                panelViewOrder.setVisible(false);
+                panelDeleteOrder.setVisible(false);
             }
             case "Search" -> {
-                staffUIFrame.dispose();
-                new RestaurantStaffPageUI("Search");
+                displaySearchPanel();
+                panelEditOrder.setVisible(false);
+                panelSearchOrder.setVisible(true);
+                panelViewOrder.setVisible(false);
+                panelDeleteOrder.setVisible(false);
             }
             case "View" -> {
-                staffUIFrame.dispose();
-                new RestaurantStaffPageUI("View");
+                displayViewPanel();
+                panelEditOrder.setVisible(false);
+                panelSearchOrder.setVisible(false);
+                panelViewOrder.setVisible(true);
+                panelDeleteOrder.setVisible(false);
             }
             case "Delete" -> {
-                staffUIFrame.dispose();
-                new RestaurantStaffPageUI("Delete");
+                displayDeletePanel();
+                panelEditOrder.setVisible(false);
+                panelSearchOrder.setVisible(false);
+                panelViewOrder.setVisible(false);
+                panelDeleteOrder.setVisible(true);
             }
         }
     };
@@ -159,7 +152,7 @@ public class RestaurantStaffPageUI extends JFrame {
     }
 
 
-    /* 1. CREATE function
+    /* 1. EDIT function
     * 1a) void displayEditPanel() - Display JPanel for Restaurant Staff to edit orders
     * 1b) Component editTableConstruction() - Construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
     * 1c) boolean checkOrderFulfillment() - Check if Customer Order is fulfilled based on the Edit Table
@@ -173,16 +166,19 @@ public class RestaurantStaffPageUI extends JFrame {
         JScrollPane editOrderScrollPane = (JScrollPane) editTableConstruction();
 
         // Label
-        labelEditOrderID.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
-        labelEditFoodName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
-        labelEditQuantity.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
+        JLabel [] arrayEditLabels = {labelEditOrderID, labelEditFoodName, labelEditQuantity};
+        for (JLabel jLabel : arrayEditLabels){
+            jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
+        }
 
         // Text Fields
-        fieldEditOrderID.setPreferredSize(new Dimension(60, 30));
-        fieldEditOrderID.setEditable(false);
-        fieldEditFoodName.setPreferredSize(new Dimension(60, 30));
-        fieldEditFoodName.setEditable(false);
-        fieldEditQuantity.setPreferredSize(new Dimension(60, 30));
+        JTextField [] arrayEditFields = {fieldEditOrderID, fieldEditFoodName, fieldEditQuantity};
+        for (int i = 0; i < arrayEditFields.length; i++){
+            arrayEditFields[i].setPreferredSize(new Dimension(60, 30));
+            if (i == 0){
+                arrayEditFields[i].setEditable(false);
+            }
+        }
 
         // Buttons
         JButton [] editButtonInPanel = {buttonEditOrder, buttonEditFulfillment};
@@ -193,14 +189,14 @@ public class RestaurantStaffPageUI extends JFrame {
             jButton.setBackground(Color.WHITE);
             jButton.setEnabled(false);
         }
-        buttonEditOrder.setActionCommand("Edit Order");
-        buttonEditFulfillment.setActionCommand("Fulfill Order");
-
-        // EDIT Button Click Listener
-        buttonEditOrder.addActionListener(e -> editButton_OnClick(e.getActionCommand()));
-
-        // Fulfill Button Click Listener
-        buttonEditFulfillment.addActionListener(e -> editButton_OnClick(e.getActionCommand()));
+        // Action listener for editing of Customer Order, also ensuring that the action listener is only created once
+        if (buttonEditOrder.getActionListeners().length == 0){
+            buttonEditOrder.addActionListener(e -> editButton_OnClick("Edit Order"));
+        }
+        // Action listener for fulfillment of Customer Order, also ensuring that the action listener is only created once
+        if (buttonEditFulfillment.getActionListeners().length == 0){
+            buttonEditFulfillment.addActionListener(e -> editButton_OnClick("Fulfill Order"));
+        }
 
         // Add components to the JPanel
         panelEditOrder.setPreferredSize(new Dimension(500, 550));
@@ -215,7 +211,7 @@ public class RestaurantStaffPageUI extends JFrame {
         panelEditOrder.add(buttonEditOrder);
         panelEditOrder.add(buttonEditFulfillment);
         staffUIFrame.add(panelEditOrder);
-        panelEditOrder.setVisible(true);
+        panelEditOrder.setVisible(false);
     }
 
     // 1b) Method to construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
@@ -375,8 +371,10 @@ public class RestaurantStaffPageUI extends JFrame {
         buttonSearchOrder.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonSearchOrder.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonSearchOrder.setBackground(Color.WHITE);
-        // SEARCH Button Click Listener
-        buttonSearchOrder.addActionListener(e -> searchButton_OnClick());
+        // Action listener for searching Customer Order based on their table number, also ensuring that the action listener is only created once
+        if (buttonSearchOrder.getActionListeners().length == 0){
+            buttonSearchOrder.addActionListener(e -> searchButton_OnClick());
+        }
 
         // Add components to the JPanel
         panelSearchOrder.setPreferredSize(new Dimension(500, 390));
@@ -386,7 +384,7 @@ public class RestaurantStaffPageUI extends JFrame {
         panelSearchOrder.add(fieldSearchTableNumber);
         panelSearchOrder.add(buttonSearchOrder);
         staffUIFrame.add(panelSearchOrder);
-        panelSearchOrder.setVisible(true);
+        panelSearchOrder.setVisible(false);
     }
 
     // 2b) Method to construction of the JTable, display all Customer orders (JTable type returned as a JScrollPane type)
@@ -447,7 +445,7 @@ public class RestaurantStaffPageUI extends JFrame {
         panelViewOrder.setBackground(Color.WHITE);
         panelViewOrder.add(viewScrollPane1);
         staffUIFrame.add(panelViewOrder);
-        panelViewOrder.setVisible(true);
+        panelViewOrder.setVisible(false);
     }
 
     // 3b) Construction of the JTable (JTable type returned as a JScrollPane type)
@@ -481,7 +479,7 @@ public class RestaurantStaffPageUI extends JFrame {
     /* 4. DELETE function
     * 4a) void displayDeletePanel() - Display JPanel for Restaurant Staff to Delete orders
     * 4b) Component deleteTableConstruction() - Construction of the JTable, Mouse Click Listener to select an order ID (JTable type returned as a JScrollPane type)
-    * */
+    */
     // 4a) Display JPanel for Restaurant Staff to Delete orders
     public void displayDeletePanel(){
         displayTitledBorder(panelDeleteOrder, "Delete Orders"); // Display titled border
@@ -494,8 +492,10 @@ public class RestaurantStaffPageUI extends JFrame {
         buttonDeleteOrder.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonDeleteOrder.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonDeleteOrder.setBackground(Color.WHITE);
-        // DELETE ORDER Button Click Listener
-        buttonDeleteOrder.addActionListener(e -> deleteOrderButton_Onclick());
+        // Action listener for fulfillment of customer orders, also ensuring that the action listener is only created once
+        if (buttonDeleteOrder.getActionListeners().length == 0){
+            buttonDeleteOrder.addActionListener(e -> deleteOrderButton_Onclick());
+        }
 
         // Add components to the JPanel
         panelDeleteOrder.setPreferredSize(new Dimension(500, 340));
@@ -503,7 +503,7 @@ public class RestaurantStaffPageUI extends JFrame {
         panelDeleteOrder.add(deleteOrderScrollPane);
         panelDeleteOrder.add(buttonDeleteOrder);
         staffUIFrame.add(panelDeleteOrder);
-        panelDeleteOrder.setVisible(true);
+        panelDeleteOrder.setVisible(false);
     }
 
     // 4b) Method to construction of the JTable, Mouse Click Listener to select an order ID (JTable type returned as a JScrollPane type)
