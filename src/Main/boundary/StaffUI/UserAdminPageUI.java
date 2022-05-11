@@ -58,7 +58,7 @@ public class UserAdminPageUI extends JFrame{
     private final JButton buttonSuspendProfile = new JButton("Suspend/Un-suspend Profile");
 
 
-    public UserAdminPageUI(String setDisplayPage){
+    public UserAdminPageUI(){
         userAdminUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userAdminUIFrame.getContentPane().setLayout(new FlowLayout());
         userAdminUIFrame.setSize(520, 705);
@@ -69,40 +69,19 @@ public class UserAdminPageUI extends JFrame{
         // Add buttons & functions for the top of the GUI
         displayAdminUserButtons();
 
-
         /* Button Function for Administrator */
         // 1. CREATE function
         displayCreatePanel();
-        panelCreate.setVisible(false);
 
         // 2. EDIT function
         displayEditPanel();
-        panelEdit.setVisible(false);
 
         // 3. VIEW function
         displaySearchPanel();
-        panelView.setVisible(false);
 
         // 4. SUSPEND function
         displaySuspendPanel();
-        panelSuspend.setVisible(false);
 
-        switch (setDisplayPage){
-            case "Default":
-                break;
-            case "Create":
-                panelCreate.setVisible(true);
-                break;
-            case "Edit":
-                panelEdit.setVisible(true);
-                break;
-            case "View":
-                panelView.setVisible(true);
-                break;
-            case "Suspend":
-                panelSuspend.setVisible(true);
-                break;
-        }
         userAdminUIFrame.setVisible(true);
     }
 
@@ -134,22 +113,32 @@ public class UserAdminPageUI extends JFrame{
                 new StaffLoginPage();
             }
             case "Create" -> {
+                displayCreatePanel();
                 panelCreate.setVisible(true);
                 panelEdit.setVisible(false);
                 panelView.setVisible(false);
                 panelSuspend.setVisible(false);
             }
             case "Edit" -> {
-                userAdminUIFrame.dispose();
-                new UserAdminPageUI("Edit");
+                displayEditPanel();
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(true);
+                panelView.setVisible(false);
+                panelSuspend.setVisible(false);
             }
             case "View" -> {
-                userAdminUIFrame.dispose();
-                new UserAdminPageUI("View");
+                displaySearchPanel();
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(false);
+                panelView.setVisible(true);
+                panelSuspend.setVisible(false);
             }
             case "Suspend" -> {
-                userAdminUIFrame.dispose();
-                new UserAdminPageUI("Suspend");
+                displaySuspendPanel();
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(false);
+                panelView.setVisible(false);
+                panelSuspend.setVisible(true);
             }
         } // end of switch statements
     };
@@ -167,21 +156,26 @@ public class UserAdminPageUI extends JFrame{
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
         // Labels
-        labelCreateUsername.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
-        labelCreatePassword.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
-        labelCreateProfile.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
+        JLabel [] arrayCreateLabels = {labelCreateUsername, labelCreatePassword, labelCreateProfile};
+        for (JLabel jLabel : arrayCreateLabels){
+            jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
+        }
 
         // Text Fields
-        fieldCreateUsername.setPreferredSize(new Dimension(50, 30));
-        fieldCreatePassword.setPreferredSize(new Dimension(50, 30));
-        fieldCreateProfile.setPreferredSize(new Dimension(50, 30));
+        JTextField [] arrayCreateFields = {fieldCreateUsername, fieldCreatePassword, fieldCreateProfile};
+        for (JTextField jTextField : arrayCreateFields){
+            jTextField.setPreferredSize(new Dimension(50, 30));
+        }
 
         // Create Account Button
         buttonCreateAccount.setPreferredSize(new Dimension(150, 30));
         buttonCreateAccount.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonCreateAccount.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonCreateAccount.setBackground(Color.WHITE);
-        buttonCreateAccount.addActionListener(e -> createButton_Onclick());
+        // Action listener for displaying creation UI of User Account and User Profile, also ensuring that the action listener is only created once
+        if (buttonCreateAccount.getActionListeners().length == 0){
+            buttonCreateAccount.addActionListener(e -> createButton_Onclick());
+        }
 
         // Add components to the JPanel
         panelCreate.setPreferredSize(new Dimension(420, 270));
@@ -194,7 +188,7 @@ public class UserAdminPageUI extends JFrame{
         panelCreate.add(fieldCreateProfile);
         panelCreate.add(buttonCreateAccount);
         panelCreate.setBorder(titledBorder);
-        panelCreate.setVisible(true);
+        panelCreate.setVisible(false);
         userAdminUIFrame.add(panelCreate);
     }
 
@@ -236,21 +230,26 @@ public class UserAdminPageUI extends JFrame{
         JScrollPane editScrollPane1 = (JScrollPane) editTableConstruction();
 
         // Labels
-        labelEditUsername.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
-        labelEditPassword.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
-        labelEditProfile.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
+        JLabel [] arrayEditLabels = {labelEditUsername, labelEditPassword, labelEditProfile};
+        for (JLabel jLabel : arrayEditLabels){
+            jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 19));
+        }
 
         // Text Fields
-        fieldEditUsername.setPreferredSize(new Dimension(110, 30));
-        fieldEditPassword.setPreferredSize(new Dimension(110, 30));
-        fieldEditProfile.setPreferredSize(new Dimension(110, 30));
+        JTextField [] arrayEditFields = {fieldEditUsername, fieldEditPassword, fieldEditProfile};
+        for (JTextField jTextField : arrayEditFields){
+            jTextField.setPreferredSize(new Dimension(110, 30));
+        }
 
         // Edit Changes Button
         buttonEditChanges.setPreferredSize(new Dimension(150, 30));
         buttonEditChanges.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
         buttonEditChanges.setBorder(BorderFactory.createLineBorder(Color.RED,1));
         buttonEditChanges.setBackground(Color.WHITE);
-        buttonEditChanges.addActionListener(e -> editButton_Onclick());
+        // Action listener for displaying editing UI of User Account and User Profile, also ensuring that the action listener is only created once
+        if (buttonEditChanges.getActionListeners().length == 0){
+            buttonEditChanges.addActionListener(e -> editButton_Onclick());
+        }
 
         panelEdit.setPreferredSize(new Dimension(500, 490));
         panelEdit.setBackground(Color.WHITE);
@@ -263,7 +262,7 @@ public class UserAdminPageUI extends JFrame{
         panelEdit.add(fieldEditProfile);
         panelEdit.add(buttonEditChanges);
         panelEdit.setBorder(titledBorder);
-        panelEdit.setVisible(true);
+        panelEdit.setVisible(false);
         userAdminUIFrame.add(panelEdit);
     }
 
@@ -362,11 +361,15 @@ public class UserAdminPageUI extends JFrame{
             jButton.setPreferredSize(new Dimension(220, 30));
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
-            // SEARCH USERNAME & PROFILE Button Click Listener
-            jButton.addActionListener(e -> viewButton_Onclick(e.getActionCommand()));
         }
-        buttonSearchUser.setActionCommand("Search By Username");
-        buttonSearchProfile.setActionCommand("Search By Profile");
+        // Action listener for searching UI of User Account, also ensuring that the action listener is only created once
+        if (buttonSearchUser.getActionListeners().length == 0){
+            buttonSearchUser.addActionListener(e -> viewButton_Onclick("Search By Username"));
+        }
+        // Action listener for searching UI of User Profile, also ensuring that the action listener is only created once
+        if (buttonSearchProfile.getActionListeners().length == 0){
+            buttonSearchProfile.addActionListener(e -> viewButton_Onclick("Search By Profile"));
+        }
 
         // Components of JPanel
         panelView.setPreferredSize(new Dimension(500, 450));
@@ -377,7 +380,7 @@ public class UserAdminPageUI extends JFrame{
         panelView.add(buttonSearchUser);
         panelView.add(buttonSearchProfile);
         userAdminUIFrame.add(panelView);
-        panelView.setVisible(true);
+        panelView.setVisible(false);
     }
 
     // 3b) Construction of the JTable, JTable type returned as a JScrollPane type, to display search results
@@ -410,7 +413,7 @@ public class UserAdminPageUI extends JFrame{
         String dataKeyedIn = fieldSearchUser.getText();
         ViewUserController viewUserController = new ViewUserController();
         String [][] data = viewUserController.searchBy(dataKeyedIn, searchStatus); // get data from controller which gets it from entity User Admin
-        viewTableConstruction(data); // Construct table
+        viewTableConstruction(data); // Refresh table
     }
 
 
@@ -437,10 +440,14 @@ public class UserAdminPageUI extends JFrame{
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
         }
-        // SUSPEND USERNAME & PROFILE Button Click Listener
-        buttonSuspendAccount.addActionListener(e -> suspendUserButton_Onclick());
-        buttonSuspendProfile.addActionListener(e -> suspendProfileButton_Onclick());
-
+        // Action listener for displaying suspend UI of User Account, also ensuring that the action listener is only created once
+        if (buttonSuspendAccount.getActionListeners().length == 0){
+            buttonSuspendAccount.addActionListener(e -> suspendUserButton_Onclick());
+        }
+        // Action listener for displaying suspend UI of User Profile, also ensuring that the action listener is only created once
+        if (buttonSuspendProfile.getActionListeners().length == 0){
+            buttonSuspendProfile.addActionListener(e -> suspendProfileButton_Onclick());
+        }
 
         // Add components to the JPanel
         panelSuspend.setPreferredSize(new Dimension(500, 330));
@@ -449,7 +456,7 @@ public class UserAdminPageUI extends JFrame{
         panelSuspend.add(buttonSuspendAccount);
         panelSuspend.add(buttonSuspendProfile);
         panelSuspend.setBorder(titledBorder);
-        panelSuspend.setVisible(true);
+        panelSuspend.setVisible(false);
         userAdminUIFrame.add(panelSuspend);
     }
 

@@ -101,7 +101,6 @@ public class RestaurantStaffPageUI extends JFrame {
                 panelDeleteOrder.setVisible(true);
                 break;
         }
-
         staffUIFrame.setVisible(true);
     }
 
@@ -354,7 +353,6 @@ public class RestaurantStaffPageUI extends JFrame {
         // Table Construction called in method, converted to a JScrollPane
         String [][] orders = {{"", "", "", ""}};
         JScrollPane searchScrollPane1 = (JScrollPane) searchTableConstruction(orders);
-        panelSearchOrder.add(searchScrollPane1);
 
         // Label
         labelSearchTableNumber.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 17));
@@ -383,6 +381,7 @@ public class RestaurantStaffPageUI extends JFrame {
         // Add components to the JPanel
         panelSearchOrder.setPreferredSize(new Dimension(500, 390));
         panelSearchOrder.setBackground(Color.WHITE);
+        panelSearchOrder.add(searchScrollPane1);
         panelSearchOrder.add(labelSearchTableNumber);
         panelSearchOrder.add(fieldSearchTableNumber);
         panelSearchOrder.add(buttonSearchOrder);
@@ -497,7 +496,6 @@ public class RestaurantStaffPageUI extends JFrame {
         buttonDeleteOrder.setBackground(Color.WHITE);
         // DELETE ORDER Button Click Listener
         buttonDeleteOrder.addActionListener(e -> deleteOrderButton_Onclick());
-
 
         // Add components to the JPanel
         panelDeleteOrder.setPreferredSize(new Dimension(500, 340));
