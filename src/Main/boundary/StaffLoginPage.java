@@ -130,7 +130,7 @@ public class StaffLoginPage extends JFrame{
                 new OwnerPageUI();
                 break;
             case "Restaurant Manager":
-                new ManagerPageUI("Default");
+                new ManagerPageUI();
                 break;
             case "Restaurant Staff":
                 new RestaurantStaffPageUI("Default");

@@ -248,18 +248,10 @@ public class CustomerPageUI extends JFrame {
     private void categoryButton_Onclick(JButton jButton) {
         String action = jButton.getText();
         switch(action){
-            case "Pasta" -> {
-                viewMenu("Pasta");
-            }
-            case "Pizza" -> {
-                viewMenu("Pizza");
-            }
-            case "Baked Rice" -> {
-                viewMenu("Baked Rice");
-            }
-            case "Drinks" -> {
-                viewMenu("Drinks");
-            }
+            case "Pasta" -> viewMenu("Pasta");
+            case "Pizza" -> viewMenu("Pizza");
+            case "Baked Rice" -> viewMenu("Baked Rice");
+            case "Drinks" -> viewMenu("Drinks");
         }
     }
 

@@ -116,7 +116,7 @@ public class ManagerPageUI extends JFrame {
     private final JButton buttonDeleteCoupon = new JButton("Delete Coupon");
     private JTable tableDeleteCoupon;
 
-    public ManagerPageUI(String setDisplayPage){
+    public ManagerPageUI(){
         managerUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         managerUIFrame.getContentPane().setLayout(new FlowLayout());
         managerUIFrame.setSize(520, 705);
@@ -130,43 +130,15 @@ public class ManagerPageUI extends JFrame {
         /* Button Function for Restaurant Manager */
         // 1. Create menu items or coupons
         displayCreatePanel();
-        panelCreate.setVisible(false);
-
         // 2. Edit menu items or coupons
         displayEditPanel();
-        panelEdit.setVisible(false);
-
         // 3. Search menu items or coupons
         displaySearchPanel();
-        panelSearch.setVisible(false);
-
         // 4. View menu items or coupons
         displayViewPanel();
-        panelView.setVisible(false);
-
         // 5. Delete menu items or coupons
         displayDeletePanel();
-        panelDelete.setVisible(false);
 
-        switch(setDisplayPage) {
-            case "Default":
-                break;
-            case "Create":
-                panelCreate.setVisible(true);
-                break;
-            case "Edit":
-                panelEdit.setVisible(true);
-                break;
-            case "Search":
-                panelSearch.setVisible(true);
-                break;
-            case "View":
-                panelView.setVisible(true);
-                break;
-            case "Delete":
-                panelDelete.setVisible(true);
-                break;
-        }
         managerUIFrame.setVisible(true);
     }
 
@@ -193,33 +165,52 @@ public class ManagerPageUI extends JFrame {
     ActionListener topButtonsListener = e -> {
         JButton buttonPressed = (JButton)e.getSource();
         String action = buttonPressed.getText();
-        switch (action){
-            case "Logout":
+        switch (action) {
+            case "Logout" -> {
                 managerUIFrame.dispose();
                 managerUIFrame.setVisible(false);
                 new StaffLoginPage();
-                break;
-            case "Create":
+            }
+            case "Create" -> {
+                displayCreatePanel();
                 panelCreate.setVisible(true);
                 panelEdit.setVisible(false);
                 panelSearch.setVisible(false);
-                break;
-            case "Edit":
-                managerUIFrame.dispose();
-                new ManagerPageUI("Edit");
-                break;
-            case "Search":
-                managerUIFrame.dispose();
-                new ManagerPageUI("Search");
-                break;
-            case "View":
-                managerUIFrame.dispose();
-                new ManagerPageUI("View");
-                break;
-            case "Delete":
-                managerUIFrame.dispose();
-                new ManagerPageUI("Delete");
-                break;
+                panelView.setVisible(false);
+                panelDelete.setVisible(false);
+            }
+            case "Edit" -> {
+                displayEditPanel();
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(true);
+                panelSearch.setVisible(false);
+                panelView.setVisible(false);
+                panelDelete.setVisible(false);
+            }
+            case "Search" -> {
+                displaySearchPanel();
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(false);
+                panelSearch.setVisible(true);
+                panelView.setVisible(false);
+                panelDelete.setVisible(false);
+            }
+            case "View" -> {
+                displayViewPanel();
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(false);
+                panelSearch.setVisible(false);
+                panelView.setVisible(true);
+                panelDelete.setVisible(false);
+            }
+            case "Delete" -> {
+                displayDeletePanel();
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(false);
+                panelSearch.setVisible(false);
+                panelView.setVisible(false);
+                panelDelete.setVisible(true);
+            }
         }
     };
 
@@ -251,15 +242,20 @@ public class ManagerPageUI extends JFrame {
             jButton.setBackground(Color.WHITE);
             panelCreate.add(jButton);
         }
-        buttonDisplayCreateMenuItem.addActionListener(e -> buttonCreateChoices_Onclick("Menu Items"));
-        buttonDisplayCreateCoupon.addActionListener(e -> buttonCreateChoices_Onclick("Coupon"));
-
+        // Action listener for displaying creation UI of menu items, also ensuring that the action listener is only created once
+        if (buttonDisplayCreateMenuItem.getActionListeners().length == 0){
+            buttonDisplayCreateMenuItem.addActionListener(e -> buttonCreateChoices_Onclick("Menu Items"));
+        }
+        // Action listener for displaying creation UI of coupons, also ensuring that the action listener is only created once
+        if (buttonDisplayCreateCoupon.getActionListeners().length == 0){
+            buttonDisplayCreateCoupon.addActionListener(e -> buttonCreateChoices_Onclick("Coupon"));
+        }
 
         // Add components to the JPanel
         panelCreate.setPreferredSize(new Dimension(500, 430));
         panelCreate.setBackground(Color.WHITE);
+        panelCreate.setVisible(false);
         managerUIFrame.add(panelCreate);
-        panelCreate.setVisible(true);
     }
 
     // 1b) Allows the user to choose between creation of Menu Items OR coupon, then display the respective GUI components
@@ -321,7 +317,10 @@ public class ManagerPageUI extends JFrame {
                 buttonCreateMenuItem.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
                 buttonCreateMenuItem.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
                 buttonCreateMenuItem.setBackground(Color.WHITE);
-                buttonCreateMenuItem.addActionListener(e -> buttonCreateMenuItem_Onclick());
+                // Action listener for creation of menu items, also ensuring that the action listener is only created once
+                if (buttonCreateMenuItem.getActionListeners().length == 0){
+                    buttonCreateMenuItem.addActionListener(e -> buttonCreateMenuItem_Onclick());
+                }
                 panelCreate.add(buttonCreateMenuItem);
             }
             case "Coupon" -> {
@@ -350,7 +349,10 @@ public class ManagerPageUI extends JFrame {
                 buttonCreateCoupon.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
                 buttonCreateCoupon.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
                 buttonCreateCoupon.setBackground(Color.WHITE);
-                buttonCreateCoupon.addActionListener(e -> buttonCreateCoupon_Onclick());
+                // Action listener for creation of coupons, also ensuring that the action listener is only created once
+                if (buttonCreateCoupon.getActionListeners().length == 0){
+                    buttonCreateCoupon.addActionListener(e -> buttonCreateCoupon_Onclick());
+                }
                 panelCreate.add(buttonCreateCoupon);
             }
         } // end of switch statements
@@ -372,16 +374,21 @@ public class ManagerPageUI extends JFrame {
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null, "Please enter a valid number for the price of the food item.", "Error!", JOptionPane.WARNING_MESSAGE);
             } // end of try-catch statements
-            // Get Food Name from Text Field and the radio button selected
-            String food_name = fieldCreateFoodName.getText();
-            String category = buttonGroupCreate.getSelection().getActionCommand();
-            // Pass values to the controller
-            ManagerCreateController managerCreateController = new ManagerCreateController();
-            if (managerCreateController.validateCreateFoodItem(food_name, item_price, category)){
-                JOptionPane.showMessageDialog(null, "Menu Item is created successfully.", "Menu Item Creation", JOptionPane.INFORMATION_MESSAGE);
+            if (item_price <= 0.0){
+                JOptionPane.showMessageDialog(null, "Price of the food item cannot be 0 or less.", "Error!", JOptionPane.WARNING_MESSAGE);
             }
             else{
-                JOptionPane.showMessageDialog(null, "Menu Item already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
+                // Get Food Name from Text Field and the radio button selected
+                String food_name = fieldCreateFoodName.getText().toLowerCase();
+                String category = buttonGroupCreate.getSelection().getActionCommand();
+                // Pass values to the controller
+                ManagerCreateController managerCreateController = new ManagerCreateController();
+                if (managerCreateController.validateCreateFoodItem(food_name, item_price, category)){
+                    JOptionPane.showMessageDialog(null, "Menu Item is created successfully.", "Menu Item Creation", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Menu Item already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
             }
         } // end of if-else statements
     }
@@ -402,14 +409,19 @@ public class ManagerPageUI extends JFrame {
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null, "Please enter a valid number for the price of the food item.", "Error!", JOptionPane.WARNING_MESSAGE);
             } // end of try-catch statements
-            String coupon = fieldCreateCouponName.getText().toUpperCase(); // Get Coupon name from Text Field, coupon name in UPPER case
-            // Pass values to the controller
-            ManagerCreateController managerCreateController = new ManagerCreateController();
-            if (managerCreateController.validateCreateCoupon(coupon, discount)){
-                JOptionPane.showMessageDialog(null, "Coupon is created successfully.", "Coupon Creation", JOptionPane.INFORMATION_MESSAGE);
+            if (discount <= 0 || discount > 1){
+                JOptionPane.showMessageDialog(null, "Discount value of the coupon cannot be 0 or less.", "Error!", JOptionPane.WARNING_MESSAGE);
             }
             else{
-                JOptionPane.showMessageDialog(null, "Coupon already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
+                String coupon = fieldCreateCouponName.getText().toUpperCase(); // Get Coupon name from Text Field, coupon name in UPPER case
+                // Pass values to the controller
+                ManagerCreateController managerCreateController = new ManagerCreateController();
+                if (managerCreateController.validateCreateCoupon(coupon, discount)){
+                    JOptionPane.showMessageDialog(null, "Coupon is created successfully.", "Coupon Creation", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Coupon already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
             }
         } // end of if-else statements
     }
@@ -436,16 +448,23 @@ public class ManagerPageUI extends JFrame {
             jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
-            panelEdit.add(jButton);
         }
-        buttonDisplayEditMenuItem.addActionListener(e -> buttonEditChoices_Onclick("Menu Items"));
-        buttonDisplayEditCoupon.addActionListener(e -> buttonEditChoices_Onclick("Coupon"));
+        panelEdit.add(buttonDisplayEditMenuItem, 0);
+        panelEdit.add(buttonDisplayEditCoupon, 1);
+        // Action listener for displaying editing UI of menu items, also ensuring that the action listener is only created once
+        if (buttonDisplayEditMenuItem.getActionListeners().length == 0) {
+            buttonDisplayEditMenuItem.addActionListener(e -> buttonEditChoices_Onclick("Menu Items"));
+        }
+        // Action listener for displaying editing UI of coupons, also ensuring that the action listener is only created once
+        if (buttonDisplayEditCoupon.getActionListeners().length == 0) {
+            buttonDisplayEditCoupon.addActionListener(e -> buttonEditChoices_Onclick("Coupon"));
+        }
 
         // Add components to the JPanel
         panelEdit.setPreferredSize(new Dimension(500, 590));
         panelEdit.setBackground(Color.WHITE);
         managerUIFrame.add(panelEdit);
-        panelEdit.setVisible(true);
+        panelEdit.setVisible(false);
     }
 
     // 2b) Allows the user to choose between editing of Menu Items OR coupon, then display the respective GUI components
@@ -501,7 +520,10 @@ public class ManagerPageUI extends JFrame {
                 buttonEditMenuItem.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
                 buttonEditMenuItem.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
                 buttonEditMenuItem.setBackground(Color.WHITE);
-                buttonEditMenuItem.addActionListener(e -> buttonEditMenuItem_Onclick());
+                // Action listener for editing of menu items, also ensuring that the action listener is only created once
+                if (buttonEditMenuItem.getActionListeners().length == 0){
+                    buttonEditMenuItem.addActionListener(e -> buttonEditMenuItem_Onclick());
+                }
                 panelEdit.add(buttonEditMenuItem);
             }
             case "Coupon" -> {
@@ -517,8 +539,8 @@ public class ManagerPageUI extends JFrame {
                 }
                 // Text Fields
                 JTextField[] arrayEditFoodItemsTextFields = {fieldEditCouponName, fieldEditCouponDiscountValue};
-                for (int i = 0; i < arrayEditFoodItemsTextFields.length; i++) {
-                    arrayEditFoodItemsTextFields[i].setPreferredSize(new Dimension(50, 30));
+                for (JTextField arrayEditFoodItemsTextField : arrayEditFoodItemsTextFields) {
+                    arrayEditFoodItemsTextField.setPreferredSize(new Dimension(50, 30));
                 }
                 // Add labels and text fields to the JPanel
                 panelEdit.add(labelEditCouponName);
@@ -530,7 +552,10 @@ public class ManagerPageUI extends JFrame {
                 buttonEditCoupon.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
                 buttonEditCoupon.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
                 buttonEditCoupon.setBackground(Color.WHITE);
-                buttonEditCoupon.addActionListener(e -> buttonEditCoupon_Onclick());
+                // Action listener for editing of coupons, also ensuring that the action listener is only created once
+                if (buttonEditCoupon.getActionListeners().length == 0){
+                    buttonEditCoupon.addActionListener(e -> buttonEditCoupon_Onclick());
+                }
                 panelEdit.add(buttonEditCoupon);
             }
         } // end of switch statements
@@ -593,7 +618,7 @@ public class ManagerPageUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Please enter a valid number for the price of the food item.", "Error!", JOptionPane.WARNING_MESSAGE);
             } // end of try-catch statements
             // Check if price entered is > 0
-            if (new_item_price < 0){
+            if (new_item_price <= 0){
                 JOptionPane.showMessageDialog(null, "Please ensure Price text field's input is more than 0.", "Error!", JOptionPane.WARNING_MESSAGE);
             }
             else{
@@ -656,32 +681,38 @@ public class ManagerPageUI extends JFrame {
         else{
             /* Get the new values */
             int rowSelected = tableEditCoupons.getSelectedRow();
-            String oldCouponName = tableEditCoupons.getModel().getValueAt(rowSelected,0).toString();
-            String newCouponName = fieldEditCouponName.getText().toUpperCase();
-            Float new_discount_value = 0.0f;
-            try{
-                new_discount_value = Float.parseFloat(fieldEditCouponDiscountValue.getText());
-                // Convert NEW discount value to 1 decimal place
-                DecimalFormat df = new DecimalFormat("#.##");
-                new_discount_value = Float.parseFloat(df.format(new_discount_value));
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Please enter a valid number for the discount value of the coupon.", "Error!", JOptionPane.WARNING_MESSAGE);
-            } // end of try-catch statements
-            // Check if the discount value is > 1
-            if (new_discount_value > 1.0){
-                JOptionPane.showMessageDialog(null, "Please ensure Discount Value text field's input is less than 1.", "Error!", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                // Pass values to the controller
-                ManagerEditController managerEditController = new ManagerEditController();
-                if (managerEditController.editCouponValues(oldCouponName, newCouponName, new_discount_value)){
-                    JOptionPane.showMessageDialog(null, "Coupon has been successful updated.", "Coupon Update", JOptionPane.INFORMATION_MESSAGE);
-                    editCouponTableConstruction(); // After edit, refresh edit Menu Item table
+            if (rowSelected != -1){
+                String oldCouponName = tableEditCoupons.getModel().getValueAt(rowSelected,0).toString();
+                String newCouponName = fieldEditCouponName.getText().toUpperCase();
+                Float new_discount_value = 0.0f;
+                try{
+                    new_discount_value = Float.parseFloat(fieldEditCouponDiscountValue.getText());
+                    // Convert NEW discount value to 1 decimal place
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    new_discount_value = Float.parseFloat(df.format(new_discount_value));
+                }catch(NumberFormatException e){
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for the discount value of the coupon.", "Error!", JOptionPane.WARNING_MESSAGE);
+                } // end of try-catch statements
+                // Check if the discount value is > 1
+                if (new_discount_value > 1.0){
+                    JOptionPane.showMessageDialog(null, "Please ensure Discount Value text field's input is less than 1.", "Error!", JOptionPane.WARNING_MESSAGE);
                 }
                 else{
-                    JOptionPane.showMessageDialog(null, "Coupon has not been successful updated.", "Coupon Update", JOptionPane.ERROR_MESSAGE);
-                }
-            } // end of if-else statements
+                    // Pass values to the controller
+                    ManagerEditController managerEditController = new ManagerEditController();
+                    if (managerEditController.editCouponValues(oldCouponName, newCouponName, new_discount_value)){
+                        JOptionPane.showMessageDialog(null, "Coupon has been successful updated.", "Coupon Update", JOptionPane.INFORMATION_MESSAGE);
+                        editCouponTableConstruction(); // After edit, refresh edit Menu Item table
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Coupon has not been successful updated.", "Coupon Update", JOptionPane.ERROR_MESSAGE);
+                    }
+                } // end of if-else statements
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Please reselect the coupon you wish to edit!", "Error!", JOptionPane.WARNING_MESSAGE);
+            }
+
         } // end of if-else statements
     }
 
@@ -697,7 +728,7 @@ public class ManagerPageUI extends JFrame {
 
         // Search Text Field
         fieldSearch.setPreferredSize(new Dimension(60, 30));
-        panelSearch.add(fieldSearch);
+        panelSearch.add(fieldSearch, 0);
 
         // Choice buttons on top
         JButton [] buttonChoices = {buttonSearchMenuItem, buttonSearchCoupon};
@@ -706,16 +737,23 @@ public class ManagerPageUI extends JFrame {
             jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
-            panelSearch.add(jButton);
         }
-        buttonSearchMenuItem.addActionListener(e -> buttonSearchMenuItem_Onclick());
-        buttonSearchCoupon.addActionListener(e -> buttonSearchCoupon_Onclick());
+        panelSearch.add(buttonSearchMenuItem, 1);
+        panelSearch.add(buttonSearchCoupon, 2);
+        // Action listener for searching of menu items, also ensuring that the action listener is only created once
+        if (buttonSearchMenuItem.getActionListeners().length == 0) {
+            buttonSearchMenuItem.addActionListener(e -> buttonSearchMenuItem_Onclick());
+        }
+        // Action listener for searching of coupons, also ensuring that the action listener is only created once
+        if (buttonSearchCoupon.getActionListeners().length == 0) {
+            buttonSearchCoupon.addActionListener(e -> buttonSearchCoupon_Onclick());
+        }
 
         // Add components to the JPanel
         panelSearch.setPreferredSize(new Dimension(500, 390));
         panelSearch.setBackground(Color.WHITE);
         managerUIFrame.add(panelSearch);
-        panelSearch.setVisible(true);
+        panelSearch.setVisible(false);
     }
 
     // 3b) Search by Menu Item button function, and then display results by constructing a table
@@ -799,16 +837,23 @@ public class ManagerPageUI extends JFrame {
             jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
-            panelView.add(jButton);
         }
-        buttonViewMenuItem.addActionListener(e -> buttonViewMenuItem_Onclick());
-        buttonViewCoupon.addActionListener(e -> buttonViewCoupon_Onclick());
+        panelView.add(buttonViewMenuItem, 0);
+        panelView.add(buttonViewCoupon, 1);
+        // Action listener for viewing of menu items, also ensuring that the action listener is only created once
+        if (buttonViewMenuItem.getActionListeners().length == 0) {
+            buttonViewMenuItem.addActionListener(e -> buttonViewMenuItem_Onclick());
+        }
+        // Action listener for viewing of coupons, also ensuring that the action listener is only created once
+        if (buttonViewCoupon.getActionListeners().length == 0) {
+            buttonViewCoupon.addActionListener(e -> buttonViewCoupon_Onclick());
+        }
 
         // Add components to the JPanel
         panelView.setPreferredSize(new Dimension(500, 390));
         panelView.setBackground(Color.WHITE);
         managerUIFrame.add(panelView);
-        panelView.setVisible(true);
+        panelView.setVisible(false);
     }
 
     // 4b) View Menu Item button function to allow the user to view all Menu Items on a table upon pressing the View All Menu Items
@@ -887,21 +932,28 @@ public class ManagerPageUI extends JFrame {
             jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
-            panelDelete.add(jButton);
         }
-        buttonDisplayDeleteMenuItem.addActionListener(e -> buttonDeleteChoices_Onclick("Menu Items"));
-        buttonDisplayDeleteCoupon.addActionListener(e -> buttonDeleteChoices_Onclick("Coupon"));
+        panelDelete.add(buttonDisplayDeleteMenuItem, 0);
+        panelDelete.add(buttonDisplayDeleteCoupon, 1);
+        // Action listener for displaying deletion UI of menu items, also ensuring that the action listener is only created once
+        if (buttonDisplayDeleteMenuItem.getActionListeners().length == 0){
+            buttonDisplayDeleteMenuItem.addActionListener(e -> buttonDeleteChoices_Onclick("Menu Items"));
+        }
+        // Action listener for displaying deletion UI of coupons, also ensuring that the action listener is only created once
+        if (buttonDisplayDeleteCoupon.getActionListeners().length == 0){
+            buttonDisplayDeleteCoupon.addActionListener(e -> buttonDeleteChoices_Onclick("Coupon"));
+        }
 
         // Add components to the JPanel
         panelDelete.setPreferredSize(new Dimension(500, 450));
         panelDelete.setBackground(Color.WHITE);
         managerUIFrame.add(panelDelete);
-        panelDelete.setVisible(true);
+        panelDelete.setVisible(false);
     }
 
     // 5b) Allows the user to choose between deletion of Menu Items OR coupon, then display the respective GUI components
     public void buttonDeleteChoices_Onclick(String buttonPressed){
-        /* REMOVE COMPONENTS */
+        /* REMOVE COMPONENTS of each category */
         Component[] componentList = panelDelete.getComponents();
         // Loop through the components
         for(Component c : componentList){
@@ -938,9 +990,11 @@ public class ManagerPageUI extends JFrame {
                 buttonDeleteMenuItem.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
                 buttonDeleteMenuItem.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
                 buttonDeleteMenuItem.setBackground(Color.WHITE);
-                buttonDeleteMenuItem.addActionListener(e -> buttonDeleteMenuItem_Onclick());
+                // Action listener for deletion of menu items, also ensuring that the action listener is only created once
+                if (buttonDeleteMenuItem.getActionListeners().length == 0){
+                    buttonDeleteMenuItem.addActionListener(e -> buttonDeleteMenuItem_Onclick());
+                }
                 panelDelete.add(buttonDeleteMenuItem);
-
             }
             case "Coupon" -> {
                 // Disable pressed button
@@ -961,7 +1015,10 @@ public class ManagerPageUI extends JFrame {
                 buttonDeleteCoupon.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
                 buttonDeleteCoupon.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
                 buttonDeleteCoupon.setBackground(Color.WHITE);
-                buttonDeleteCoupon.addActionListener(e -> buttonDeleteCoupon_Onclick());
+                // Action listener for deletion of coupons, also ensuring that the action listener is only created once
+                if (buttonDeleteCoupon.getActionListeners().length == 0){
+                    buttonDeleteCoupon.addActionListener(e -> buttonDeleteCoupon_Onclick());
+                }
                 panelDelete.add(buttonDeleteCoupon);
             }
         } // end of switch statements
