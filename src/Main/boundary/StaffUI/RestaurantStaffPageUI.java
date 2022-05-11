@@ -52,7 +52,6 @@ public class RestaurantStaffPageUI extends JFrame {
     private final JPanel panelViewOrder = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     private JTable tableViewOrder;
 
-
     /* 4. DELETE function */
     private final JPanel panelDeleteOrder = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
     private JTable tableDeleteOrder;
@@ -69,7 +68,6 @@ public class RestaurantStaffPageUI extends JFrame {
 
         // Add buttons & functions for the top of the GUI
         displayStaffUserButton();
-
 
         /* Button Function for Restaurant Staff */
         // 1. EDIT function
@@ -460,8 +458,8 @@ public class RestaurantStaffPageUI extends JFrame {
         // Display data in a table format
         String [] columnTableNames = {"Order ID", "Food Name", "Quantity", "Price", "Fulfilled"};
         tableViewOrder = new JTable(data, columnTableNames);
-        JScrollPane searchScrollPane = new JScrollPane(tableViewOrder);
-        searchScrollPane.setPreferredSize(new Dimension(485, 470)); // width then height
+        JScrollPane viewScrollPane = new JScrollPane(tableViewOrder);
+        viewScrollPane.setPreferredSize(new Dimension(485, 470)); // width then height
 
         //Get the components in the panel
         Component[] componentList = panelViewOrder.getComponents();
@@ -470,14 +468,14 @@ public class RestaurantStaffPageUI extends JFrame {
             //Find the components you want to remove
             if(c instanceof JScrollPane){
                 //Remove it
-                panelEditOrder.remove(c);
+                panelViewOrder.remove(c);
             }
         }
-        panelEditOrder.add(searchScrollPane, 0);
-        panelEditOrder.revalidate();
-        panelEditOrder.repaint();
+        panelViewOrder.add(viewScrollPane, 0);
+        panelViewOrder.revalidate();
+        panelViewOrder.repaint();
 
-        return searchScrollPane;
+        return viewScrollPane;
     }
 
 
