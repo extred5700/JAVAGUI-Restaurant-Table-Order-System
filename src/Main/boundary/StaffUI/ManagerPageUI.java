@@ -240,8 +240,9 @@ public class ManagerPageUI extends JFrame {
             jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
             jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
             jButton.setBackground(Color.WHITE);
-            panelCreate.add(jButton);
         }
+        panelCreate.add(buttonDisplayCreateMenuItem, 0);
+        panelCreate.add(buttonDisplayCreateCoupon, 1);
         // Action listener for displaying creation UI of menu items, also ensuring that the action listener is only created once
         if (buttonDisplayCreateMenuItem.getActionListeners().length == 0){
             buttonDisplayCreateMenuItem.addActionListener(e -> buttonCreateChoices_Onclick("Menu Items"));
@@ -694,8 +695,8 @@ public class ManagerPageUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Please enter a valid number for the discount value of the coupon.", "Error!", JOptionPane.WARNING_MESSAGE);
                 } // end of try-catch statements
                 // Check if the discount value is > 1
-                if (new_discount_value > 1.0){
-                    JOptionPane.showMessageDialog(null, "Please ensure Discount Value text field's input is less than 1.", "Error!", JOptionPane.WARNING_MESSAGE);
+                if (new_discount_value <= 0.0 || new_discount_value > 1.0){
+                    JOptionPane.showMessageDialog(null, "Please ensure Discount Value text field's input is more than 0 and less than 1.", "Error!", JOptionPane.WARNING_MESSAGE);
                 }
                 else{
                     // Pass values to the controller
