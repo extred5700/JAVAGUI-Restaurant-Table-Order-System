@@ -81,4 +81,32 @@ public class Staff{
         }
         return userExistence;
     } // end of method checkUserExistence()
+
+/*
+Honestly, may have to use this instead of the one above -> can check, and rename accordingly
+    public boolean checkUserExistence(String username, String password, String profile){
+        boolean userExistence = false;
+        Connection dbConnection = dbConnection(); // Set up connection with the DB
+        try{
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            String query = "SELECT * FROM user_account INNER JOIN user_profile ON user_account.profile_id = user_profile.profile_id WHERE username = '" + username + "' AND password = '" + password + "' AND profile_name = '" + profile +"'";
+            ResultSet rs = statement.executeQuery(query);
+            if (!rs.next()){
+                //This means no account found
+                System.out.println("No account found.");
+            }
+            else{
+                //This means account found
+                System.out.println("Account is valid.");
+                userExistence = true;
+            }
+        }catch (SQLException e){
+            // Catches any SQL query issues
+            System.out.println(e);
+        }
+        return userExistence;
+    } // end of method checkUserExistence()
+
+ */
 }

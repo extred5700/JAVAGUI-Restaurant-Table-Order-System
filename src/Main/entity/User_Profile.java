@@ -22,14 +22,22 @@ public class User_Profile extends Staff{
     // Validate User Profile
     public boolean checkProfileExistence(String profile){
         boolean profileExistence = false;
-        /* Note for Joshua:
-        * 1) Connection dbConnection = dbConnection(); // Set up connection with the DB
-        * 2) Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
-        * both works the same, however, one is calling from the staff entity class
-        * I think we should all go with option 2
-        * */
-        // Do SQL Codes here
+        Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
+        try{
+            Statement statement = dbConnection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT profile_name FROM user_profile WHERE profile_name = '" + profile + "'");
 
+            if (!rs.next()) {
+                //no profile found -> do nothing
+            }
+            else{
+                //profile found
+                profileExistence = true;
+            }
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
         return profileExistence;
     }
 
@@ -40,11 +48,10 @@ public class User_Profile extends Staff{
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
         // Need to auto-increment the profile_id
         try{
-            String query = "insert into user_profile (profile_id, profile, active)" + " values (?, ?, ?) ";
+            String query = "insert into user_profile (profile_name, profile_active)" + " values (?, ?) ";
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
-            //preparedStatement.setString(1, profileID);
-            preparedStatement.setString(2, newProfile);
-            preparedStatement.setString(3, active);
+            preparedStatement.setString(1, newProfile);
+            preparedStatement.setString(2, active);
             preparedStatement.execute();
             isProfileCreated = true;
         }catch (Exception e){
@@ -58,7 +65,7 @@ public class User_Profile extends Staff{
     public boolean editProfile(int selectedProfileID, String newProfile){
         boolean isProfileEdited = false;
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
-        String query = "UPDATE user_profile SET profile ='" + newProfile +"' WHERE profile_id ='" + selectedProfileID + "'";
+        String query = "UPDATE user_profile SET profile_name ='" + newProfile +"' WHERE profile_id ='" + selectedProfileID + "'";
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query);
             isProfileEdited = true;
@@ -72,16 +79,17 @@ public class User_Profile extends Staff{
     * 1) StaffLoginPage.java
     * 2) UserAdminPageUI, Creation of User Profiles
     * Purely returning the Strings of the different types of User Admin
+    * Will only return active user profiles
     */
     public String [] existingProfile(){
         ArrayList<String> arrayListProfiles = new ArrayList<>();
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
-        String query = "SELECT profile from user_profile";
+        String query = "SELECT profile_name FROM user_profile WHERE profile_active = 'Y'";
         try (Statement statement = dbConnection.createStatement()){
             ResultSet set = statement.executeQuery(query);
             while (set.next()){
                 // Add data to their respective array list
-                arrayListProfiles.add(set.getString("profile"));
+                arrayListProfiles.add(set.getString("profile_name"));
             }
         } catch(SQLException e){
             System.out.println(e);
@@ -103,13 +111,13 @@ public class User_Profile extends Staff{
 
         try{
             Statement statement = dbConnection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM user_profile WHERE profile LIKE '%" + dataKeyedIn + "%'");
+            ResultSet rs = statement.executeQuery("SELECT * FROM user_profile WHERE profile_name LIKE '%" + dataKeyedIn + "%'");
 
             while (rs.next()) { //This is the result set
                 // Add data to their respective array list
                 arrayListSearchedProfileID.add(rs.getString("profile_id"));
-                arrayListSearchedProfileName.add(rs.getString("profile"));
-                arrayListSearchedActive.add(rs.getString("active"));
+                arrayListSearchedProfileName.add(rs.getString("profile_name"));
+                arrayListSearchedActive.add(rs.getString("profile_active"));
             }
         } catch (Exception e){
             // Catches any SQL query issues
@@ -140,9 +148,9 @@ public class User_Profile extends Staff{
 
             while (rs.next()) { //This is the result set
                 // Add data to their respective array list
-                arrayListSearchedProfileID.add(rs.getString("profile_id"));
-                arrayListSearchedProfileName.add(rs.getString("profile"));
-                arrayListSearchedActive.add(rs.getString("active"));
+                arrayListSearchedProfileID.add(Integer.toString(rs.getInt("profile_id")));
+                arrayListSearchedProfileName.add(rs.getString("profile_name"));
+                arrayListSearchedActive.add(rs.getString("profile_active"));
             }
         } catch (Exception e){
             // Catches any SQL query issues
@@ -164,7 +172,7 @@ public class User_Profile extends Staff{
     public boolean suspendProfile(int selectedProfileID, String newActiveStatus){
         boolean isProfileSuspended = false;
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
-        String query = "UPDATE user_profile SET active ='" + newActiveStatus + "' WHERE profile_id='" + selectedProfileID + "'";
+        String query = "UPDATE user_profile SET profile_active ='" + newActiveStatus + "' WHERE profile_id='" + selectedProfileID + "'";
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query);
             isProfileSuspended = true;

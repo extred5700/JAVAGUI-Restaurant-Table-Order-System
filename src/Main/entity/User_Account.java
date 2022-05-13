@@ -23,14 +23,8 @@ public class User_Account extends Staff{
         try{
             Statement statement = dbConnection.createStatement();
             //SQL query stuff
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM user WHERE username ='"
-                            +username+
-                            "' AND password = '"
-                            +password+
-                            "' AND user_profile = '"
-                            +profile+
-                            "'");
+            String query = "SELECT * FROM user_account INNER JOIN user_profile ON user_account.profile_id = user_profile.profile_id WHERE username = '" + username + "' AND password = '" + password + "' AND profile_name = '" + profile +"'";
+            ResultSet rs = statement.executeQuery(query);
             if (!rs.next()){
                 //This means no account found
                 System.out.println("No account found.");
@@ -51,13 +45,27 @@ public class User_Account extends Staff{
     public boolean createAccount(String newUsername, String newPassword, String newProfile) {
         boolean isUserCreated = false;
         String active = "Y";
+        int profileID = 0;
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
+        //obtain profile_id first
         try{
-            String query = "insert into user_account (username, password, user_profile, active)" + " values (?, ?, ?, ?) ";
-            PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
+            Statement statement = dbConnection.createStatement();
+            String query1 = "SELECT profile_id FROM user_profile WHERE profile_name = " + newProfile + "'";
+            ResultSet rs = statement.executeQuery(query1);
+            while (rs.next()) { //This is the result set
+                profileID = rs.getInt("profile_id");
+            }
+        }catch (Exception e){
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+        }
+        //actually insert into table
+        try{
+            String query2 = "insert into user_account (username, password, profile_id, account_active)" + " values (?, ?, ?, ?) ";
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(query2);
             preparedStatement.setString(1, newUsername);
             preparedStatement.setString(2, newPassword);
-            preparedStatement.setString(3, newProfile);
+            preparedStatement.setInt(3, profileID);
             preparedStatement.setString(4, active);
             preparedStatement.execute();
             isUserCreated = true;
@@ -92,15 +100,15 @@ public class User_Account extends Staff{
 
         try{
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            ResultSet rs = statement.executeQuery("SELECT * FROM user_account WHERE username LIKE '%" + dataKeyedIn + "%'");
+            String query = "SELECT username,password,profile_name,account_active FROM user_account INNER JOIN user_profile ON user_account.profile_id = user_profile.profile_id WHERE username LIKE '%" + dataKeyedIn + "%'";
+            ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) { //This is the result set
                 // Add data to their respective array list
                 arrayListSearchedUsernames.add(rs.getString("username"));
                 arrayListSearchedPasswords.add(rs.getString("password"));
-                arrayListSearchedProfiles.add(rs.getString("user_profile"));
-                arrayListSearchedActive.add(rs.getString("active"));
+                arrayListSearchedProfiles.add(rs.getString("profile_name"));
+                arrayListSearchedActive.add(rs.getString("account_active"));
             }
         } catch (Exception e){
             // Catches any SQL query issues
@@ -121,14 +129,46 @@ public class User_Account extends Staff{
 
     // Function to View user accounts #6
     public String [][] viewAccount() {
+        ArrayList<String> arrayListSearchedUsernames = new ArrayList<>();
+        ArrayList<String> arrayListSearchedPasswords = new ArrayList<>();
+        ArrayList<String> arrayListSearchedProfiles = new ArrayList<>();
+        ArrayList<String> arrayListSearchedActive = new ArrayList<>();
+        Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
 
+        try{
+            Statement statement = dbConnection.createStatement();
+            String query = "SELECT username,password,profile_name,account_active FROM user_account INNER JOIN user_profile ON user_account.profile_id = user_profile.profile_id";
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()) { //This is the result set
+                // Add data to their respective array list
+                arrayListSearchedUsernames.add(rs.getString("username"));
+                arrayListSearchedPasswords.add(rs.getString("password"));
+                arrayListSearchedProfiles.add(rs.getString("profile_name"));
+                arrayListSearchedActive.add(rs.getString("account_active"));
+            }
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        // Convert Array List to a 2D array
+        String [][] arrayAllAccountData = new String[arrayListSearchedUsernames.size()][4];
+        for (int row = 0; row < arrayAllAccountData.length; row++){
+            for (int column = 0; column < arrayAllAccountData[row].length; column++){
+                arrayAllAccountData[row][0] = arrayListSearchedUsernames.get(row);
+                arrayAllAccountData[row][1] = arrayListSearchedPasswords.get(row);
+                arrayAllAccountData[row][2] = arrayListSearchedProfiles.get(row);
+                arrayAllAccountData[row][3] = arrayListSearchedActive.get(row);
+            }
+        }
+        return arrayAllAccountData;
     }
 
     // Function to Suspend user accounts #7
     public boolean suspendAccount(String selectedUsername, String newActiveStatus) {
         boolean isUserSuspended = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "UPDATE user_account SET active ='" + newActiveStatus + "' WHERE username='" + selectedUsername + "'";
+        String query = "UPDATE user_account SET account_active ='" + newActiveStatus + "' WHERE username='" + selectedUsername + "'";
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query);
             isUserSuspended = true;
