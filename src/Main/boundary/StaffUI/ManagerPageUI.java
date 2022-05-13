@@ -124,7 +124,7 @@ public class ManagerPageUI extends JFrame {
         managerUIFrame.setLocationRelativeTo(null); // Window will display in the middle of the screen
         managerUIFrame.getContentPane().setBackground(Color.WHITE);
 
-        // Add buttons & functions
+        // Add buttons & functions for the top of the GUI
         displayManagerUserButtons();
 
         /* Button Function for Restaurant Manager */
