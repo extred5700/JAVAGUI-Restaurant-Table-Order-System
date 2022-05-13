@@ -23,16 +23,22 @@ Code Files - Files in src folder
 
 /* Staff Profiles */
 1. StaffLoginPage.java - Display login fields for staff profiles to log in (Status: Completed)
-2. UserAdminPageUI.java - Display all User Admin functions (Status: Only Logout, Create Account completed)
+2. UserAdminPageUI.java - Display all User Admin functions (Status: Completed)
+3. ManagerPageUI.java - Display all Manager functions (Status: Testing)
+4. ResturantStaffUI.java - Display all Restaurant Staff functions (Status: testing)
 
 /* Customer */
 1. CustomerLoginPage.java - Display table number field (Status: Table Number validation with controller not complete only)
-2. CustomerPageUI.java - Display all Customer functions (Status: Functions not started)
+2. CustomerPageUI.java - Display all Customer functions (Status: Testing)
 
---- Controller ---
-1. LoginController.java - Contains function to validate the user profile login
-2. AddUserController.java - Contains function to check whether the user exist in the DB
 
 --- Entity ---
-1. Customer.java
-2. Staff.java
+1. Cart.java - All cart functions (Status: Completed)
+2. Customer.java - View Menu, add menu items to cart, edit quantity of menu items in cart, delete items in cart, input coupon discount, make payment (Status: Completed)
+3. Menu_Items.java - All Menu Items functions (Status: Completed)
+4. Order.java - Able to delete 
+5. Restaurant_Manager.java - Add Menu Items/Coupons, Edit Menu Items/Coupons, Search Menu Items/Coupons, View Menu Items/Coupons, Delete Menu Items/Coupons (Status: Completed) 
+6. Restaurant_Owner.java - Generate report for Average spend per visit, frequency/patterns of visit, dish/drink preference. Daily, weekly & monthly. (Status: Comepeted)
+7. Restaurant_Staff.java - Edit Customer Order, Search Customer Order, View Customer Order, Delete Customer Order (Status: Completed)
+8. Staff.java -
+9. User_Admin.java - 
