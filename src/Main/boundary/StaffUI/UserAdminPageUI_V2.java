@@ -203,7 +203,7 @@ public class UserAdminPageUI_V2 extends JFrame{
                     buttonCreateUserAccount.addActionListener(e -> buttonCreateUserAccount_Onclick());
                 }
 
-                // Add respective components to the JFrame
+                // Add respective components to the JPanel
                 panelCreate.add(labelCreateUsername);
                 panelCreate.add(fieldCreateUsername);
                 panelCreate.add(labelCreatePassword);
@@ -230,7 +230,7 @@ public class UserAdminPageUI_V2 extends JFrame{
                     buttonCreateUserProfile.addActionListener(e -> buttonCreateUserProfile_Onclick());
                 }
 
-                // Add respective components to the JFrame
+                // Add respective components to the JPanel
                 panelCreate.add(labelCreateProfile);
                 panelCreate.add(fieldCreateProfile);
                 panelCreate.add(buttonCreateUserProfile);
@@ -251,7 +251,7 @@ public class UserAdminPageUI_V2 extends JFrame{
             String createSelectedProfile = choiceCreateProfile.getSelectedItem();
             // Determine if the user account exist, if not, create a User Account
             AdminCreateController addUserController = new AdminCreateController();
-            if (addUserController.validateCreate(createUsernameText, createPasswordText, createSelectedProfile)){
+            if (addUserController.validateCreateAccount(createUsernameText, createPasswordText, createSelectedProfile)){
                 JOptionPane.showMessageDialog(null, "User Account is created successfully.", "Account Creation", JOptionPane.INFORMATION_MESSAGE);
             }
             else{
@@ -262,7 +262,14 @@ public class UserAdminPageUI_V2 extends JFrame{
 
     // 1d) Create button function to allow the user to create a User Profile by passing the data to the controller
     public void buttonCreateUserProfile_Onclick(){
-
+        // Check if text field is empty
+        if (fieldCreateProfile.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            String createProfile = fieldCreateProfile.getText().toUpperCase();
+            System.out.println(createProfile);
+        }
     }
 
 

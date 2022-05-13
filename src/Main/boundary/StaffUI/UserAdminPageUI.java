@@ -204,7 +204,7 @@ public class UserAdminPageUI extends JFrame{
         }
         else{
             AdminCreateController addUserController = new AdminCreateController();
-            if (addUserController.validateCreate(createUsernameText, createPasswordText, createProfileText)){
+            if (addUserController.validateCreateAccount(createUsernameText, createPasswordText, createProfileText)){
                 JOptionPane.showMessageDialog(null, "Account is created successfully.", "Account Creation", JOptionPane.INFORMATION_MESSAGE);
             }
             else{
