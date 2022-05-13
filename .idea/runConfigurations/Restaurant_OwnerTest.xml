@@ -3,7 +3,7 @@
     <module name="Hopium" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="Main.entity.*" />
+        <option name="PATTERN" value="Main.entity.User_Admin" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

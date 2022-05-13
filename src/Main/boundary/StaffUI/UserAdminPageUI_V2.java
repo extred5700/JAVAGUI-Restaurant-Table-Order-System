@@ -184,7 +184,7 @@ public class UserAdminPageUI_V2 extends JFrame{
                 for (JTextField jTextField : arrayCreateFields){
                     jTextField.setPreferredSize(new Dimension(50, 30));
                 }
-                // Choice
+                // Choice/Dropdown list
                 choiceCreateProfile.setPreferredSize(new Dimension(250, 30));
                 String [] arrayAllProfiles = {"Admin", "Owner", "Manager", "Staff"};
                 // To prevent duplicated values in the dropdown list
@@ -267,7 +267,7 @@ public class UserAdminPageUI_V2 extends JFrame{
             JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            String createProfile = fieldCreateProfile.getText().toUpperCase();
+            String createProfile = fieldCreateProfile.getText().toLowerCase();
             System.out.println(createProfile);
         }
     }
