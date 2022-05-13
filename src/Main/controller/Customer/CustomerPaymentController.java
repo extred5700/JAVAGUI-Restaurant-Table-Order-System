@@ -1,25 +1,25 @@
 package Main.controller.Customer;
 
-import Main.entity.Customer;
+import Main.entity.Cart;
 
 public class CustomerPaymentController {
     // execute payment method
-    public boolean payment(Customer customer, String pNum) {
-        return customer.ePayment(pNum);
+    public boolean payment(int table_no, String pNum) {
+        return new Cart(table_no).makePayment(pNum);
     }
 
     // validate phone number
-    public boolean validatePhoneNumber(Customer customer, String pNum) {
-        return customer.getCart().validatePhoneNumber(pNum);
+    public boolean validatePhoneNumber(int table_no, String pNum) {
+        return new Cart(table_no).validatePhoneNumber(pNum);
     }
 
     // get total price
-    public float getTotalPrice(Customer customer) {
-        return customer.getCart().getTotalPrice();
+    public float getTotalPrice(int table_no) {
+        return new Cart(table_no).getTotalPrice();
     }
 
     // check for coupon
-    public boolean discountCoupon(Customer customer, String coupon) {
-        return customer.inputDiscount(coupon);
+    public boolean discountCoupon(int table_no, String coupon) {
+        return new Cart(table_no).applyDiscount(coupon);
     }
 }

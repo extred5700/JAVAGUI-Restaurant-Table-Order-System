@@ -9,6 +9,7 @@ public class Cart {
 
     // Variables
     private int transaction_id;
+//    private float total_price;
 
     // Default Constructor
     public Cart() {
@@ -225,5 +226,4 @@ public class Cart {
     public boolean validatePhoneNumber(String phoneNumber) {
         return phoneNumber.length() == 8 && (phoneNumber.charAt(0) == '8' || phoneNumber.charAt(0) == '9');
     }
-
 }
