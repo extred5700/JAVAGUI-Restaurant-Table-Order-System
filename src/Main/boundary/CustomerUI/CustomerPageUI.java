@@ -2,7 +2,6 @@ package Main.boundary.CustomerUI;
 
 import Main.boundary.CustomerLoginPage;
 import Main.controller.Customer.*;
-import Main.entity.Customer;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,7 +11,7 @@ import java.awt.event.*;
 
 public class CustomerPageUI extends JFrame {
     /* Variable declaration */
-    private Customer customer; // Create Customer object
+    int table_no;
 
     /* Customer Page JFrame */
     private final JFrame customerUIFrame = new JFrame("Customer Homepage");
@@ -98,7 +97,7 @@ public class CustomerPageUI extends JFrame {
     // Constructor
     public CustomerPageUI(int table_no){
         // initialise variables
-        customer = new Customer(table_no);
+        this.table_no = table_no;
 
         // set JFrame
         customerUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -258,7 +257,7 @@ public class CustomerPageUI extends JFrame {
     // Construct table to display menu items
     private Component menuTableConstruction(String category) {
         CustomerViewMenuController viewMenuController = new CustomerViewMenuController();
-        String [][] data = viewMenuController.viewMenu(customer, category);
+        String [][] data = viewMenuController.viewMenu(category);
         // Display data in a table format
         String [] columnTableNames = {"Item ID","Food Name", "Price"};
         tableMenuItems = new JTable(data, columnTableNames);
@@ -353,7 +352,7 @@ public class CustomerPageUI extends JFrame {
             JOptionPane.showMessageDialog(null, "Quantity cannot be 0.", "Error!", JOptionPane.WARNING_MESSAGE);
         }
         else {
-            addToCartController.addToCart(customer, Integer.parseInt(item_id), Integer.parseInt(qty));
+            addToCartController.addToCart(table_no, Integer.parseInt(item_id), Integer.parseInt(qty));
             JOptionPane.showMessageDialog(null, "Item has been added to your cart!", "Success!", JOptionPane.INFORMATION_MESSAGE);
             fieldItemId.setText("");
             fieldItemName.setText("");
@@ -478,10 +477,10 @@ public class CustomerPageUI extends JFrame {
         }
         else {
             if (Integer.parseInt(qty) == 0) {
-                editCartController.deleteItem(customer, Integer.parseInt(order_id));
+                editCartController.deleteItem(table_no, Integer.parseInt(order_id));
             }
             else {
-                editCartController.editQty(customer, Integer.parseInt(order_id), Integer.parseInt(qty));
+                editCartController.editQty(table_no, Integer.parseInt(order_id), Integer.parseInt(qty));
             }
             JOptionPane.showMessageDialog(null, "Your Cart has been Updated!", "Success!", JOptionPane.WARNING_MESSAGE);
             // Refresh the cart items
@@ -500,7 +499,7 @@ public class CustomerPageUI extends JFrame {
             JOptionPane.showMessageDialog(null, "You have not selected an item!", "Error!", JOptionPane.WARNING_MESSAGE);
         }
         else {
-            editCartController.deleteItem(customer, Integer.parseInt(order_id));
+            editCartController.deleteItem(table_no, Integer.parseInt(order_id));
             JOptionPane.showMessageDialog(null, "Item has been deleted from your cart!", "Success!", JOptionPane.INFORMATION_MESSAGE);
             // Refresh the cart items
             editCartPanel();
@@ -511,7 +510,7 @@ public class CustomerPageUI extends JFrame {
     // Construct table for EDIT Page
     private Component editCartTableConstruction() {
         CustomerViewCartController viewCartController = new CustomerViewCartController();
-        String [][] data = viewCartController.viewCart(customer);
+        String [][] data = viewCartController.viewCart(table_no);
         // Display data in a table format
         String [] columnTableNames = {"Order ID","Food Name", "Quantity", "Price"};
         tableViewCart = new JTable(data, columnTableNames);
@@ -570,7 +569,7 @@ public class CustomerPageUI extends JFrame {
     // Construct table for VIEW Page
     private Component viewCartTableConstruction() {
         CustomerViewCartController viewCartController = new CustomerViewCartController();
-        String [][] data = viewCartController.viewCart(customer);
+        String [][] data = viewCartController.viewCart(table_no);
         // Display data in a table format
         String [] columnTableNames = {"Order ID","Food Name", "Quantity", "Price"};
         tableViewCart = new JTable(data, columnTableNames);
@@ -630,7 +629,7 @@ public class CustomerPageUI extends JFrame {
     // Construct table for PAYMENT Page
     private Component paymentCartTableConstruction() {
         CustomerViewCartController viewCartController = new CustomerViewCartController();
-        String [][] data = viewCartController.viewCart(customer);
+        String [][] data = viewCartController.viewCart(table_no);
         // Display data in a table format
         String [] columnTableNames = {"Order ID","Food Name", "Quantity", "Price"};
         tableViewCart = new JTable(data, columnTableNames);
@@ -669,7 +668,9 @@ public class CustomerPageUI extends JFrame {
         CustomerPaymentController paymentController = new CustomerPaymentController();
 
         // set total price field
-        fieldPaymentTotalPrice.setText(String.valueOf(paymentController.getTotalPrice(customer)));
+        float totalPrice = Float.parseFloat(String.valueOf(paymentController.getTotalPrice(table_no)));
+        fieldPaymentTotalPrice.setText(String.valueOf(totalPrice));
+        /*fieldPaymentTotalPrice.setText(String.valueOf(paymentController.getTotalPrice(table_no)));*/
 
         /* Buttons */
         // Input Coupon and Make Payment Buttons
@@ -701,13 +702,13 @@ public class CustomerPageUI extends JFrame {
         }
         // Validate coupon
         else {
-            if (!paymentController.discountCoupon(customer, coupon)) { // validate coupon method returns false - invalid coupon
+            if (!paymentController.discountCoupon(table_no, coupon)) { // validate coupon method returns false - invalid coupon
                 JOptionPane.showMessageDialog(null, "Coupon is invalid!", "Error!", JOptionPane.WARNING_MESSAGE);
             }
             else { // validate coupon method return true - valid coupon - apply discount
                 JOptionPane.showMessageDialog(null, "Coupon is valid!", "Success!", JOptionPane.INFORMATION_MESSAGE);
                 // update total price field
-                fieldPaymentTotalPrice.setText(String.valueOf(paymentController.getTotalPrice(customer)));
+                fieldPaymentTotalPrice.setText(String.valueOf(paymentController.getTotalPrice(table_no)));
             }
         }
     }
@@ -720,11 +721,11 @@ public class CustomerPageUI extends JFrame {
             JOptionPane.showMessageDialog(null, "You have not entered your phone number!", "Error!", JOptionPane.WARNING_MESSAGE);
         }
         // Validate phone number
-        else if (!paymentController.validatePhoneNumber(customer, pNum)) { // validate phone number method returns false - invalid phone number
+        else if (!paymentController.validatePhoneNumber(table_no, pNum)) { // validate phone number method returns false - invalid phone number
             JOptionPane.showMessageDialog(null, "Please enter a valid phone number!", "Error!", JOptionPane.WARNING_MESSAGE);
         }
         else {
-            if (paymentController.payment(customer, pNum)) { // payment method returns true - payment successful
+            if (paymentController.payment(table_no, pNum)) { // payment method returns true - payment successful
                 JOptionPane.showMessageDialog(null, "Payment successful!", "Success!", JOptionPane.INFORMATION_MESSAGE);
                 // Go back to CustomerLoginPage
                 dispose();
