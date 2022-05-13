@@ -198,12 +198,12 @@ public class UserAdminPageUI extends JFrame{
         String createUsernameText = fieldCreateUsername.getText().toLowerCase();
         String createPasswordText = fieldCreatePassword.getText().toLowerCase();
         String createProfileText = fieldCreateProfile.getText().toUpperCase();
-        // validateCreate() method located in AddUserController.java
+        // validateCreate() method located in AdminCreateController.java
         if (createUsernameText.isEmpty() || createPasswordText.isEmpty() || createProfileText.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            AddUserController addUserController = new AddUserController();
+            AdminCreateController addUserController = new AdminCreateController();
             if (addUserController.validateCreate(createUsernameText, createPasswordText, createProfileText)){
                 JOptionPane.showMessageDialog(null, "Account is created successfully.", "Account Creation", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -268,8 +268,8 @@ public class UserAdminPageUI extends JFrame{
 
     // 2b) Construction of table variables for EDIT functions
     public Component editTableConstruction(){
-        ViewUserController viewUserController = new ViewUserController();
-        String [][] data = viewUserController.getUserInfo();
+        AdminViewController adminViewController = new AdminViewController();
+        String [][] data = adminViewController.getUserInfo();
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
         tableEditUsers = new JTable(data, columnTableNames);
@@ -318,7 +318,7 @@ public class UserAdminPageUI extends JFrame{
             int rowSelected = tableEditUsers.getSelectedRow();
             if (rowSelected != -1){
                 String oldUsername = tableEditUsers.getModel().getValueAt(rowSelected,0).toString();
-                EditUserController editUserController = new EditUserController();
+                AdminEditController editUserController = new AdminEditController();
                 if (editUserController.editUserAccount(oldUsername, newUsername, newPassword, newProfile)){
                     JOptionPane.showMessageDialog(null, "Account has been successful updated.", "Account Update", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -348,8 +348,8 @@ public class UserAdminPageUI extends JFrame{
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
         // Initial Table Construction
-        ViewUserController viewUserController = new ViewUserController();
-        String [][] ini_data = viewUserController.getUserInfo();
+        AdminViewController adminViewController = new AdminViewController();
+        String [][] ini_data = adminViewController.getUserInfo();
         JScrollPane searchScrollPane1 = (JScrollPane) viewTableConstruction(ini_data);
 
         // Text field
@@ -411,8 +411,8 @@ public class UserAdminPageUI extends JFrame{
     // 3c) View button function to allow the user to search for a username or user profile by passing the 2 data to the controller
     public void viewButton_Onclick(String searchStatus){
         String dataKeyedIn = fieldSearchUser.getText();
-        ViewUserController viewUserController = new ViewUserController();
-        String [][] data = viewUserController.searchBy(dataKeyedIn, searchStatus); // get data from controller which gets it from entity User Admin
+        AdminViewController adminViewController = new AdminViewController();
+        String [][] data = adminViewController.searchBy(dataKeyedIn, searchStatus); // get data from controller which gets it from entity User Admin
         viewTableConstruction(data); // Refresh table
     }
 
@@ -462,8 +462,8 @@ public class UserAdminPageUI extends JFrame{
 
     // 4b) Construction of the JTable, Mouse Click Listener to display an account's details in the text field (JTable type returned as a JScrollPane type)
     public Component suspendTableConstruction(){
-        SuspendUserController suspendUserController = new SuspendUserController();
-        String [][] data = suspendUserController.getUserInfo();
+        AdminSuspendController adminSuspendController = new AdminSuspendController();
+        String [][] data = adminSuspendController.getUserInfo();
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
         tableSuspendUsers = new JTable(data, columnTableNames);
@@ -501,8 +501,8 @@ public class UserAdminPageUI extends JFrame{
                 default -> "";
                 // Change active status to the opposite and update the database
             };
-            SuspendUserController suspendUserController = new SuspendUserController();
-            if (suspendUserController.suspendUserAccount(selectedUsername, newActiveStatus)){
+            AdminSuspendController adminSuspendController = new AdminSuspendController();
+            if (adminSuspendController.suspendUserAccount(selectedUsername, newActiveStatus)){
                 if (newActiveStatus.equals("N")){
                     JOptionPane.showMessageDialog(null, "Account has been successfully suspended!", "Suspend User", JOptionPane.INFORMATION_MESSAGE);
                     suspendTableConstruction();
@@ -537,8 +537,8 @@ public class UserAdminPageUI extends JFrame{
                 default -> "";
                 // Change active status to the opposite and update the database
             };
-            SuspendUserController suspendUserController = new SuspendUserController();
-            if (suspendUserController.suspendUserProfile(selectedUserProfile, newActiveStatus)){
+            AdminSuspendController adminSuspendController = new AdminSuspendController();
+            if (adminSuspendController.suspendUserProfile(selectedUserProfile, newActiveStatus)){
                 if (newActiveStatus.equals("N")){
                     JOptionPane.showMessageDialog(null, "Profile has been successfully suspended!", "Suspend User Profile", JOptionPane.INFORMATION_MESSAGE);
                     suspendTableConstruction();
