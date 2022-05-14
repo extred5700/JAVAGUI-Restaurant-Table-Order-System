@@ -412,7 +412,7 @@ public class UserAdminPageUI extends JFrame{
     public void viewButton_Onclick(String searchStatus){
         String dataKeyedIn = fieldSearchUser.getText();
         AdminViewController adminViewController = new AdminViewController();
-        String [][] data = adminViewController.searchBy(dataKeyedIn, searchStatus); // get data from controller which gets it from entity User Admin
+        String [][] data = adminViewController.searchByUsername(dataKeyedIn, searchStatus); // get data from controller which gets it from entity User Admin
         viewTableConstruction(data); // Refresh table
     }
 

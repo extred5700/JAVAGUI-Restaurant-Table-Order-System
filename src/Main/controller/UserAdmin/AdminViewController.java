@@ -14,7 +14,7 @@ public class AdminViewController {
         return userAdmin.getUserInfoFromDB();
     }
 
-    public String [][] searchBy(String dataKeyedIn, String searchStatus){
+    public String [][] searchByUsername(String dataKeyedIn, String searchStatus){
         return userAdmin.searchAccount(dataKeyedIn, searchStatus);
     }
 }

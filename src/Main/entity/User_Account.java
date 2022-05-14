@@ -42,15 +42,15 @@ public class User_Account extends Staff{
     } // end of method checkUserExistence()
 
     // Function to Create a user account #3
-    public boolean createAccount(String newUsername, String newPassword, String newProfile) {
+    public boolean createAccount(String username, String password, String profile) {
         boolean isUserCreated = false;
         String active = "Y";
         int profileID = 0;
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
-        //obtain profile_id first
+        // Obtain profile_id first
         try{
             Statement statement = dbConnection.createStatement();
-            String query1 = "SELECT profile_id FROM user_profile WHERE profile_name = '" + newProfile + "'";
+            String query1 = "SELECT profile_id FROM user_profile WHERE profile_name = '" + profile + "'";
             ResultSet rs = statement.executeQuery(query1);
             while (rs.next()) { //This is the result set
                 profileID = rs.getInt("profile_id");
@@ -63,8 +63,8 @@ public class User_Account extends Staff{
         try{
             String query2 = "insert into user_account (username, password, profile_id, account_active)" + " values (?, ?, ?, ?) ";
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query2);
-            preparedStatement.setString(1, newUsername);
-            preparedStatement.setString(2, newPassword);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
             preparedStatement.setInt(3, profileID);
             preparedStatement.setString(4, active);
             preparedStatement.execute();
@@ -77,10 +77,24 @@ public class User_Account extends Staff{
     }
 
     // Function to Edit user accounts #4
-    public boolean editAccount(String oldUsername, String newUsername, String newPassword) {
+    public boolean editAccount(String oldUsername, String newUsername, String newPassword, String newProfile) {
         boolean isUserEdited = false;
+        int profileID = 0;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "UPDATE user_account SET username ='" + newUsername + "',password='" + newPassword + "' WHERE username ='" + oldUsername + "'";
+        // Obtain profile_id first
+        try{
+            Statement statement = dbConnection.createStatement();
+            String query1 = "SELECT profile_id FROM user_profile WHERE profile_name = '" + newProfile + "'";
+            ResultSet rs = statement.executeQuery(query1);
+            while (rs.next()) { //This is the result set
+                profileID = rs.getInt("profile_id");
+            }
+        }catch (Exception e){
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+        }
+
+        String query = "UPDATE user_account SET username ='" + newUsername + "',password='" + newPassword + "',profile_id='" + profileID + "' WHERE username ='" + oldUsername + "'";
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query);
             isUserEdited = true;

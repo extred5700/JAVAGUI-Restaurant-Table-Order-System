@@ -157,15 +157,15 @@ public class User_Profile extends Staff{
             e.printStackTrace();
         }
         // Convert Array List to a 2D array
-        String [][] arrayAllSearchedData = new String[arrayListSearchedProfileID.size()][3];
-        for (int row = 0; row < arrayAllSearchedData.length; row++){
-            for (int column = 0; column < arrayAllSearchedData[row].length; column++){
-                arrayAllSearchedData[row][0] = arrayListSearchedProfileID.get(row);
-                arrayAllSearchedData[row][1] = arrayListSearchedProfileName.get(row);
-                arrayAllSearchedData[row][2] = arrayListSearchedActive.get(row);
+        String [][] arrayAllProfileData = new String[arrayListSearchedProfileID.size()][3];
+        for (int row = 0; row < arrayAllProfileData.length; row++){
+            for (int column = 0; column < arrayAllProfileData[row].length; column++){
+                arrayAllProfileData[row][0] = arrayListSearchedProfileID.get(row);
+                arrayAllProfileData[row][1] = arrayListSearchedProfileName.get(row);
+                arrayAllProfileData[row][2] = arrayListSearchedActive.get(row);
             }
         }
-        return arrayAllSearchedData;
+        return arrayAllProfileData;
     }
 
     // Function to suspend/un-suspend User Profile #7

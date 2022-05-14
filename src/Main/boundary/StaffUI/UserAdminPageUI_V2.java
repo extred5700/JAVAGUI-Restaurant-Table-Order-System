@@ -2,12 +2,15 @@ package Main.boundary.StaffUI;
 
 import Main.boundary.StaffLoginPage;
 import Main.controller.UserAdmin.AdminCreateController;
+import Main.controller.UserAdmin.AdminEditController;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UserAdminPageUI_V2 extends JFrame{
     /* Variable declaration */
@@ -43,6 +46,25 @@ public class UserAdminPageUI_V2 extends JFrame{
     // Button
     private final JButton buttonCreateUserProfile = new JButton("Create User Profile");
 
+    /* 2. EDIT function */
+    private final JPanel panelEdit = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+    // Display Buttons
+    private final JButton buttonDisplayEditAccount = new JButton("User Account");
+    private final JButton buttonDisplayEditProfile = new JButton("User Profile");
+    /* 1a) Edit User Account */
+    // Table
+    private JTable tableEditAccount;
+    // Labels
+    private final JLabel labelEditUsername = new JLabel("Username: ", SwingConstants.CENTER);
+    private final JLabel labelEditPassword = new JLabel("Password: ", SwingConstants.CENTER);
+    // Text Fields
+    private final JTextField fieldEditUsername = new JTextField(20);
+    private final JTextField fieldEditPassword = new JTextField(20);
+    // Choice
+    private final Choice choiceEditProfile = new Choice();
+    // Button
+    private final JButton buttonEditUserAccount = new JButton("Edit User Account");
+
 
     public UserAdminPageUI_V2(){
         userAdminUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +80,10 @@ public class UserAdminPageUI_V2 extends JFrame{
         /* Button Function for User Admin */
         // 1. CREATE function
         displayCreatePanel();
-        panelCreate.setVisible(true);
+
+        // 2. EDIT function
+        displayEditPanel();
+        //panelEdit.setVisible(true);
 
         userAdminUIFrame.setVisible(true);
     }
@@ -94,9 +119,12 @@ public class UserAdminPageUI_V2 extends JFrame{
             case "Create" -> {
                 displayCreatePanel();
                 panelCreate.setVisible(true);
+                panelEdit.setVisible(false);
             }
             case "Edit" -> {
-
+                displayEditPanel();
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(true);
             }
             case "View" -> {
 
@@ -283,11 +311,189 @@ public class UserAdminPageUI_V2 extends JFrame{
 
 
     /* 2. EDIT function
-    * void displayCreatePanel() - Display JPanel for User Admin to create an account or profile
+    * 2a) void displayEditPanel() - Display JPanel for User Admin to edit an account or profile
+    * 2b) void buttonEditChoices_Onclick(String buttonPressed) - Allows the user to choose between editing of User Account or User Profile
+    * 2c) Component editAccountTableConstruction() - Construction of table variables for EDIT USER ACCOUNT functions
+    * 2d) void buttonEditUserAccount_Onclick() - Edit User Account button function to allow the user to edit a Menu Item by passing the data to the controller
     * */
+    // 2a) Display JPanel for User Admin to edit an account or profile
     public void displayEditPanel(){
+        displayTitledBorder(panelEdit, "Edit User Account / User Profile");
+
+        // Remove all components then add choice buttons on the top
+        Component[] componentList = panelEdit.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JScrollPane || c instanceof Choice){
+                //Remove it
+                panelEdit.remove(c);
+            }
+            if (c instanceof JButton){
+                c.setEnabled(true);
+            }
+        }
+
+        // Choice buttons on top
+        JButton [] buttonChoices = {buttonDisplayEditAccount, buttonDisplayEditProfile};
+        for (JButton jButton : buttonChoices){
+            jButton.setPreferredSize(new Dimension(220, 30));
+            jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+            jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
+            jButton.setBackground(Color.WHITE);
+        }
+        panelEdit.add(buttonDisplayEditAccount, 0);
+        panelEdit.add(buttonDisplayEditProfile, 1);
+        // Action listener for displaying editing UI of User Account, also ensuring that the action listener is only created once
+        if (buttonDisplayEditAccount.getActionListeners().length == 0) {
+            buttonDisplayEditAccount.addActionListener(e -> buttonEditChoices_Onclick("User Account"));
+        }
+        // Action listener for displaying editing UI of User Profile, also ensuring that the action listener is only created once
+        if (buttonDisplayEditProfile.getActionListeners().length == 0) {
+            buttonDisplayEditProfile.addActionListener(e -> buttonEditChoices_Onclick("User Profile"));
+        }
+
+        // Add components to the JPanel
+        panelEdit.setPreferredSize(new Dimension(500, 550));
+        panelEdit.setBackground(Color.WHITE);
+        panelEdit.setVisible(false);
+        userAdminUIFrame.add(panelEdit);
+    }
+
+    // 2b) Allows the user to choose between editing of User Account or User Profile
+    public void buttonEditChoices_Onclick(String buttonPressed){
+        // Remove all components then add choice buttons on the top
+        Component[] componentList = panelEdit.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JScrollPane || c instanceof Choice){
+                //Remove it
+                panelEdit.remove(c);
+            }
+        }
+        panelEdit.add(buttonDisplayEditAccount, 0);
+        panelEdit.add(buttonDisplayEditProfile, 1);
+        panelEdit.revalidate();
+        panelEdit.repaint();
+
+        // Display relevant components based on the button pressed
+        switch(buttonPressed){
+            case "User Account" -> {
+                buttonDisplayEditAccount.setEnabled(false);
+                buttonDisplayEditProfile.setEnabled(true);
+                // Table
+                JScrollPane editUserAccountScrollPane = (JScrollPane) editAccountTableConstruction();
+                panelEdit.add(editUserAccountScrollPane); // Add table to JPanel
+                // Labels
+                JLabel[] arrayEditFoodItemLabels = {labelEditUsername, labelEditPassword};
+                for (JLabel jLabel : arrayEditFoodItemLabels) {
+                    jLabel.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 18));
+                }
+                // Text Fields
+                JTextField[] arrayEditAccountTextFields = {fieldEditUsername, fieldEditPassword};
+                for (int i = 0; i < arrayEditAccountTextFields.length; i++) {
+                    arrayEditAccountTextFields[i].setPreferredSize(new Dimension(50, 30));
+                }
+                // Choice/Dropdown list
+                choiceEditProfile.setPreferredSize(new Dimension(250, 30));
+                AdminEditController adminEditController = new AdminEditController();
+                String [] arrayAllProfiles = adminEditController.getArrayOfProfiles();
+                choiceEditProfile.removeAll();
+                // To prevent duplicated values in the dropdown list
+                if (choiceEditProfile.getItemCount() != arrayAllProfiles.length){
+                    for (String arrayAllProfile : arrayAllProfiles) {
+                        choiceEditProfile.add(arrayAllProfile);
+                    }
+                }
+                // Button
+                buttonEditUserAccount.setPreferredSize(new Dimension(250, 30));
+                buttonEditUserAccount.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+                buttonEditUserAccount.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+                buttonEditUserAccount.setBackground(Color.WHITE);
+                // Action listener for creation of User Profiles, also ensuring that the action listener is only created once
+                if (buttonEditUserAccount.getActionListeners().length == 0){
+                    buttonEditUserAccount.addActionListener(e -> buttonEditUserAccount_Onclick());
+                }
+                // Add Labels, text fields, choice and button
+                panelEdit.add(labelEditUsername);
+                panelEdit.add(fieldEditUsername);
+                panelEdit.add(labelEditPassword);
+                panelEdit.add(fieldEditPassword);
+                panelEdit.add(choiceEditProfile);
+                panelEdit.add(buttonEditUserAccount);
+            }
+            case "User Profile" -> {
+                buttonDisplayEditProfile.setEnabled(false);
+                buttonDisplayEditAccount.setEnabled(true);
+            }
+        } // end of switch statements
 
     }
 
+    // 2c) Construction of table variables for EDIT USER ACCOUNT functions
+    public Component editAccountTableConstruction(){
+        // Display Table and table click listener
+        AdminEditController adminEditController = new AdminEditController();
+        String [][] data = adminEditController.getArrayOfAccounts();
+        // Display data in a table format
+        String[] columnTableNames = {"Username", "Password", "User Profile", "Active"};
+        tableEditAccount = new JTable(data, columnTableNames);
+        JScrollPane editUserAccountScrollPane1 = new JScrollPane(tableEditAccount);
+        editUserAccountScrollPane1.setPreferredSize(new Dimension(485, 200)); // width then height
+        // Table Click Listener
+        tableEditAccount.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int getRow = tableEditAccount.getSelectedRow();
+                // Display details on the text fields
+                fieldEditUsername.setText(tableEditAccount.getModel().getValueAt(getRow, 0).toString());
+                fieldEditPassword.setText(tableEditAccount.getModel().getValueAt(getRow, 1).toString());
+            }
+        });
+        /* REMOVE COMPONENTS */
+        Component[] componentList = panelEdit.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JScrollPane){
+                //Remove it
+                panelEdit.remove(c);
+            }
+        }
+        panelEdit.add(editUserAccountScrollPane1, 2);
+        panelEdit.revalidate();
+        panelEdit.repaint();
+        return editUserAccountScrollPane1;
+    }
+
+    // 2d) Edit User Account button function to allow the user to edit a Menu Item by passing the data to the controller
+    public void buttonEditUserAccount_Onclick(){
+        if (fieldEditUsername.getText().isEmpty() || fieldEditPassword.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty!", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            int rowSelected = tableEditAccount.getSelectedRow();
+            // Check if the User Admin Actor doesn't key in an invalid User Account
+            if (rowSelected != -1){
+                String oldUsername = tableEditAccount.getModel().getValueAt(rowSelected,0).toString();
+                String newUsername = fieldEditUsername.getText().toLowerCase();
+                String newPassword = fieldEditPassword.getText().toLowerCase();
+                String profile = choiceEditProfile.getSelectedItem();
+                AdminEditController adminEditController = new AdminEditController();
+                // Send data over to the controller
+                if (adminEditController.editUserAccount(oldUsername, newUsername, newPassword, profile)){
+                    JOptionPane.showMessageDialog(null, "User Account has been successful updated.", "Account Update", JOptionPane.INFORMATION_MESSAGE);
+                    editAccountTableConstruction();
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "User Account has not been successful updated.", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "No such account!", "Error!", JOptionPane.ERROR_MESSAGE);
+            } // end of if-else statements
+        } // end of if-else statements
+    }
 
 }
