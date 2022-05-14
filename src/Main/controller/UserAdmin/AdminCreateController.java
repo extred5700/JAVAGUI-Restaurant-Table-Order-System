@@ -1,22 +1,23 @@
 package Main.controller.UserAdmin;
 
 import Main.entity.Staff;
+import Main.entity.User_Account;
 import Main.entity.User_Admin;
 import Main.entity.User_Profile;
 
 public class AdminCreateController {
-    User_Admin userAdmin = new User_Admin();
+    User_Account user_account = new User_Account();
     User_Profile user_profile = new User_Profile();
 
     // Validate Account's existence before creation
     public boolean validateCreateAccount(String username, String password, String profile){
         // If User Account already in use
-        if (userAdmin.checkUserExistence(username, password, profile)){
+        if (user_account.checkUserExistence(username, password, profile)){
             return false; // return false as user exist, does not validate creation of account
         }
         // If User Account does not exist
         else{
-            return userAdmin.createAccount(username, password, profile);
+            return user_account.createAccount(username, password, profile);
         }
     }
 

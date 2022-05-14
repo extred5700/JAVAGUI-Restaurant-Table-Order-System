@@ -45,7 +45,7 @@ public class User_Account extends Staff{
     public boolean createAccount(String newUsername, String newPassword, String newProfile) {
         boolean isUserCreated = false;
         String active = "Y";
-        int profileID = 0;
+        int profileID = 1;
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
         //obtain profile_id first
         try{

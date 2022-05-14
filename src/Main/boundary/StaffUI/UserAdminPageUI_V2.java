@@ -186,7 +186,7 @@ public class UserAdminPageUI_V2 extends JFrame{
                 }
                 // Choice/Dropdown list
                 choiceCreateProfile.setPreferredSize(new Dimension(250, 30));
-                String [] arrayAllProfiles = {"Admin", "Owner", "Manager", "Staff"};
+                String [] arrayAllProfiles = {"user admin", "restaurant owner", "restaurant manager", "restaurant staff"};
                 // To prevent duplicated values in the dropdown list
                 if (choiceCreateProfile.getItemCount() != arrayAllProfiles.length){
                     for (String arrayAllProfile : arrayAllProfiles) {
