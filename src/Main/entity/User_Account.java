@@ -45,12 +45,12 @@ public class User_Account extends Staff{
     public boolean createAccount(String newUsername, String newPassword, String newProfile) {
         boolean isUserCreated = false;
         String active = "Y";
-        int profileID = 1;
+        int profileID = 0;
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
         //obtain profile_id first
         try{
             Statement statement = dbConnection.createStatement();
-            String query1 = "SELECT profile_id FROM user_profile WHERE profile_name = " + newProfile + "'";
+            String query1 = "SELECT profile_id FROM user_profile WHERE profile_name = '" + newProfile + "'";
             ResultSet rs = statement.executeQuery(query1);
             while (rs.next()) { //This is the result set
                 profileID = rs.getInt("profile_id");
