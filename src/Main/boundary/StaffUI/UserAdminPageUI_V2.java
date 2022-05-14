@@ -186,7 +186,9 @@ public class UserAdminPageUI_V2 extends JFrame{
                 }
                 // Choice/Dropdown list
                 choiceCreateProfile.setPreferredSize(new Dimension(250, 30));
-                String [] arrayAllProfiles = {"user admin", "restaurant owner", "restaurant manager", "restaurant staff"};
+                AdminCreateController adminCreateController = new AdminCreateController();
+                String [] arrayAllProfiles = adminCreateController.getArrayOfProfiles();
+                choiceCreateProfile.removeAll();
                 // To prevent duplicated values in the dropdown list
                 if (choiceCreateProfile.getItemCount() != arrayAllProfiles.length){
                     for (String arrayAllProfile : arrayAllProfiles) {
@@ -252,7 +254,7 @@ public class UserAdminPageUI_V2 extends JFrame{
             // Determine if the user account exist, if not, create a User Account
             AdminCreateController addUserController = new AdminCreateController();
             if (addUserController.validateCreateAccount(createUsernameText, createPasswordText, createSelectedProfile)){
-                JOptionPane.showMessageDialog(null, "User Account is created successfully.", "Account Creation", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "User Account is created successfully.", "User Account Creation", JOptionPane.INFORMATION_MESSAGE);
             }
             else{
                 JOptionPane.showMessageDialog(null, "User Account already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -268,8 +270,23 @@ public class UserAdminPageUI_V2 extends JFrame{
         }
         else{
             String createProfile = fieldCreateProfile.getText().toLowerCase();
-            System.out.println(createProfile);
+            // Determine if the user profile exist, if not, create a User Account
+            AdminCreateController addUserController = new AdminCreateController();
+            if (addUserController.validateCreateProfile(createProfile)){
+                JOptionPane.showMessageDialog(null, "User Profile is created successfully.", "User Profile Creation", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "User Profile already exist.", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
         }
+    }
+
+
+    /* 2. EDIT function
+    * void displayCreatePanel() - Display JPanel for User Admin to create an account or profile
+    * */
+    public void displayEditPanel(){
+
     }
 
 

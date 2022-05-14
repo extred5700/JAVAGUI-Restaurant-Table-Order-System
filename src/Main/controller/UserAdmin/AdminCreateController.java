@@ -9,6 +9,11 @@ public class AdminCreateController {
     User_Account user_account = new User_Account();
     User_Profile user_profile = new User_Profile();
 
+    // Get all available profiles for User Admin to select from the dropdown box
+    public String [] getArrayOfProfiles(){
+        return user_profile.existingProfile();
+    }
+
     // Validate Account's existence before creation
     public boolean validateCreateAccount(String username, String password, String profile){
         // If User Account already in use
