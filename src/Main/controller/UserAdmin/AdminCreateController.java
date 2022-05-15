@@ -1,8 +1,6 @@
 package Main.controller.UserAdmin;
 
-import Main.entity.Staff;
 import Main.entity.User_Account;
-import Main.entity.User_Admin;
 import Main.entity.User_Profile;
 
 public class AdminCreateController {
