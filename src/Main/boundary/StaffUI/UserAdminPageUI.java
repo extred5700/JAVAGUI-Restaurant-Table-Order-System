@@ -268,8 +268,8 @@ public class UserAdminPageUI extends JFrame{
 
     // 2b) Construction of table variables for EDIT functions
     public Component editTableConstruction(){
-        AdminViewController adminViewController = new AdminViewController();
-        String [][] data = adminViewController.getUserInfo();
+        AdminViewSearchController adminViewSearchController = new AdminViewSearchController();
+        String [][] data = adminViewSearchController.getUserAccounts();
         // Display data in a table format
         String [] columnTableNames = {"Username", "Password","User Profile", "Active"};
         tableEditUsers = new JTable(data, columnTableNames);
@@ -348,8 +348,8 @@ public class UserAdminPageUI extends JFrame{
         titledBorder.setTitleFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
 
         // Initial Table Construction
-        AdminViewController adminViewController = new AdminViewController();
-        String [][] ini_data = adminViewController.getUserInfo();
+        AdminViewSearchController adminViewSearchController = new AdminViewSearchController();
+        String [][] ini_data = adminViewSearchController.getUserAccounts();
         JScrollPane searchScrollPane1 = (JScrollPane) viewTableConstruction(ini_data);
 
         // Text field
@@ -411,8 +411,8 @@ public class UserAdminPageUI extends JFrame{
     // 3c) View button function to allow the user to search for a username or user profile by passing the 2 data to the controller
     public void viewButton_Onclick(String searchStatus){
         String dataKeyedIn = fieldSearchUser.getText();
-        AdminViewController adminViewController = new AdminViewController();
-        String [][] data = adminViewController.searchByUsername(dataKeyedIn, searchStatus); // get data from controller which gets it from entity User Admin
+        AdminViewSearchController adminViewSearchController = new AdminViewSearchController();
+        String [][] data = adminViewSearchController.searchBy(dataKeyedIn, searchStatus); // get data from controller which gets it from entity User Admin
         viewTableConstruction(data); // Refresh table
     }
 

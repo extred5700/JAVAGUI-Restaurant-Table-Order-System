@@ -3,6 +3,7 @@ package Main.boundary.StaffUI;
 import Main.boundary.StaffLoginPage;
 import Main.controller.UserAdmin.AdminCreateController;
 import Main.controller.UserAdmin.AdminEditController;
+import Main.controller.UserAdmin.AdminViewSearchController;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -81,6 +82,16 @@ public class UserAdminPageUI_V2 extends JFrame{
     // Display Buttons
     private final JButton buttonDisplaySearchAccount = new JButton("User Account");
     private final JButton buttonDisplaySearchProfile = new JButton("User Profile");
+    /* 3a) View/Search User Accounts */
+    // Table
+    private JTable tableSearchAccount;
+    // Label
+    private final JLabel labelSearchUsername = new JLabel("Username: ", SwingConstants.CENTER);
+    // Text Field
+    private final JTextField fieldSearchUsername = new JTextField(20);
+    // Button
+    private final JButton buttonViewUserAccount = new JButton("Search By Username");
+
 
     public UserAdminPageUI_V2(){
         userAdminUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -443,7 +454,7 @@ public class UserAdminPageUI_V2 extends JFrame{
                 if (buttonEditUserAccount.getActionListeners().length == 0){
                     buttonEditUserAccount.addActionListener(e -> buttonEditUserAccount_Onclick());
                 }
-                // Add Labels, text fields, choice and button
+                // Add Components to the JPanel
                 panelEdit.add(labelEditUsername);
                 panelEdit.add(fieldEditUsername);
                 panelEdit.add(labelEditPassword);
@@ -477,7 +488,7 @@ public class UserAdminPageUI_V2 extends JFrame{
                 if (buttonEditUserProfile.getActionListeners().length == 0){
                     buttonEditUserProfile.addActionListener(e -> buttonEditUserProfile_Onclick());
                 }
-                // Add Labels, text fields, choice and button
+                // Add Components to the JPanel
                 panelEdit.add(labelEditProfileID);
                 panelEdit.add(fieldEditProfileID);
                 panelEdit.add(labelEditProfileName);
@@ -485,7 +496,6 @@ public class UserAdminPageUI_V2 extends JFrame{
                 panelEdit.add(buttonEditUserProfile);
             }
         } // end of switch statements
-
     }
 
     /* Methods 2c and 2d belongs to EDITING User Accounts */
@@ -627,7 +637,13 @@ public class UserAdminPageUI_V2 extends JFrame{
 
     /* VIEW/SEARCH function
     * 3a) void displaySearchPanel() - Display JPanel for User Admin to View & Search for an account or profile
-    * 3b)
+    * 3b) void buttonSearchChoices_Onclick(String buttonPressed) - Allows the user to choose between viewing/searching of User Account or User Profile
+    * Methods 3c and 3d belongs to VIEWING & SEARCHING User Accounts
+    * 3c) Component viewAccountTableConstruction(String [][] data) - Construction of table variables for SEARCHING USER ACCOUNT functions
+    * 3d) void buttonViewUserAccount_Onclick() - View button function to allow the user to search for a username by passing the data to the controller
+    * Methods 3e and 3f to VIEWING & SEARCHING User Profiles
+    * 3e)
+    * 3f)
     * */
     // 3a) Display JPanel for User Admin to View & Search for an account or profile
     public void displaySearchPanel(){
@@ -685,21 +701,93 @@ public class UserAdminPageUI_V2 extends JFrame{
                 panelEdit.remove(c);
             }
         }
-        panelSearch.add(buttonDisplayEditAccount, 0);
-        panelSearch.add(buttonDisplayEditProfile, 1);
+        panelSearch.add(buttonDisplaySearchAccount, 0);
+        panelSearch.add(buttonDisplaySearchProfile, 1);
         panelSearch.revalidate();
         panelSearch.repaint();
 
         // Display the relevant components based on the button pressed
         switch(buttonPressed){
             case "User Account" -> {
-                buttonDisplayEditAccount.setEnabled(false);
-                buttonDisplayEditProfile.setEnabled(true);
+                buttonDisplaySearchAccount.setEnabled(false);
+                buttonDisplaySearchProfile.setEnabled(true);
+
+                /* Table
+                * Call Controller to get a 2D array of all User Accounts to construct the table
+                */
+                AdminViewSearchController adminViewSearchController = new AdminViewSearchController();
+                String [][] arrayAllAccountData =  adminViewSearchController.getUserAccounts();
+                JScrollPane viewUserAccountScrollPane = (JScrollPane) viewAccountTableConstruction(arrayAllAccountData);
+                // Label
+                labelSearchUsername.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 18));
+                // Text Field
+                fieldSearchUsername.setPreferredSize(new Dimension(50, 30));
+                // Button
+                buttonViewUserAccount.setPreferredSize(new Dimension(220, 30));
+                buttonViewUserAccount.setBorder(BorderFactory.createLineBorder(Color.RED,1));
+                buttonViewUserAccount.setBackground(Color.WHITE);
+                // Action listener for searching of User Account, also ensuring that the action listener is only created once
+                if (buttonViewUserAccount.getActionListeners().length == 0){
+                    buttonViewUserAccount.addActionListener(e -> buttonViewUserAccount_Onclick());
+                }
+
+                // Add Components to the JPanel
+                panelSearch.add(viewUserAccountScrollPane);
+                panelSearch.add(labelSearchUsername);
+                panelSearch.add(fieldSearchUsername);
+                panelSearch.add(buttonViewUserAccount);
             }
             case "User Profile" -> {
-                buttonDisplayEditProfile.setEnabled(false);
-                buttonDisplayEditAccount.setEnabled(true);
+                buttonDisplaySearchProfile.setEnabled(false);
+                buttonDisplaySearchAccount.setEnabled(true);
+
+                // Add Components to the JPanel
             }
         } // end of switch statements
     }
+
+    // 3c) Construction of table variables for SEARCHING USER ACCOUNT functions
+    public Component viewAccountTableConstruction(String [][] data){
+        // Display data in a table format
+        String[] columnTableNames = {"Username", "Password", "User Profile", "Active"};
+        tableSearchAccount = new JTable(data, columnTableNames);
+        JScrollPane viewUserAccountScrollPane1 = new JScrollPane(tableSearchAccount);
+        viewUserAccountScrollPane1.setPreferredSize(new Dimension(485, 200)); // width then height
+
+        /* REMOVE COMPONENTS */
+        Component[] componentList = panelSearch.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JScrollPane){
+                //Remove it
+                panelSearch.remove(c);
+            }
+        }
+        panelSearch.add(viewUserAccountScrollPane1, 2);
+        panelSearch.revalidate();
+        panelSearch.repaint();
+        return viewUserAccountScrollPane1;
+    }
+
+    // 3d) View button function to allow the user to search for a username by passing the data to the controller
+    public void buttonViewUserAccount_Onclick(){
+        // Check if text field is empty
+        if (fieldSearchUsername.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            String dataKeyedIn = fieldSearchUsername.getText();
+            AdminViewSearchController adminViewSearchController = new AdminViewSearchController();
+            String [][] arrayAllSearchedData = adminViewSearchController.searchByUsername(dataKeyedIn);
+            // Refresh Table
+            viewAccountTableConstruction(arrayAllSearchedData);
+        } // end of if-else statements
+    }
+
+    // 3e)
+
+    // 3f)
+
+
 }
