@@ -2,6 +2,7 @@ package Main.boundary;
 
 import Main.boundary.StaffUI.*;
 import Main.controller.Staff.LoginController;
+import Main.controller.UserAdmin.AdminCreateController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,7 +78,7 @@ public class StaffLoginPage extends JFrame{
                 String staffProfile = staffType.getSelectedItem();  // Check which dropdown list's item has been selected
                 LoginController loginController = new LoginController(); // Controller Object to establish DB connection, attempt to login the user
                 if (loginController.validateLogin(staffUsername, staffPassword, staffProfile)) {
-                    loginSuccess(staffUsername, staffProfile);
+                    loginSuccess(staffProfile);
                 }
                 // If login fails
                 else {
@@ -110,31 +111,28 @@ public class StaffLoginPage extends JFrame{
 
     // Method to display Staff Log In Choices
     public void displayStaffChoices(){
-        staffType.add("User Admin");
-        staffType.add("Restaurant Owner");
-        staffType.add("Restaurant Manager");
-        staffType.add("Restaurant Staff");
+        AdminCreateController adminCreateController = new AdminCreateController();
+        String [] arrayAllProfiles = adminCreateController.getArrayOfProfiles();
+        staffType.removeAll();
+        if (staffType.getItemCount() != arrayAllProfiles.length){
+            for (String arrayAllProfile : arrayAllProfiles) {
+                staffType.add(arrayAllProfile);
+            }
+        }
         staffType.setBounds(200, 360, 200, 20);
         staffLoginFrame.getContentPane().add(staffType);
     } // end of method displayStaffChoices
 
     // Method to display the respective profile UI
-    public void loginSuccess(String username, String profile){
+    public void loginSuccess(String profile){
         dispose();
         staffLoginFrame.setVisible(false);
-        switch (profile){
-            case "User Admin":
-                new UserAdminPageUI(); // Display Administrator UI
-                break;
-            case "Restaurant Owner":
-                new OwnerPageUI();
-                break;
-            case "Restaurant Manager":
-                new ManagerPageUI();
-                break;
-            case "Restaurant Staff":
-                new RestaurantStaffPageUI();
-                break;
+        switch (profile) {
+            case "User Admin" -> new UserAdminPageUI(); // Display Administrator UI
+            case "Restaurant Owner" -> new OwnerPageUI();
+            case "Restaurant Manager" -> new ManagerPageUI();
+            case "Restaurant Staff" -> new RestaurantStaffPageUI();
+            case "default" -> System.out.println(1); // For Testing
         }
     } // end of method loginSuccess
 }
