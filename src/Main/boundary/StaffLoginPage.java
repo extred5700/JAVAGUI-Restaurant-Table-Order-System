@@ -128,10 +128,10 @@ public class StaffLoginPage extends JFrame{
         dispose();
         staffLoginFrame.setVisible(false);
         switch (profile) {
-            case "User Admin" -> new UserAdminPageUI(); // Display Administrator UI
-            case "Restaurant Owner" -> new OwnerPageUI();
-            case "Restaurant Manager" -> new ManagerPageUI();
-            case "Restaurant Staff" -> new RestaurantStaffPageUI();
+            case "user admin" -> new UserAdminPageUI(); // Display Administrator UI
+            case "restaurant owner" -> new OwnerPageUI();
+            case "restaurant manager" -> new ManagerPageUI();
+            case "restaurant staff" -> new RestaurantStaffPageUI();
             case "default" -> System.out.println(1); // For Testing
         }
     } // end of method loginSuccess
