@@ -1,0 +1,38 @@
+RESTAURANT STAFF CHANGES:
+
+Essentially, Cart entity will ONLY handle the order_history table.
+Aim to completely remove Restaurant_Staff entity IF POSSIBLE.
+
+Edit:
+	Controller change Restaurant_Staff restaurant_staff = new Restaurant_Staff            TO            Cart cart = new Cart()
+	
+	Edit Cart Status:
+		KQ : User Story #22 change to "As a Restaurant Staff, I want to edit cart status, so that I can change cart status to delivered/fulfilled
+		TW : editOrderStatus(int orderIDSelected) <-- this function move to cart entity because it will query order_history table
+	
+	Edit Cart:
+		KQ : User Story #23 change to "As a Restaurant Staff, I want to edit cart items so that I can assist customers who wish to edit their cart items after it has been sent to the kitchen"
+		TW : editOrder(int orderIDSelected, int newQuantity) <-- this function remove from Restaurant Staff completely.
+		TW : editCart(orderIDSelected, newQuantity) <-- Controller just call this function from Cart entity straight up.
+	
+Search:
+	Controller change Restaurant_Staff restaurant_staff = new Restaurant_Staff            TO            Cart cart = new Cart()
+
+	Search Orders by Table Number:
+		KQ : User Story #24 change to "As a Restaurant Staff, I want to search orders by table number, so that i am able to access specific table's orders."
+		TW : searchOrder(table_num) <-- Remove this function from Restaurant_Staff entity.
+		TW : return Cart(table_num).viewCart() <-- Controller to call this instead.
+		
+View:
+	Controller change Restaurant_Staff restaurant_staff = new Restaurant_Staff 			  TO 			Cart cart = new Cart()
+	
+	View all cart items:
+		TW : viewAllOrders() <-- This function move to Cart Entity.
+
+Delete:
+	Controller change Restaurant_Staff restaurant_staff = new Restaurant_Staff            TO            Cart cart = new Cart()
+	
+	Delete item from cart:
+		KQ : User Story #26 change to "As a Restaurant Staff, I want to delete orders from cart, so that I can remove invalid/cancelled orders"
+		TW : viewAllOrders() <-- To call from the cart entity as it has been moved there in View UserStory changes
+		TW : deleteOrder(int order_id) <-- This function remove completely, CONTROLLER JUST CALL deleteFromCart(order_id) from the cart entity.
