@@ -138,7 +138,6 @@ public class UserAdminPageUI extends JFrame{
 
         // 4. SUSPEND function
         displaySuspendPanel();
-        panelSuspend.setVisible(true);
 
         userAdminUIFrame.setVisible(true);
     }
