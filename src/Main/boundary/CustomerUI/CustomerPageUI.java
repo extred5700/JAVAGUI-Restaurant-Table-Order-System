@@ -482,7 +482,7 @@ public class CustomerPageUI extends JFrame {
             else {
                 editCartController.editQty(table_no, Integer.parseInt(order_id), Integer.parseInt(qty));
             }
-            JOptionPane.showMessageDialog(null, "Your Cart has been Updated!", "Success!", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Your Cart has been Updated!", "Success!", JOptionPane.INFORMATION_MESSAGE);
             // Refresh the cart items
             editCartPanel();
             panelEdit.setVisible(true);
@@ -733,7 +733,7 @@ public class CustomerPageUI extends JFrame {
                 new CustomerLoginPage();
             }
             else { // payment method returns false - payment unsuccessful
-                JOptionPane.showMessageDialog(null, "Payment unsuccessful. Please try again.", "Error!", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Payment unsuccessful. Please try again.", "Error!", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
