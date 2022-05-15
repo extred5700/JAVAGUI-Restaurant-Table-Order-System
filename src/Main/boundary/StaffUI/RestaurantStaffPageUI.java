@@ -478,6 +478,7 @@ public class RestaurantStaffPageUI extends JFrame {
     /* 4. DELETE function
     * 4a) void displayDeletePanel() - Display JPanel for Restaurant Staff to Delete orders
     * 4b) Component deleteTableConstruction() - Construction of the JTable, Mouse Click Listener to select an order ID (JTable type returned as a JScrollPane type)
+    * 4c) void deleteOrderButton_Onclick() - Delete button function to allow the user to delete an order by passing the selected Order ID into the controller
     */
     // 4a) Display JPanel for Restaurant Staff to Delete orders
     public void displayDeletePanel(){
