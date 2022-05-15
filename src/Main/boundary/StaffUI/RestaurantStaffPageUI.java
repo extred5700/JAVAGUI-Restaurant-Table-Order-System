@@ -288,7 +288,6 @@ public class RestaurantStaffPageUI extends JFrame {
                 else{
                     int orderIDSelected = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 0).toString());
                     // Check if the data keyed in Quantity Text Field is a numeric data type
-                    //if ((fieldEditQuantity.getText() != null) && (fieldEditQuantity.getText().matches("[1-9.]+"))){
                     if ((fieldEditQuantity.getText() != null) && (fieldEditQuantity.getText().matches("\\b([1-9]|[1-9][0-9]|100)\\b"))){ // Update: Max Quantity for a dish is 100 (Range is 1 - 100)
                         int oldQuantity = Integer.parseInt(tableEditOrder.getModel().getValueAt(tableEditOrder.getSelectedRow(), 2).toString());
                         // Check if quantity text field is edited to a new value
@@ -340,7 +339,7 @@ public class RestaurantStaffPageUI extends JFrame {
     /* 2. SEARCH function
      * 2a) void displaySearchPanel() - Display JPanel for Restaurant Staff to Search Orders based on Table Number
      * 2b) Component searchTableConstruction(String [][] data) - Construction of the JTable (JTable type returned as a JScrollPane type)
-     * 2c) void searchButton_OnClick(String [][] data) - ALL edit JPanel buttons
+     * 2c) void searchButton_OnClick(String [][] data) - Search button function to retrieve Customer Orders based on the value of the text field
      */
     // 2a) Display JPanel for Restaurant Staff to Search Orders based on Table Number
     public void displaySearchPanel(){
@@ -388,11 +387,11 @@ public class RestaurantStaffPageUI extends JFrame {
     }
 
     // 2b) Method to construction of the JTable, display all Customer orders (JTable type returned as a JScrollPane type)
-    public Component searchTableConstruction(String [][] data){
+    public Component searchTableConstruction(String [][] orders){
         // Display data in a table format
         String [] columnTableNames = {"Order ID", "Food Name", "Quantity", "Price"};
         // Table
-        tableSearchOrder = new JTable(data, columnTableNames);
+        tableSearchOrder = new JTable(orders, columnTableNames);
         JScrollPane searchScrollPane2 = new JScrollPane(tableSearchOrder);
         searchScrollPane2.setPreferredSize(new Dimension(470, 200)); // width then height
 
@@ -413,7 +412,7 @@ public class RestaurantStaffPageUI extends JFrame {
         return searchScrollPane2;
     }
 
-    // 2c) ALL edit JPanel buttons
+    // 2c) Search button function to retrieve Customer Orders based on the value of the text field
     public void searchButton_OnClick(){
         if (fieldSearchTableNumber.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Please enter a valid Table Number", "Error!", JOptionPane.WARNING_MESSAGE);

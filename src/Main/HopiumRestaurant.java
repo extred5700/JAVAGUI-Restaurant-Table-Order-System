@@ -1,5 +1,6 @@
 package Main;
 
+import Main.boundary.CustomerLoginPage;
 import Main.boundary.StaffUI.*;
 
 public class HopiumRestaurant {
@@ -9,16 +10,16 @@ public class HopiumRestaurant {
         /* Staff */
         //new StaffLoginPage();
         // Admin
-        new UserAdminPageUI();
+        //new UserAdminPageUI();
         // Owner
         //new OwnerPageUI();
         // Manager
         //new ManagerPageUI();
         // Restaurant Staff
-        //new RestaurantStaffPageUI();
+        new RestaurantStaffPageUI();
 
         /* Customer */
-        //new CustomerLoginPage();
+        new CustomerLoginPage();
         //new CustomerPageUI(42);
 
     }

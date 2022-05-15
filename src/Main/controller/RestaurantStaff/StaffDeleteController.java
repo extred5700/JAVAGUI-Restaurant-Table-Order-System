@@ -1,15 +1,15 @@
 package Main.controller.RestaurantStaff;
 
-import Main.entity.Restaurant_Staff;
+import Main.entity.Cart;
 
 public class StaffDeleteController {
-    Restaurant_Staff restaurant_staff = new Restaurant_Staff();
+    Cart cart = new Cart();
 
     public String [][] displayAllOrders(){
-        return restaurant_staff.viewAllOrders();
+        return cart.viewAllOrders();
     }
 
     public boolean deleteByOrderID(int order_id){
-        return restaurant_staff.deleteOrder(order_id);
+        return cart.deleteFromCart(order_id);
     }
 }

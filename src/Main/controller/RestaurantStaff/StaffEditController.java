@@ -1,21 +1,21 @@
 package Main.controller.RestaurantStaff;
 
-import Main.entity.Restaurant_Staff;
+import Main.entity.Cart;
 
 public class StaffEditController{
-    Restaurant_Staff restaurant_staff = new Restaurant_Staff();
+    Cart cart = new Cart();
 
     public String [][] displayOrders(){
-        return restaurant_staff.viewAllOrders();
+        return cart.viewAllOrders();
     }
 
     // EDIT order QUANTITY
     public boolean editCustomerOrder(int orderIDSelected, int newQuantity){
-        return restaurant_staff.editOrder(orderIDSelected, newQuantity);
+        return cart.editCart(orderIDSelected, newQuantity);
     }
 
     // FULFILLMENT of orders
     public boolean fulfillOrder(int orderIDSelected){
-        return restaurant_staff.editOrderStatus(orderIDSelected);
+        return cart.editOrderStatus(orderIDSelected);
     }
 }

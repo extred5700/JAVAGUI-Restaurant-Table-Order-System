@@ -1,11 +1,11 @@
 package Main.controller.RestaurantStaff;
 
-import Main.entity.Restaurant_Staff;
+import Main.entity.Cart;
 
 public class StaffSearchController {
-    Restaurant_Staff restaurant_staff = new Restaurant_Staff();
 
     public String [][] searchBy(int table_num){
-        return restaurant_staff.searchOrder(table_num);
+        Cart cart = new Cart(table_num);
+        return cart.viewCart();
     }
 }

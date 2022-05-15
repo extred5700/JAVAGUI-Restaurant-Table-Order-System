@@ -1,11 +1,11 @@
 package Main.controller.RestaurantStaff;
 
-import Main.entity.Restaurant_Staff;
+import Main.entity.Cart;
 
 public class StaffViewController {
-    Restaurant_Staff restaurant_staff = new Restaurant_Staff();
+    Cart cart = new Cart();
 
     public String [][] displayOrders(){
-        return restaurant_staff.viewAllOrders();
+        return cart.viewAllOrders();
     }
 }
