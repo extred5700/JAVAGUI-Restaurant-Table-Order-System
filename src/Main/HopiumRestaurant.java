@@ -18,7 +18,7 @@ public class HopiumRestaurant {
         // Manager
         //new ManagerPageUI();
         // Restaurant Staff
-        //new RestaurantStaffPageUI();
+        new RestaurantStaffPageUI();
 
         /* Customer */
         //new CustomerLoginPage();

@@ -76,6 +76,11 @@ public class UserAdminPageUI_V2 extends JFrame{
     // Button
     private final JButton buttonEditUserProfile = new JButton("Edit User Profile");
 
+    /* 3. VIEW/SEARCH function */
+    private final JPanel panelSearch = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+    // Display Buttons
+    private final JButton buttonDisplaySearchAccount = new JButton("User Account");
+    private final JButton buttonDisplaySearchProfile = new JButton("User Profile");
 
     public UserAdminPageUI_V2(){
         userAdminUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,7 +99,10 @@ public class UserAdminPageUI_V2 extends JFrame{
 
         // 2. EDIT function
         displayEditPanel();
-        //panelEdit.setVisible(true);
+
+        // 3. VIEW/SEARCH function
+        displaySearchPanel();
+        panelSearch.setVisible(true);
 
         userAdminUIFrame.setVisible(true);
     }
@@ -131,14 +139,19 @@ public class UserAdminPageUI_V2 extends JFrame{
                 displayCreatePanel();
                 panelCreate.setVisible(true);
                 panelEdit.setVisible(false);
+                panelSearch.setVisible(false);
             }
             case "Edit" -> {
                 displayEditPanel();
                 panelCreate.setVisible(false);
                 panelEdit.setVisible(true);
+                panelSearch.setVisible(false);
             }
             case "View" -> {
-
+                displaySearchPanel();
+                panelCreate.setVisible(false);
+                panelEdit.setVisible(false);
+                panelSearch.setVisible(true);
             }
             case "Suspend" -> {
 
@@ -611,4 +624,82 @@ public class UserAdminPageUI_V2 extends JFrame{
         } // end of if-else statements
     }
 
+
+    /* VIEW/SEARCH function
+    * 3a) void displaySearchPanel() - Display JPanel for User Admin to View & Search for an account or profile
+    * 3b)
+    * */
+    // 3a) Display JPanel for User Admin to View & Search for an account or profile
+    public void displaySearchPanel(){
+        displayTitledBorder(panelSearch, "View & Search User Account / User Profile");
+
+        // Remove all components then add choice buttons on the top
+        Component[] componentList = panelSearch.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JScrollPane || c instanceof Choice){
+                //Remove it
+                panelSearch.remove(c);
+            }
+            if (c instanceof JButton){
+                c.setEnabled(true);
+            }
+        }
+
+        // Choice buttons on top
+        JButton [] buttonChoices = {buttonDisplaySearchAccount, buttonDisplaySearchProfile};
+        for (JButton jButton : buttonChoices){
+            jButton.setPreferredSize(new Dimension(220, 30));
+            jButton.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
+            jButton.setBorder(BorderFactory.createLineBorder(Color.RED,1));
+            jButton.setBackground(Color.WHITE);
+        }
+        panelSearch.add(buttonDisplaySearchAccount, 0);
+        panelSearch.add(buttonDisplaySearchProfile, 1);
+        // Action listener for displaying viewing/searching UI of User Account, also ensuring that the action listener is only created once
+        if (buttonDisplaySearchAccount.getActionListeners().length == 0) {
+            buttonDisplaySearchAccount.addActionListener(e -> buttonSearchChoices_Onclick("User Account"));
+        }
+        // Action listener for displaying viewing/searching UI of User Profile, also ensuring that the action listener is only created once
+        if (buttonDisplaySearchProfile.getActionListeners().length == 0) {
+            buttonDisplaySearchProfile.addActionListener(e -> buttonSearchChoices_Onclick("User Profile"));
+        }
+
+        // Add components to the JPanel
+        panelSearch.setPreferredSize(new Dimension(500, 550));
+        panelSearch.setBackground(Color.WHITE);
+        panelSearch.setVisible(false);
+        userAdminUIFrame.add(panelSearch);
+    }
+
+    // 3b) Allows the user to choose between viewing/searching of User Account or User Profile
+    public void buttonSearchChoices_Onclick(String buttonPressed){
+        // Remove all components then add choice buttons on the top
+        Component[] componentList = panelSearch.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JScrollPane || c instanceof Choice){
+                //Remove it
+                panelEdit.remove(c);
+            }
+        }
+        panelSearch.add(buttonDisplayEditAccount, 0);
+        panelSearch.add(buttonDisplayEditProfile, 1);
+        panelSearch.revalidate();
+        panelSearch.repaint();
+
+        // Display the relevant components based on the button pressed
+        switch(buttonPressed){
+            case "User Account" -> {
+                buttonDisplayEditAccount.setEnabled(false);
+                buttonDisplayEditProfile.setEnabled(true);
+            }
+            case "User Profile" -> {
+                buttonDisplayEditProfile.setEnabled(false);
+                buttonDisplayEditAccount.setEnabled(true);
+            }
+        } // end of switch statements
+    }
 }

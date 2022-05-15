@@ -538,15 +538,22 @@ public class RestaurantStaffPageUI extends JFrame {
         int getRow = tableDeleteOrder.getSelectedRow();
         if (getRow != -1){
             int selectedOrderID = Integer.parseInt((String)tableDeleteOrder.getModel().getValueAt(getRow, 0));
-            StaffDeleteController staffDeleteController = new StaffDeleteController();
-            // If deletion of Customer Order is successful
-            if (staffDeleteController.deleteByOrderID(selectedOrderID)){
-                JOptionPane.showMessageDialog(null, "Customer Order has been successfully deleted!", "Delete Order", JOptionPane.INFORMATION_MESSAGE);
-                deleteTableConstruction(); // Refresh table
+            String selectedFulfillmentStatus = tableDeleteOrder.getModel().getValueAt(getRow, 4).toString();
+            // Do not allow the Restaurant Staff to delete fulfilled orders
+            if (selectedFulfillmentStatus.equals("Y")){
+                JOptionPane.showMessageDialog(null, "Cannot delete fulfilled orders!", "Delete Order", JOptionPane.ERROR_MESSAGE);
             }
-            // If deletion of Customer Order is unsuccessful
             else{
-                JOptionPane.showMessageDialog(null, "Customer Order deletion failed.", "Suspend User", JOptionPane.ERROR_MESSAGE);
+                StaffDeleteController staffDeleteController = new StaffDeleteController();
+                // If deletion of Customer Order is successful
+                if (staffDeleteController.deleteByOrderID(selectedOrderID)){
+                    JOptionPane.showMessageDialog(null, "Customer Order has been successfully deleted!", "Delete Order", JOptionPane.INFORMATION_MESSAGE);
+                    deleteTableConstruction(); // Refresh table
+                }
+                // If deletion of Customer Order is unsuccessful
+                else{
+                    JOptionPane.showMessageDialog(null, "Customer Order deletion failed.", "Delete Order", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         else{

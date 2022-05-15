@@ -33,5 +33,4 @@ public class AdminEditController {
         return user_profile.editProfile(selectedProfileID, newProfile);
     }
 
-
 }
