@@ -1,10 +1,7 @@
 package Main.controller.UserAdmin;
 
 import Main.entity.User_Account;
-import Main.entity.User_Admin;
 import Main.entity.User_Profile;
-
-import java.util.ArrayList;
 
 public class AdminViewSearchController {
     User_Account user_account = new User_Account();

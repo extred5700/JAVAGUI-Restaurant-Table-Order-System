@@ -22,7 +22,7 @@ public class AdminSuspendController {
         return user_profile.viewProfile();
     }
 
-    // Pass the new Active status of the selected Username to the entity
+    // Pass the new Active status of the selected User Profile to the entity
     public boolean suspendUserProfile(int selectedUserProfileID, String newActiveStatus){
         return user_profile.suspendProfile(selectedUserProfileID, newActiveStatus);
     }

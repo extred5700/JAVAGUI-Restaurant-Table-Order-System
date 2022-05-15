@@ -363,10 +363,10 @@ public class UserAdminPageUI extends JFrame{
             JOptionPane.showMessageDialog(null, "Please do not leave the text field empty.", "Error!", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            String createProfile = fieldCreateProfile.getText().toLowerCase();
+            String profile = fieldCreateProfile.getText().toLowerCase();
             // Determine if the user profile exist, if not, create a User Account
             AdminCreateController addUserController = new AdminCreateController();
-            if (addUserController.validateCreateProfile(createProfile)){
+            if (addUserController.validateCreateProfile(profile)){
                 JOptionPane.showMessageDialog(null, "User Profile is created successfully.", "User Profile Creation", JOptionPane.INFORMATION_MESSAGE);
             }
             else{
@@ -714,7 +714,7 @@ public class UserAdminPageUI extends JFrame{
         }
 
         // Add components to the JPanel
-        panelSearch.setPreferredSize(new Dimension(500, 550));
+        panelSearch.setPreferredSize(new Dimension(500, 440));
         panelSearch.setBackground(Color.WHITE);
         panelSearch.setVisible(false);
         userAdminUIFrame.add(panelSearch);
