@@ -442,6 +442,20 @@ public class ManagerPageUI extends JFrame {
     public void displayEditPanel(){
         displayTitledBorder(panelEdit, "Edit Menu Items/Coupons");
 
+        // Remove all components then add choice buttons on the top
+        Component[] componentList = panelEdit.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JScrollPane || c instanceof Choice){
+                //Remove it
+                panelEdit.remove(c);
+            }
+            if (c instanceof JButton){
+                c.setEnabled(true);
+            }
+        }
+
         // Choice buttons on top
         JButton [] buttonChoices = {buttonDisplayEditMenuItem, buttonDisplayEditCoupon};
         for (JButton jButton : buttonChoices){
@@ -831,6 +845,20 @@ public class ManagerPageUI extends JFrame {
     public void displayViewPanel(){
         displayTitledBorder(panelView, "View Menu Items/Coupons");
 
+        // Remove all components then add choice buttons on the top
+        Component[] componentList = panelView.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JScrollPane || c instanceof Choice){
+                //Remove it
+                panelView.remove(c);
+            }
+            if (c instanceof JButton){
+                c.setEnabled(true);
+            }
+        }
+
         // View Table buttons
         JButton [] buttonChoices = {buttonViewMenuItem, buttonViewCoupon};
         for (JButton jButton : buttonChoices){
@@ -925,6 +953,20 @@ public class ManagerPageUI extends JFrame {
     // 5a) Method to display JPanel for Restaurant Manager to delete menu items or coupons
     public void displayDeletePanel(){
         displayTitledBorder(panelDelete, "Delete Menu Items/Coupons");
+
+        // Remove all components then add choice buttons on the top
+        Component[] componentList = panelDelete.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JScrollPane || c instanceof Choice){
+                //Remove it
+                panelDelete.remove(c);
+            }
+            if (c instanceof JButton){
+                c.setEnabled(true);
+            }
+        }
 
         // Buttons
         JButton [] buttonChoices = {buttonDisplayDeleteMenuItem, buttonDisplayDeleteCoupon};
