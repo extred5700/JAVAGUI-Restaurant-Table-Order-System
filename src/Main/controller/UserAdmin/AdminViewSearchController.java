@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class AdminViewSearchController {
     User_Account user_account = new User_Account();
     User_Profile user_profile = new User_Profile();
-    User_Admin userAdmin = new User_Admin();
 
     // Returns all DB User Accounts
     public String[][] getUserAccounts(){
@@ -29,10 +28,5 @@ public class AdminViewSearchController {
     // Returns search result of 2D arrays based on the searched profile
     public String [][] searchByProfile(String dataKeyedIn){
         return user_profile.searchProfile(dataKeyedIn);
-    }
-
-    // Ignore will delete later
-    public String [][] searchBy(String dataKeyedIn, String searchStatus){
-        return userAdmin.searchAccount(dataKeyedIn, searchStatus);
     }
 }

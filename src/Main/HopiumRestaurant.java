@@ -1,7 +1,5 @@
 package Main;
 
-import Main.boundary.*;
-import Main.boundary.StaffLoginPage;
 import Main.boundary.StaffUI.*;
 
 public class HopiumRestaurant {
@@ -11,8 +9,7 @@ public class HopiumRestaurant {
         /* Staff */
         //new StaffLoginPage();
         // Admin
-        //new UserAdminPageUI();
-        new UserAdminPageUI_V2();
+        new UserAdminPageUI();
         // Owner
         //new OwnerPageUI();
         // Manager

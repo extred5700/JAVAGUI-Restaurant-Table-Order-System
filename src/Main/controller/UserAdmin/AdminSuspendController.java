@@ -1,19 +1,30 @@
 package Main.controller.UserAdmin;
 
+import Main.entity.User_Account;
 import Main.entity.User_Admin;
+import Main.entity.User_Profile;
 
 public class AdminSuspendController {
-    User_Admin userAdmin = new User_Admin();
+    User_Account user_account = new User_Account();
+    User_Profile user_profile = new User_Profile();
 
-    public String [][] getUserInfo(){
-        return userAdmin.getUserInfoFromDB();
+    // Returns all DB User Accounts
+    public String[][] getUserAccounts(){
+        return user_account.viewAccount();
     }
 
+    // Pass the new Active status of the selected Username to the entity
     public boolean suspendUserAccount(String selectedUsername, String newActiveStatus){
-        return userAdmin.suspendAccount(selectedUsername, newActiveStatus);
+        return user_account.suspendAccount(selectedUsername, newActiveStatus);
     }
 
-    public boolean suspendUserProfile(String selectedUserProfile, String newActiveStatus){
-        return userAdmin.suspendProfile(selectedUserProfile, newActiveStatus);
+    // Returns all DB User Profiles
+    public String [][] getUserProfiles(){
+        return user_profile.viewProfile();
+    }
+
+    // Pass the new Active status of the selected Username to the entity
+    public boolean suspendUserProfile(int selectedUserProfileID, String newActiveStatus){
+        return user_profile.suspendProfile(selectedUserProfileID, newActiveStatus);
     }
 }

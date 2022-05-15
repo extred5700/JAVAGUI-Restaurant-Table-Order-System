@@ -18,7 +18,6 @@ public class AdminEditController {
     }
 
     // To display all User Profiles in a form of a Table
-    // Can rename
     public String [][] getProfileTable(){
         return user_profile.viewProfile();
     }
