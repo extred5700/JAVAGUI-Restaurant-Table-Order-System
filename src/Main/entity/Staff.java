@@ -52,41 +52,13 @@ public class Staff{
     } // end of method dbConnection()
 
     // Validate user login profile
-    // This function DOES not check for active user_profile because you literally cannot login to a suspended user profile
-    // May want to remove profile from this method
     public boolean login(String username, String password, String profile){
         boolean userExistence = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         try{
             Statement statement = dbConnection.createStatement();
             //SQL query stuff
-            String query = "SELECT * FROM user_account WHERE username = '" + username + "' AND password = '" + password + "' AND account_active = 'Y'";
-            ResultSet rs = statement.executeQuery(query);
-            if (!rs.next()){
-                //This means no account found
-                System.out.println("No account found.");
-            }
-            else{
-                //This means account found
-                System.out.println("Account is valid.");
-                userExistence = true;
-            }
-        }catch (SQLException e){
-            // Catches any SQL query issues
-            System.out.println(e);
-        }
-        return userExistence;
-    } // end of method login()
-
-    //alternate login - > this one will also double-check for active user_profile
-    //Also does not require profile input -> may want to remove
-    public boolean login2(String username, String password, String profile){
-        boolean userExistence = false;
-        Connection dbConnection = dbConnection(); // Set up connection with the DB
-        try{
-            Statement statement = dbConnection.createStatement();
-            //SQL query stuff
-            String query = "SELECT * FROM user_account INNER JOIN user_profile ON user_account.profile_id = user_profile.profile_id WHERE username = '" + username + "' AND password = '" + password + "' AND account_active = 'Y' AND profile_active = 'Y'";
+            String query = "SELECT * FROM user_account INNER JOIN user_profile ON user_account.profile_id = user_profile.profile_id WHERE username = '" + username + "' AND password = '" + password + "' AND profile_name = '" + profile + "' AND account_active = 'Y' AND profile_active = 'Y'";
             ResultSet rs = statement.executeQuery(query);
             if (!rs.next()){
                 //This means no account found
