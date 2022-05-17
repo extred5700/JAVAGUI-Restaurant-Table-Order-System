@@ -1,0 +1,57 @@
+RESTAURANT MANAGER CHANGES:
+
+	I asked KQ to make new entities alr:
+	CART ENTITY -> ONLY ACCESS ORDER_HISTORY Table
+	(NEW) PAYMENT ENTITY -> ONLY ACCESS TRANSACTION_HISTORY Table
+	(NEW) DISCOUNT ENTITY -> ONLY ACCESS DISCOUNT Table
+	
+	Create:
+		Menu Items:
+		TW - Move checkMenuItemExistence(String food_name) to Menu_Items entity
+		TW - Move createMenuItems(String food_name, Float item_price, String category) to Menu Items entity
+		
+		Coupons:
+		Amir/KQ - User Story missing "So that" statment. Suggestion : "As a Restaurant Manager, I want to create Coupons, so that customers can use it to get discounts"
+		TW - Move checkCouponExistence(String coupon) to Discount entity
+		TW - Move createCoupon(String coupon, Float discount) to Discount entity
+		
+	Delete:
+		Menu Items:
+		TW - Move viewMenuItems() function to the Menu_Items entity. (Make sure that no clashes with the viewMenu() function that already exists in that entity.)
+		TW - Move deleteMenuItem(int itemID) function to the Menu_Items entity.
+		TW - Create a DeleteMenuItemTableConstruction() function, similar to that in the Edit user story section
+				-Meaning this construction function should call the displayMenuItems() function in the controller
+		
+		Coupons:
+		Amir/KQ - User Story missing "So that" statement. Suggestion : "As a Restaurant Manager, I want to be able to delete coupons. so that i can remove coupons that are no longer available"
+		TW - Move viewCoupons() to Discount entity
+		TW - Move deleteCoupon (String coupon) to Discount entity
+		TW - Create a DeleteCouponTableConstruction() function, similar to that in the Edit user story section
+				-Meaning this construction function should call the displayCoupons() function in the controller
+	
+	Edit:
+		Menu Items:
+		TW - Move editMenuItem(int itemID, String newFoodName, Float new_item_price) to Menu_Items entity.
+		TW - Make sure viewMenuItems() is referencing the one you moved into Menu_Items entity.
+		
+		Coupons:
+		TW - Move editCoupon(String oldCouponname, String newCouponName, Float new_discount_value) to Coupons entity
+		TW - Make sure viewCoupons() is referencing the one you moved into Coupons entity.
+		
+	Search:
+		Menu Items:
+		TW - Move searchMenuItem(String searchText) into Menu_Items entity.
+		TW - Create a searchMenuItemTableConstuction(String [ ][ ] data) function to display the table. To be called by respective Onclick function after retrieving data.
+		
+		Coupons:
+		TW - Move searchCoupon(String searchText) into Coupons entity.
+		TW - Create a searchCouponTableConstruction(String [ ][ ] data) function to display the table. To be called by respective Onclick function after retrieving data.
+		
+	View:
+		Menu Items:
+		TW - viewMenuItems() should be referencing the one you moved into Menu_Items entity.
+		TW - Create a viewMenuItemTableConstruction() function to display the table. To be called by respective Onclick function after retrieving data.
+		
+		Coupons:
+		TW - viewCoupons() should be referencing the one you moved into Coupons entity.
+		TW - Create a viewCouponTableConstruction() function to display the table. To be called by respective Onclick function after retrieving data.
