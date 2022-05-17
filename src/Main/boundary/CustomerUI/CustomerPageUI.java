@@ -133,7 +133,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Display Navigation Buttons for Customer
-    private void constructTopButtons(){
+    public void constructTopButtons(){
         JButton [] topButtons = {buttonMenu, buttonEdit, buttonView, buttonPayment};
         for (JButton jButton : topButtons){
             jButton.setPreferredSize(new Dimension(120, 30));
@@ -146,7 +146,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Button Listener for Navigation Buttons
-    private final ActionListener topButtonsListener = e -> {
+    public final ActionListener topButtonsListener = e -> {
         JButton buttonPressed = (JButton)e.getSource();
         String action = buttonPressed.getText();
         switch(action){
@@ -190,7 +190,7 @@ public class CustomerPageUI extends JFrame {
      * 1f) void addToCartButton_Onclick() - ActionListener for the addToCart Button
      */
     // Display JPanel for Customers to View Menu based on Category (DEFAULT "ALL")
-    private void viewMenu(String category) {
+    public void viewMenu(String category) {
         // Border
         titledBorder = new TitledBorder("Menu/Add To Cart");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -228,7 +228,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Display Category Buttons for Customer ONLY in the MENU Page
-    private void constructCategoryButtons() {
+    public void constructCategoryButtons() {
         JButton [] categoryButtons = {buttonPasta, buttonPizza, buttonBakedRice, buttonDrinks};
         for (JButton jButton : categoryButtons){
             jButton.setPreferredSize(new Dimension(90, 30));
@@ -244,7 +244,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Button Listener - for Category Buttons in the MENU Page
-    private void categoryButton_Onclick(JButton jButton) {
+    public void categoryButton_Onclick(JButton jButton) {
         String action = jButton.getText();
         switch(action){
             case "Pasta" -> viewMenu("Pasta");
@@ -255,7 +255,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Construct table to display menu items
-    private Component menuTableConstruction(String category) {
+    public Component menuTableConstruction(String category) {
         CustomerViewMenuController viewMenuController = new CustomerViewMenuController();
         String [][] data = viewMenuController.viewMenu(category);
         // Display data in a table format
@@ -278,7 +278,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Construct the Components for Customers to add menu items to cart
-    private void addToCartComponents() {
+    public void addToCartComponents() {
         /* Labels */
         labelItemId.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
         labelItemName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
@@ -336,7 +336,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // ActionListener - addToCart Button
-    private void addToCartButton_Onclick() {
+    public void addToCartButton_Onclick() {
         // Create Controller Object
         CustomerAddToCartController addToCartController = new CustomerAddToCartController();
 
@@ -368,7 +368,7 @@ public class CustomerPageUI extends JFrame {
      * 2e) Component editCartTableConstruction() - Construction of the JTable to display Customer Cart - JTable type returned as a JScrollPane type
      */
     // Display JPanel for Customers to Edit their Cart
-    private void editCartPanel() {
+    public void editCartPanel() {
         // Border
         titledBorder = new TitledBorder("Edit Your Order");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -413,7 +413,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Construct the Components for Customers to EDIT their Cart
-    private void editCartComponents() {
+    public void editCartComponents() {
         /* Labels */
         labelEditOrderId.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
         labelEditItemName.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
@@ -459,7 +459,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Create Action Listener for Update Cart Button
-    private void updateCartButton_Onclick() {
+    public void updateCartButton_Onclick() {
         // Call Controller
         CustomerEditCartController editCartController = new CustomerEditCartController();
         String order_id = fieldEditOrderId.getText(); // get order_id
@@ -490,7 +490,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Create Action Listener for Delete Item Button
-    private void deleteItemButton_Onclick() {
+    public void deleteItemButton_Onclick() {
         // Call Controller
         CustomerEditCartController editCartController = new CustomerEditCartController();
         String order_id = fieldEditOrderId.getText(); // get order_id
@@ -508,7 +508,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Construct table for EDIT Page
-    private Component editCartTableConstruction() {
+    public Component editCartTableConstruction() {
         CustomerViewCartController viewCartController = new CustomerViewCartController();
         String [][] data = viewCartController.viewCart(table_no);
         // Display data in a table format
@@ -535,7 +535,7 @@ public class CustomerPageUI extends JFrame {
      * 3b) Component viewCartTableConstruction() - Construction of the JTable to display Customer Cart - JTable type returned as a JScrollPane type
      */
     // Display JPanel for Customers to VIEW their Cart
-    private void viewCart() {
+    public void viewCart() {
         // Border
         titledBorder = new TitledBorder("View Your Order");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -567,7 +567,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Construct table for VIEW Page
-    private Component viewCartTableConstruction() {
+    public Component viewCartTableConstruction() {
         CustomerViewCartController viewCartController = new CustomerViewCartController();
         String [][] data = viewCartController.viewCart(table_no);
         // Display data in a table format
@@ -586,7 +586,7 @@ public class CustomerPageUI extends JFrame {
      * 4e) void makePaymentButton_Onclick(CustomerPaymentController paymentController) - Create Action Listener for Make Payment Button
      */
     // Display JPanel for Customers to make PAYMENT
-    private void payment() {
+    public void payment() {
         // Border
         titledBorder = new TitledBorder("Payment");
         titledBorder.setBorder(new LineBorder(Color.BLACK));
@@ -627,7 +627,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Construct table for PAYMENT Page
-    private Component paymentCartTableConstruction() {
+    public Component paymentCartTableConstruction() {
         CustomerViewCartController viewCartController = new CustomerViewCartController();
         String [][] data = viewCartController.viewCart(table_no);
         // Display data in a table format
@@ -639,7 +639,7 @@ public class CustomerPageUI extends JFrame {
     }
 
     // Construct the Components for Customers to make PAYMENT
-    private void paymentComponents() {
+    public void paymentComponents() {
         /* Labels */
         labelPaymentPhoneNumber.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
         labelPaymentTotalPrice.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 22));
@@ -684,7 +684,7 @@ public class CustomerPageUI extends JFrame {
 
         // Create Action Listener for Coupon Button
         if (buttonInputCoupon.getActionListeners().length == 0) {
-            buttonInputCoupon.addActionListener(e -> inputCouponButton_Onclick(paymentController));
+            buttonInputCoupon.addActionListener(e -> inputCouponButton_Onclick());
         }
 
         // Create Action Listener for Make Payment Button
@@ -694,27 +694,30 @@ public class CustomerPageUI extends JFrame {
     }
 
     // ActionListener for Input Coupon Button
-    private void inputCouponButton_Onclick(CustomerPaymentController paymentController) {
-        String coupon = fieldPaymentInputCoupon.getText(); // get phone number
+    public void inputCouponButton_Onclick() {
+        String coupon = fieldPaymentInputCoupon.getText(); // get coupon
+
+        CustomerDiscountController customerDiscountController = new CustomerDiscountController();
 
         if (coupon.isEmpty()) { // Check if text field is left empty by the user
             JOptionPane.showMessageDialog(null, "You have not entered a coupon!", "Error!", JOptionPane.WARNING_MESSAGE);
         }
         // Validate coupon
         else {
-            if (!paymentController.discountCoupon(table_no, coupon)) { // validate coupon method returns false - invalid coupon
+            if (!customerDiscountController.discountCoupon(table_no, coupon)) { // validate coupon method returns false - invalid coupon
                 JOptionPane.showMessageDialog(null, "Coupon is invalid!", "Error!", JOptionPane.WARNING_MESSAGE);
             }
             else { // validate coupon method return true - valid coupon - apply discount
                 JOptionPane.showMessageDialog(null, "Coupon is valid!", "Success!", JOptionPane.INFORMATION_MESSAGE);
                 // update total price field
+                CustomerPaymentController paymentController = new CustomerPaymentController();
                 fieldPaymentTotalPrice.setText(String.valueOf(paymentController.getTotalPrice(table_no)));
             }
         }
     }
 
     // ActionListener for Make Payment Button
-    private void makePaymentButton_Onclick(CustomerPaymentController paymentController) {
+    public void makePaymentButton_Onclick(CustomerPaymentController paymentController) {
         String pNum = fieldPaymentPhoneNumber.getText(); // get phone number
 
         if (pNum.isEmpty()) { // Check if text field is left empty by the user

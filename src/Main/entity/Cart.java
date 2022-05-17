@@ -164,7 +164,7 @@ public class Cart {
     }
 
     // Returns float of total price of current cart - for any payment displays
-    public float getTotalPrice(){
+    /*public float getTotalPrice(){
         float x = 0;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         String query = "SELECT total_price FROM transaction_history WHERE transaction_id = " + transaction_id; //query
@@ -180,10 +180,10 @@ public class Cart {
             e.printStackTrace();
         }
         return x;
-    }
+    }*/
 
     //Checks for valid discount and applies it, if successful, return true
-    public boolean applyDiscount(String discount_code){
+    /*public boolean applyDiscount(String discount_code){
         boolean discountApplied = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         String query = "SELECT discount_value FROM discount WHERE coupon = '" + discount_code+"'"; //query
@@ -205,10 +205,10 @@ public class Cart {
             e.printStackTrace();
         }
         return discountApplied;
-    }
+    }*/
 
     // Updates transaction history with payment - requires phone number of customer. upon success, return true
-    public boolean makePayment (String phoneNumber){
+    /*public boolean makePayment (String phoneNumber){
         boolean isPaymentSuccessful = false;
 
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -220,12 +220,12 @@ public class Cart {
             System.out.println(e);
         }
         return isPaymentSuccessful;
-    }
+    }*/
 
     // Validate Customer's phone number
-    public boolean validatePhoneNumber(String phoneNumber) {
+    /*public boolean validatePhoneNumber(String phoneNumber) {
         return phoneNumber.length() == 8 && (phoneNumber.charAt(0) == '8' || phoneNumber.charAt(0) == '9');
-    }
+    }*/
 
     // Function to Edit order status #22
     public boolean editOrderStatus(int orderIDSelected) {
