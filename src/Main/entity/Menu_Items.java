@@ -65,7 +65,7 @@ public class Menu_Items {
         boolean isMenuItemCreated = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         try {
-            String query = "insert into menu_item (name, item_price, category )" + " values (?, ?, ?) ";
+            String query = "insert into menu_item (name, item_price, category, deleted)" + " values (?, ?, ?,'N') ";
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
             preparedStatement.setString(1, food_name);
             preparedStatement.setFloat(2, item_price);
@@ -87,7 +87,7 @@ public class Menu_Items {
         ArrayList<String> arrayListCategory = new ArrayList<>();
 
         Connection dbConnection = dbConnection(); // Set up connection with DB
-        String query = "SELECT * from menu_item";
+        String query = "SELECT * from menu_item WHERE deleted = 'N'";
         try (Statement statement = dbConnection.createStatement()){
             ResultSet set = statement.executeQuery(query);
             while (set.next()){
@@ -138,7 +138,7 @@ public class Menu_Items {
         try{
             Statement statement = dbConnection.createStatement();
             // SQL Query Stuff
-            ResultSet rs = statement.executeQuery("SELECT * FROM menu_item WHERE name LIKE '%" + searchText + "%'");
+            ResultSet rs = statement.executeQuery("SELECT * FROM menu_item WHERE deleted = 'N' AND name LIKE '%" + searchText + "%'");
 
             while (rs.next()) { //This is the result set
                 // Add data to their respective array list
@@ -168,7 +168,7 @@ public class Menu_Items {
     public boolean deleteMenuItem(int itemID) {
         boolean isMenuItemDeleted = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "DELETE FROM menu_item WHERE item_id = '" + itemID + "'";
+        String query = "UPDATE menu_item SET deleted = 'Y' WHERE item_id = '" + itemID + "'";
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query);
             isMenuItemDeleted = true;
@@ -189,15 +189,15 @@ public class Menu_Items {
             // Display menu items from DB
             String query = "";
             if (category.equals("All")) {
-                query = "SELECT item_id, name, item_price FROM menu_item";
+                query = "SELECT item_id, name, item_price FROM menu_item WHERE deleted = 'N'";
             } else if (category.equals("Pasta")) {
-                query = "SELECT item_id, name, item_price FROM menu_item WHERE category = 'Pasta'";
+                query = "SELECT item_id, name, item_price FROM menu_item WHERE category = 'Pasta' AND deleted = 'N'";
             } else if (category.equals("Pizza")) {
-                query = "SELECT item_id, name, item_price FROM menu_item WHERE category = 'Pizza'";
+                query = "SELECT item_id, name, item_price FROM menu_item WHERE category = 'Pizza' AND deleted = 'N'";
             } else if (category.equals("Baked Rice")){
-                query = "SELECT item_id, name, item_price FROM menu_item WHERE category = 'Baked Rice'";
+                query = "SELECT item_id, name, item_price FROM menu_item WHERE category = 'Baked Rice' AND deleted = 'N'";
             } else {
-                query = "SELECT item_id, name, item_price FROM menu_item WHERE category = 'Drinks'";
+                query = "SELECT item_id, name, item_price FROM menu_item WHERE category = 'Drinks' AND deleted = 'N' ";
             }
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
