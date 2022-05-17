@@ -637,10 +637,10 @@ public class ManagerPageUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Please ensure Price text field's input is more than 0.", "Error!", JOptionPane.WARNING_MESSAGE);
             }
             else{
-                int item_id = Integer.parseInt(fieldEditItemID.getText());
+                int itemID = Integer.parseInt(fieldEditItemID.getText());
                 // Pass values to the controller
                 ManagerEditController managerEditController = new ManagerEditController();
-                if (managerEditController.editItem(item_id, newFoodName, new_item_price)){
+                if (managerEditController.editItem(itemID, newFoodName, new_item_price)){
                     JOptionPane.showMessageDialog(null, "Menu Item has been successful updated.", "Menu Item Update", JOptionPane.INFORMATION_MESSAGE);
                     editMenuItemTableConstruction(); // After edit, refresh edit Menu Item table
                 }
@@ -699,23 +699,23 @@ public class ManagerPageUI extends JFrame {
             if (rowSelected != -1){
                 String oldCouponName = tableEditCoupons.getModel().getValueAt(rowSelected,0).toString();
                 String newCouponName = fieldEditCouponName.getText().toUpperCase();
-                Float new_discount_value = 0.0f;
+                Float new_coupon_value = 0.0f;
                 try{
-                    new_discount_value = Float.parseFloat(fieldEditCouponDiscountValue.getText());
+                    new_coupon_value = Float.parseFloat(fieldEditCouponDiscountValue.getText());
                     // Convert NEW discount value to 1 decimal place
                     DecimalFormat df = new DecimalFormat("#.##");
-                    new_discount_value = Float.parseFloat(df.format(new_discount_value));
+                    new_coupon_value = Float.parseFloat(df.format(new_coupon_value));
                 }catch(NumberFormatException e){
                     JOptionPane.showMessageDialog(null, "Please enter a valid number for the discount value of the coupon.", "Error!", JOptionPane.WARNING_MESSAGE);
                 } // end of try-catch statements
                 // Check if the discount value is > 1
-                if (new_discount_value <= 0.0 || new_discount_value > 1.0){
+                if (new_coupon_value <= 0.0 || new_coupon_value > 1.0){
                     JOptionPane.showMessageDialog(null, "Please ensure Discount Value text field's input is more than 0 and less than 1.", "Error!", JOptionPane.WARNING_MESSAGE);
                 }
                 else{
                     // Pass values to the controller
                     ManagerEditController managerEditController = new ManagerEditController();
-                    if (managerEditController.editCouponValues(oldCouponName, newCouponName, new_discount_value)){
+                    if (managerEditController.editCouponValues(oldCouponName, newCouponName, new_coupon_value)){
                         JOptionPane.showMessageDialog(null, "Coupon has been successful updated.", "Coupon Update", JOptionPane.INFORMATION_MESSAGE);
                         editCouponTableConstruction(); // After edit, refresh edit Menu Item table
                     }
@@ -734,8 +734,12 @@ public class ManagerPageUI extends JFrame {
 
     /* 3. SEARCH function
     * 3a) void displaySearchPanel() - Method to display JPanel for Restaurant Manager to search menu items or coupons
-    * 3b) void buttonSearchMenuItem_Onclick() - Search by Menu Item Name button function, and then display results by constructing a table
-    * 3c) void buttonSearchCoupon_Onclick() - Search by Coupon Name button function, and then display results by constructing a table
+    * Methods 3b and 3c belongs to searching MENU ITEMS
+    * 3b) void buttonSearchMenuItem_Onclick() - Search by Menu Item Name button function
+    * 3c) Component searchMenuItemTableConstruction(String [][] data) - Construction of table variables for MENU ITEMS functions
+    * Methods 3d and 3e belongs to searching COUPONS
+    * 3d) void buttonSearchCoupon_Onclick() - Search by Coupon Name button function
+    * 3e) Component searchCouponTableConstruction(String [][] data) - Construction of table variables for COUPON
     */
     // 3a) Method to display JPanel for Restaurant Manager to search menu items and coupons
     public void displaySearchPanel(){
@@ -771,6 +775,7 @@ public class ManagerPageUI extends JFrame {
         panelSearch.setVisible(false);
     }
 
+    /* Methods 3b and 3c belongs to searching MENU ITEMS */
     // 3b) Search by Menu Item button function, and then display results by constructing a table
     public void buttonSearchMenuItem_Onclick(){
         String searchText = fieldSearch.getText();
@@ -780,30 +785,37 @@ public class ManagerPageUI extends JFrame {
         else{
             // Pass search results into controller to get 2D array of search results
             ManagerSearchController managerSearchController = new ManagerSearchController();
-            String [][] searchResults = managerSearchController.searchByMenuItemName(searchText);
-            // Display data in a table format
-            String [] columnTableNames = {"Item ID", "Food Name", "Price", "Category"};
-            tableSearchMenuItems = new JTable(searchResults, columnTableNames);
-            JScrollPane searchMenuItemScrollPane = new JScrollPane(tableSearchMenuItems);
-            searchMenuItemScrollPane.setPreferredSize(new Dimension(485, 200)); // width then height
-
-            //Get the components in the panel
-            Component[] componentList = panelSearch.getComponents();
-            //Loop through the components
-            for(Component c : componentList){
-                //Find the components you want to remove
-                if(c instanceof JScrollPane){
-                    //Remove it
-                    panelSearch.remove(c);
-                }
-            }
-            panelSearch.add(searchMenuItemScrollPane, 3);
-            panelSearch.revalidate();
-            panelSearch.repaint();
+            String [][] arrayAllSearchData = managerSearchController.searchByMenuItemName(searchText);
+            JScrollPane searchMenuItemScrollPane = (JScrollPane) searchMenuItemTableConstruction(arrayAllSearchData);
+            panelSearch.add(searchMenuItemScrollPane);
         } // end of if-else statements
     }
 
-    // 3c) Search by Coupon Name button function, and then display results by constructing a table
+    // 3c) Construction of table variables for MENU ITEMS
+    public Component searchMenuItemTableConstruction(String [][] data){
+        // Display data in a table format
+        String [] columnTableNames = {"Item ID", "Food Name", "Price", "Category"};
+        tableSearchMenuItems = new JTable(data, columnTableNames);
+        JScrollPane searchMenuItemScrollPane1 = new JScrollPane(tableSearchMenuItems);
+        searchMenuItemScrollPane1.setPreferredSize(new Dimension(485, 200)); // width then height
+
+        //Get the components in the panel
+        Component[] componentList = panelSearch.getComponents();
+        //Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JScrollPane){
+                //Remove it
+                panelSearch.remove(c);
+            }
+        }
+        panelSearch.add(searchMenuItemScrollPane1, 3);
+        panelSearch.revalidate();
+        panelSearch.repaint();
+        return searchMenuItemScrollPane1;
+    }
+
+    // 3d) Search by Coupon Name button function, and then display results by constructing a table
     public void buttonSearchCoupon_Onclick(){
         String searchText = fieldSearch.getText();
         if (searchText.isEmpty()){
@@ -812,34 +824,44 @@ public class ManagerPageUI extends JFrame {
         else{
             // Pass search results into controller to get 2D array of search results
             ManagerSearchController managerSearchController = new ManagerSearchController();
-            String [][] searchResults = managerSearchController.searchByCouponName(searchText);
-            // Display data in a table format
-            String [] columnTableNames = {"Coupon Name", "Discount Value"};
-            tableSearchCoupons = new JTable(searchResults, columnTableNames);
-            JScrollPane searchCouponScrollPane = new JScrollPane(tableSearchCoupons);
-            searchCouponScrollPane.setPreferredSize(new Dimension(485, 200)); // width then height
-
-            //Get the components in the panel
-            Component[] componentList = panelSearch.getComponents();
-            //Loop through the components
-            for(Component c : componentList){
-                //Find the components you want to remove
-                if(c instanceof JScrollPane){
-                    //Remove it
-                    panelSearch.remove(c);
-                }
-            }
-            panelSearch.add(searchCouponScrollPane, 3);
-            panelSearch.revalidate();
-            panelSearch.repaint();
+            String [][] arrayAllSearchData = managerSearchController.searchByCouponName(searchText);
+            JScrollPane searchCouponScrollPane = (JScrollPane) searchCouponTableConstruction(arrayAllSearchData);
+            panelSearch.add(searchCouponScrollPane);
         } // end of if-else statements
+    }
+
+    // 3e) Construction of table variables for COUPON
+    public Component searchCouponTableConstruction(String [][] data){
+        // Display data in a table format
+        String [] columnTableNames = {"Coupon Name", "Discount Value"};
+        tableSearchCoupons = new JTable(data, columnTableNames);
+        JScrollPane searchCouponScrollPane1 = new JScrollPane(tableSearchCoupons);
+        searchCouponScrollPane1.setPreferredSize(new Dimension(485, 200)); // width then height
+
+        //Get the components in the panel
+        Component[] componentList = panelSearch.getComponents();
+        //Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JScrollPane){
+                //Remove it
+                panelSearch.remove(c);
+            }
+        }
+        panelSearch.add(searchCouponScrollPane1, 3);
+        panelSearch.revalidate();
+        panelSearch.repaint();
+        return searchCouponScrollPane1;
     }
 
 
     /* 4. VIEW function
     * 4a) void displayViewPanel() - Method to display JPanel for Restaurant Manager to display either a table of Menu Items or Coupons
+    * Methods 4b and 4c belongs to viewing MENU ITEMS
     * 4b) void buttonViewMenuItem_Onclick() - View Menu Item button function to construct table to VIEW ALL MENU ITEMS
-    * 4c) void buttonViewCoupon_Onclick() - View Coupon button function to construct table to VIEW ALL COUPONS
+    * 4c) Component viewMenuItemTableConstruction(String [][] data) - Construction of table variables for MENU ITEMS
+    * 4d) void buttonViewCoupon_Onclick() - View Coupon button function to construct table to VIEW ALL COUPONS
+    * 4e) Component viewCouponTableConstruction(String [][] data) - Construction of table variables for COUPONS
     */
     // 4a) Method to display JPanel for Restaurant Manager to display either a table of Menu Items or Coupons
     public void displayViewPanel(){
@@ -885,6 +907,7 @@ public class ManagerPageUI extends JFrame {
         panelView.setVisible(false);
     }
 
+    /* Methods 4b and 4c belongs to viewing MENU ITEMS */
     // 4b) View Menu Item button function to allow the user to view all Menu Items on a table upon pressing the View All Menu Items
     public void buttonViewMenuItem_Onclick(){
         buttonViewMenuItem.setEnabled(false);
@@ -892,12 +915,18 @@ public class ManagerPageUI extends JFrame {
 
         // Table
         ManagerViewController managerViewController = new ManagerViewController();
-        String [][] data = managerViewController.displayMenuItems();
-        // Display data in table format
-        String[] columnTableNames = {"Item ID", "Food Name", "Price", "Category"};
+        String [][] arrayAllMenuItems = managerViewController.displayMenuItems();
+        JScrollPane viewMenuItemScrollPane = (JScrollPane) viewMenuItemTableConstruction(arrayAllMenuItems);
+        panelView.add(viewMenuItemScrollPane);
+    }
+
+    // 4c) Construction of table variables for MENU ITEMS
+    public Component viewMenuItemTableConstruction(String [][] data){
+        // Display data in a table format
+        String [] columnTableNames = {"Item ID", "Food Name", "Price", "Category"};
         tableViewMenuItems = new JTable(data, columnTableNames);
-        JScrollPane viewMenuItemScrollPane = new JScrollPane(tableViewMenuItems);
-        viewMenuItemScrollPane.setPreferredSize(new Dimension(485, 270)); // width then height
+        JScrollPane viewMenuItemScrollPane1 = new JScrollPane(tableViewMenuItems);
+        viewMenuItemScrollPane1.setPreferredSize(new Dimension(485, 270)); // width then height
 
         /* REMOVE COMPONENTS */
         Component[] componentList = panelView.getComponents();
@@ -909,24 +938,32 @@ public class ManagerPageUI extends JFrame {
                 panelView.remove(c);
             }
         }
-        panelView.add(viewMenuItemScrollPane, 2);
+        panelView.add(viewMenuItemScrollPane1, 2);
         panelView.revalidate();
         panelView.repaint();
+
+        return viewMenuItemScrollPane1;
     }
 
-    // 4c) View Coupon button function to allow the user to view all Menu Items on a table upon pressing the View All Coupons
+    // 4d) View Coupon button function to allow the user to view all Menu Items on a table upon pressing the View All Coupons
     public void buttonViewCoupon_Onclick(){
         buttonViewCoupon.setEnabled(false);
         buttonViewMenuItem.setEnabled(true);
 
         // Table
         ManagerViewController managerViewController = new ManagerViewController();
-        String [][] data = managerViewController.displayCoupons();
-        // Display data in table format
-        String[] columnTableNames = {"Coupon Name", "Discount Value"};
+        String [][] arrayAllCoupons = managerViewController.displayCoupons();
+        JScrollPane viewMenuItemScrollPane = (JScrollPane) viewCouponTableConstruction(arrayAllCoupons);
+        panelView.add(viewMenuItemScrollPane);
+    }
+
+    // 4e) Construction of table variables for COUPONS
+    public Component viewCouponTableConstruction(String [][] data){
+        // Display data in a table format
+        String [] columnTableNames = {"Coupon Name", "Discount Value"};
         tableViewCoupons = new JTable(data, columnTableNames);
-        JScrollPane viewMenuItemScrollPane = new JScrollPane(tableViewCoupons);
-        viewMenuItemScrollPane.setPreferredSize(new Dimension(485, 270)); // width then height
+        JScrollPane viewMenuItemScrollPane1 = new JScrollPane(tableViewCoupons);
+        viewMenuItemScrollPane1.setPreferredSize(new Dimension(485, 270)); // width then height
 
         /* REMOVE COMPONENTS */
         Component[] componentList = panelView.getComponents();
@@ -938,18 +975,23 @@ public class ManagerPageUI extends JFrame {
                 panelView.remove(c);
             }
         }
-        panelView.add(viewMenuItemScrollPane, 2);
+        panelView.add(viewMenuItemScrollPane1, 2);
         panelView.revalidate();
         panelView.repaint();
+        return viewMenuItemScrollPane1;
     }
 
 
     /* 5. SUSPEND function
     * 5a) void displayDeletePanel() - Method to display JPanel for Restaurant Manager to delete menu items or coupons
     * 5b) void buttonDeleteChoices_Onclick(String buttonPressed) - Allows the user to choose between deletion of Menu Items OR coupon, then display the respective GUI components
+    * Methods 5c and 5d belongs to deleting MENU ITEMS
     * 5c) void buttonDeleteMenuItem_Onclick() - Delete Menu Item button function to allow the user to delete a Menu Items on a table upon pressing the Delete Menu Item Button
-    * 5d) void buttonDeleteCoupon_Onclick() - Delete Coupon button function to allow the user to delete a Coupon on a table upon pressing the Delete Coupon Button
-    * */
+    * 5d) Component deleteMenuItemTableConstruction() - Construction of table variables for MENU ITEMS
+    * Methods 5e and 5f belongs to deleting COUPONS
+    * 5e) void buttonDeleteCoupon_Onclick() - Delete Coupon button function to allow the user to delete a Coupon on a table upon pressing the Delete Coupon Button
+    * 5f) Component deleteCouponTableConstruction() - Construction of table variables for COUPON
+    */
     // 5a) Method to display JPanel for Restaurant Manager to delete menu items or coupons
     public void displayDeletePanel(){
         displayTitledBorder(panelDelete, "Delete Menu Items/Coupons");
@@ -1020,12 +1062,7 @@ public class ManagerPageUI extends JFrame {
                 buttonDisplayDeleteCoupon.setEnabled(true);
 
                 // Menu Item Table Construction
-                String [][] data = managerDeleteController.displayMenuItems();
-                // Display data in table format
-                String[] columnTableNames = {"Item ID", "Food Name", "Price", "Category"};
-                tableDeleteMenuItems = new JTable(data, columnTableNames);
-                JScrollPane deleteMenuItemScrollPane = new JScrollPane(tableDeleteMenuItems);
-                deleteMenuItemScrollPane.setPreferredSize(new Dimension(485, 270)); // width then height
+                JScrollPane deleteMenuItemScrollPane = (JScrollPane) deleteMenuItemTableConstruction();
                 panelDelete.add(deleteMenuItemScrollPane);
 
                 // Delete Menu Item Button Construction
@@ -1045,12 +1082,7 @@ public class ManagerPageUI extends JFrame {
                 buttonDisplayDeleteMenuItem.setEnabled(true);
 
                 // Coupon Table Construction
-                String [][] data = managerDeleteController.displayCoupons();
-                // Display data in table format
-                String[] columnTableNames = {"Coupon", "Discount Value"};
-                tableDeleteCoupon = new JTable(data, columnTableNames);
-                JScrollPane deleteCouponScrollPane = new JScrollPane(tableDeleteCoupon);
-                deleteCouponScrollPane.setPreferredSize(new Dimension(485, 270)); // width then height
+                JScrollPane deleteCouponScrollPane = (JScrollPane) deleteCouponTableConstruction();
                 panelDelete.add(deleteCouponScrollPane);
 
                 // Delete Coupon Button Construction
@@ -1086,7 +1118,34 @@ public class ManagerPageUI extends JFrame {
         } // end of if-else statements
     }
 
-    // 5d) Delete Coupon button function to allow the user to delete a Coupon on a table upon pressing the Delete Coupon Button
+    // 5d) Construction of table variables for MENU ITEMS
+    public Component deleteMenuItemTableConstruction(){
+        ManagerDeleteController managerDeleteController = new ManagerDeleteController();
+        String [][] arrayAllMenuItems = managerDeleteController.displayMenuItems();
+        // Display data in table format
+        String[] columnTableNames = {"Item ID", "Food Name", "Price", "Category"};
+        tableDeleteMenuItems = new JTable(arrayAllMenuItems, columnTableNames);
+        JScrollPane deleteMenuItemScrollPane1 = new JScrollPane(tableDeleteMenuItems);
+        deleteMenuItemScrollPane1.setPreferredSize(new Dimension(485, 270)); // width then height
+
+        /* REMOVE COMPONENTS */
+        Component[] componentList = panelDelete.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JScrollPane){
+                //Remove it
+                panelDelete.remove(c);
+            }
+        }
+        panelDelete.add(deleteMenuItemScrollPane1, 2);
+        panelDelete.revalidate();
+        panelDelete.repaint();
+
+        return deleteMenuItemScrollPane1;
+    }
+
+    // 5e) Delete Coupon button function to allow the user to delete a Coupon on a table upon pressing the Delete Coupon Button
     public void buttonDeleteCoupon_Onclick(){
         ManagerDeleteController managerDeleteController = new ManagerDeleteController();
         int rowSelected = tableDeleteCoupon.getSelectedRow();
@@ -1103,5 +1162,31 @@ public class ManagerPageUI extends JFrame {
         else{
             JOptionPane.showMessageDialog(null, "Please select a Coupon from the table to delete it.", "Error!", JOptionPane.WARNING_MESSAGE);
         } // end of if-else statements
+    }
+
+    // 5f) Construction of table variables for COUPON
+    public Component deleteCouponTableConstruction(){
+        ManagerDeleteController managerDeleteController = new ManagerDeleteController();
+        String [][] arrayAllCoupons = managerDeleteController.displayCoupons();
+        // Display data in table format
+        String[] columnTableNames = {"Coupon", "Discount Value"};
+        tableDeleteCoupon = new JTable(arrayAllCoupons, columnTableNames);
+        JScrollPane deleteCouponScrollPane1 = new JScrollPane(tableDeleteCoupon);
+        deleteCouponScrollPane1.setPreferredSize(new Dimension(485, 270)); // width then height
+
+        /* REMOVE COMPONENTS */
+        Component[] componentList = panelDelete.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JScrollPane){
+                //Remove it
+                panelDelete.remove(c);
+            }
+        }
+        panelDelete.add(deleteCouponScrollPane1, 2);
+        panelDelete.revalidate();
+        panelDelete.repaint();
+        return deleteCouponScrollPane1;
     }
 }

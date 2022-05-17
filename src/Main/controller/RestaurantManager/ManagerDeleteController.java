@@ -1,28 +1,30 @@
 package Main.controller.RestaurantManager;
 
-import Main.entity.Restaurant_Manager;
+import Main.entity.Discount;
+import Main.entity.Menu_Items;
 
 public class ManagerDeleteController {
-    Restaurant_Manager restaurant_manager = new Restaurant_Manager();
+    Menu_Items menuItems = new Menu_Items();
+    Discount discount = new Discount();
 
     // Display all Menu Items
     public String [][] displayMenuItems(){
-        return restaurant_manager.viewMenuItems();
-    }
-
-    // Display all Coupons
-    public String [][] displayCoupons(){
-        return restaurant_manager.viewCoupons();
+        return menuItems.viewMenuItems();
     }
 
     // Delete Menu Item by passing in the Item ID to the Restaurant Manager Entity class
     public boolean deleteItem(int itemID){
-        return restaurant_manager.deleteMenuItem(itemID);
+        return menuItems.deleteMenuItem(itemID);
+    }
+
+    // Display all Coupons
+    public String [][] displayCoupons(){
+        return discount.viewCoupons();
     }
 
     // Delete Coupon by passing in the coupon name to the Restaurant Manager Entity class
     public boolean deleteCouponByName(String coupon){
-        return restaurant_manager.deleteCoupon(coupon);
+        return discount.deleteCoupon(coupon);
     }
 
 }

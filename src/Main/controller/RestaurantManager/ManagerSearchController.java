@@ -1,17 +1,19 @@
 package Main.controller.RestaurantManager;
 
-import Main.entity.Restaurant_Manager;
+import Main.entity.Discount;
+import Main.entity.Menu_Items;
 
 public class ManagerSearchController {
-    Restaurant_Manager restaurant_manager = new Restaurant_Manager();
+    Menu_Items menuItems = new Menu_Items();
+    Discount discount = new Discount();
 
     // Search by Menu Item Name
    public String [][] searchByMenuItemName(String searchText){
-       return restaurant_manager.searchMenuItems(searchText);
+       return menuItems.searchMenuItems(searchText);
    }
 
    // Search by Coupon Name
     public String [][] searchByCouponName(String searchText){
-       return restaurant_manager.searchCoupon(searchText);
+       return discount.searchCoupon(searchText);
     }
 }

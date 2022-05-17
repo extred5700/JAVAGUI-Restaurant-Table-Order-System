@@ -14,12 +14,12 @@ public class HopiumRestaurant {
         // Owner
         //new OwnerPageUI();
         // Manager
-        //new ManagerPageUI();
+        new ManagerPageUI();
         // Restaurant Staff
-        new RestaurantStaffPageUI();
+        //new RestaurantStaffPageUI();
 
         /* Customer */
-        new CustomerLoginPage();
+        //new CustomerLoginPage();
         //new CustomerPageUI(42);
 
     }

@@ -1,17 +1,19 @@
 package Main.controller.RestaurantManager;
 
-import Main.entity.Restaurant_Manager;
+import Main.entity.Discount;
+import Main.entity.Menu_Items;
 
 public class ManagerViewController {
-    Restaurant_Manager restaurant_manager = new Restaurant_Manager();
+    Menu_Items menuItems = new Menu_Items();
+    Discount discount = new Discount();
 
     // Display all Menu Items
     public String [][] displayMenuItems(){
-        return restaurant_manager.viewMenuItems();
+        return menuItems.viewMenuItems();
     }
 
     // Display all Coupons
     public String [][] displayCoupons(){
-        return restaurant_manager.viewCoupons();
+        return discount.viewCoupons();
     }
 }
