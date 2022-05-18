@@ -1,14 +1,14 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Restaurant_OwnerTest" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+  <configuration default="false" name="TDDTest" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
     <module name="Hopium" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="Main.entity.User_Admin" />
+        <option name="PATTERN" value="Main.boundary.StaffUI.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <option name="PACKAGE_NAME" value="Main.entity" />
-    <option name="MAIN_CLASS_NAME" value="Main.entity.Restaurant_OwnerTest" />
+    <option name="PACKAGE_NAME" value="Main.boundary.StaffUI" />
+    <option name="MAIN_CLASS_NAME" value="Main.boundary.StaffUI.TDDTest" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="class" />
     <method v="2">
