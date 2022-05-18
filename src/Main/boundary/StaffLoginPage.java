@@ -2,7 +2,6 @@ package Main.boundary;
 
 import Main.boundary.StaffUI.*;
 import Main.controller.Staff.LoginController;
-import Main.controller.UserAdmin.AdminCreateController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,7 +64,6 @@ public class StaffLoginPage extends JFrame{
         staffLoginFrame.setVisible(true);
     }
 
-    // end of actionPerformed
     // Button Listener
     ActionListener buttonListener = e -> {
         JButton buttonPressed = (JButton)e.getSource();
@@ -73,12 +71,12 @@ public class StaffLoginPage extends JFrame{
         switch (action) {
             case "Login" -> {
                 // Get ID, Password & Staff Type
-                String staffUsername = loginField.getText();
-                String staffPassword = passwordField.getText();
-                String staffProfile = staffType.getSelectedItem();  // Check which dropdown list's item has been selected
+                String username = loginField.getText();
+                String password = passwordField.getText();
+                String profile = staffType.getSelectedItem();  // Check which dropdown list's item has been selected
                 LoginController loginController = new LoginController(); // Controller Object to establish DB connection, attempt to login the user
-                if (loginController.validateLogin(staffUsername, staffPassword, staffProfile)) {
-                    loginSuccess(staffProfile);
+                if (loginController.validateLogin(username, password, profile)) {
+                    loginSuccess(profile);
                 }
                 // If login fails
                 else {
@@ -111,8 +109,8 @@ public class StaffLoginPage extends JFrame{
 
     // Method to display Staff Log In Choices
     public void displayStaffChoices(){
-        AdminCreateController adminCreateController = new AdminCreateController();
-        String [] arrayAllProfiles = adminCreateController.getArrayOfProfiles();
+        LoginController loginController = new LoginController();
+        String [] arrayAllProfiles = loginController.getArrayOfProfiles();
         staffType.removeAll();
         if (staffType.getItemCount() != arrayAllProfiles.length){
             for (String arrayAllProfile : arrayAllProfiles) {

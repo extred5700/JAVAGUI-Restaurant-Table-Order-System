@@ -7,11 +7,14 @@ public class LoginController {
     private static Staff staff = new Staff();
     User_Profile user_profile = new User_Profile();
 
-
-
     // Controller will check if Staff profile is in the system/DB
-    public boolean validateLogin(String staffUsername, String password, String profile){
-        return staff.login(staffUsername, password, profile);
+    public boolean validateLogin(String username, String password, String user_profile){
+        return staff.login(username, password, user_profile);
+    }
+
+    // Get all available profiles for User Admin to select from the dropdown box
+    public String [] getArrayOfProfiles(){
+        return user_profile.existingProfile();
     }
 
     public static Staff getStaff() {	//	to get Staff
