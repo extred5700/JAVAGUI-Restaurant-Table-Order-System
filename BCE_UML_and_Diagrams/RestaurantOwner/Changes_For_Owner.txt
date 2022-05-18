@@ -1,0 +1,17 @@
+Similar to previous few changes, gunna work mainly on the entity.
+
+Owner
+	Controller:
+	Switch case should be done in the controller, and then from the controller determine which entity to pass it to.
+	
+	Average Spending (Payment entity)
+	- Move String dailySpending(), String weeklySpending() and String monthlySpending() functions over to payment entity.
+	- Create a String[ ][ ] generateReport(String radioButtonSelected) function inside Payment entity to check if it is Average Spending, then calling the 3 above mentioned functions to produce a report named, data, to send back to controller
+	
+	Frequency of Visits (Payment entity)
+	- Move String dailyFrequency(), String weeklyFrequency() and String monthlyFrequency() functions over to payment entity.
+	- Use the same generateReport(String radioButtonSelected) function above to check whether it is frequency of visits, then use the 3 functions above to generate the report
+	
+	Preference of Items (Cart entity)
+	- Move ArrayList<String> dailyPreference, ArrayList<String> weeklyPreference, ArrayList<String> monthlyPreference to CART entity.
+	- Create a String[ ][ ] generateReport() function inside Cart entity to return the results.
