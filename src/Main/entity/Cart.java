@@ -281,6 +281,7 @@ public class Cart {
         return arrayAllOrderData;
     }
 
+    /* For Restaurant Owner Report Generation: Prefernce of Items */
     // Function to generate daily dish/drink preference #43
     public ArrayList<String> dailyPreference() {
         String x = "NULL";
@@ -353,7 +354,7 @@ public class Cart {
         return tempMonthly;
     }
 
-    // Function to return 2D array of all preferences
+    // Function to return 2D array of all Menu Item preferences
     public String [][] generatePreferenceReport(){
         String [][] data = new String[10][3];
         for (int row = 0; row < data.length; row++){

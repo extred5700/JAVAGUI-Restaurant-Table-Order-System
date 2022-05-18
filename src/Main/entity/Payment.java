@@ -71,6 +71,7 @@ public class Payment {
         return phoneNumber.length() == 8 && (phoneNumber.charAt(0) == '8' || phoneNumber.charAt(0) == '9');
     }
 
+    /* For Restaurant Owner Report Generation: Average Spending */
     // Function to generate daily average spending per visit #37
     public String dailySpending() {
         float x = 0;
@@ -134,6 +135,7 @@ public class Payment {
         return Float.toString(x);
     }
 
+    /* For Restaurant Owner Report Generation: Frequency of Visits */
     // Function to generate daily frequency of visits #40
     public String dailyFrequency() {
         int x = 0;
@@ -155,6 +157,7 @@ public class Payment {
         return Integer.toString(x);
     }
 
+    // Function to generate weekly frequency of visits #41
     public String weeklyFrequency() {
         int x = 0;
         try{
@@ -196,6 +199,11 @@ public class Payment {
         return Integer.toString(x);
     }
 
+    /* Function to generate either:
+    * 1. Average Spending
+    * 2. Frequency of Visits
+    * And return the data as a 2D array back to GenerateReportController
+    */
     public String [][] generateReport(String radioButtonSelection){
         String [][] data = {
                 {"", "", ""}
