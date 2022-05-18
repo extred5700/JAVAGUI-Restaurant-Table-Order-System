@@ -1,7 +1,7 @@
 package Main.boundary.StaffUI;
 
 import Main.boundary.StaffLoginPage;
-import Main.controller.RestaurantOwner.OwnerGenerateController;
+import Main.controller.RestaurantOwner.GenerateReportController;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -22,7 +22,6 @@ public class OwnerPageUI extends JFrame {
 
     // JPanel
     private final JPanel panelReport = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
-
 
     public OwnerPageUI(){
         ownerUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -130,7 +129,7 @@ public class OwnerPageUI extends JFrame {
     // 1c) GENERATE DATA button actions
     public void generateDataButton_Onclick(){
         String radioButtonSelected = buttonGroup.getSelection().getActionCommand();
-        OwnerGenerateController generateReportController = new OwnerGenerateController();
+        GenerateReportController generateReportController = new GenerateReportController();
         String [][] data = generateReportController.getReport(radioButtonSelected);
         // Refresh Table
         generateDataTableConstruction(data);

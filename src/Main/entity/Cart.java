@@ -4,6 +4,7 @@ import com.mysql.cj.protocol.Resultset;
 import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Cart {
 
@@ -278,5 +279,90 @@ public class Cart {
             }
         }
         return arrayAllOrderData;
+    }
+
+    // Function to generate daily dish/drink preference #43
+    public ArrayList<String> dailyPreference() {
+        String x = "NULL";
+        ArrayList<String> tempDaily = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"));
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date = current_date() GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 10");
+
+            int i = 0;
+            while (rs.next()) {
+                x = rs.getString("name");
+                tempDaily.set(i,x);
+                i++;
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return tempDaily;
+    }
+
+    // Function to generate weekly dish/drink preference #44
+    public ArrayList<String> weeklyPreference() {
+        String x = "NULL";
+        ArrayList<String> tempWeekly = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"));
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 week GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 10");
+
+            int i = 0;
+            while (rs.next()) {
+                x = rs.getString("name");
+                tempWeekly.set(i,x);
+                i++;
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return tempWeekly;
+    }
+
+    // Function to generate monthly dish/drink preference #45
+    public ArrayList<String> monthlyPreference() {
+        String x = "NULL";
+        ArrayList<String> tempMonthly = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"));
+        try{
+            Connection dbConnection = dbConnection();
+            Statement statement = dbConnection.createStatement();
+            //SQL query stuff
+            ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 month GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 10");
+
+            int i=0;
+            while (rs.next()) {
+                x = rs.getString("name");
+                tempMonthly.set(i,x);
+                i++;
+            }
+            //probably have to run a return for array list here in main program
+        } catch (Exception e){
+            // Catches any SQL query issues
+            e.printStackTrace();
+        }
+        return tempMonthly;
+    }
+
+    // Function to return 2D array of all preferences
+    public String [][] generatePreferenceReport(){
+        String [][] data = new String[10][3];
+        for (int row = 0; row < data.length; row++){
+            for (int column = 0; column < data[row].length; column++){
+                data[row][0] = dailyPreference().get(row);
+                data[row][1] = weeklyPreference().get(row);
+                data[row][2] = monthlyPreference().get(row);
+            }
+        } // end of for loop
+        return data;
     }
 }

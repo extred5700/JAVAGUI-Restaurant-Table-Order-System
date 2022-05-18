@@ -381,7 +381,7 @@ public class ManagerPageUI extends JFrame {
             else{
                 // Get Food Name from Text Field and the radio button selected
                 String food_name = fieldCreateFoodName.getText().toLowerCase();
-                String category = buttonGroupCreate.getSelection().getActionCommand();
+                String category = buttonGroupCreate.getSelection().getActionCommand().toLowerCase();
                 // Pass values to the controller
                 ManagerCreateController managerCreateController = new ManagerCreateController();
                 if (managerCreateController.validateCreateFoodItem(food_name, item_price, category)){
