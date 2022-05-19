@@ -39,7 +39,7 @@ public class Menu_Items {
     public boolean checkMenuItemExistence(String food_name){
         boolean menuItemExistence = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "SELECT * FROM menu_item WHERE name = '" + food_name + "'";
+        String query = "SELECT * FROM menu_item WHERE deleted = 'N' AND name = '" + food_name + "'";
         try{
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
