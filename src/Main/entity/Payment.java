@@ -36,13 +36,13 @@ public class Payment {
     public float getTotalPrice(){
         float x = 0;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "SELECT total_price FROM transaction_history WHERE transaction_id = " + transaction_id; //query
+        String query = "SELECT discounted_price FROM transaction_history WHERE transaction_id = " + transaction_id; //query
         try {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query); //execute query
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) { //This is the result set
-                x = rs.getFloat("total_price");
+                x = rs.getFloat("discounted_price");
             }
         } catch (Exception e){
             // Catches any SQL query issues
@@ -79,11 +79,11 @@ public class Payment {
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
             //SQL query stuff
-            ResultSet rs = statement.executeQuery("select AVG(total_price) from transaction_history WHERE date = current_date()");
+            ResultSet rs = statement.executeQuery("select AVG(discounted_price) from transaction_history WHERE date = current_date()");
 
 
             while (rs.next()) {
-                x = rs.getFloat("AVG(total_price)");
+                x = rs.getFloat("AVG(discounted_price)");
             }
             //probably have to run a return for array list here in main program
         } catch (Exception e){
@@ -100,11 +100,11 @@ public class Payment {
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
             //SQL query stuff
-            ResultSet rs = statement.executeQuery("select AVG(total_price) from transaction_history  WHERE date >= current_date() - interval 1 week");
+            ResultSet rs = statement.executeQuery("select AVG(discounted_price) from transaction_history  WHERE date >= current_date() - interval 1 week");
 
 
             while (rs.next()) {
-                x = rs.getFloat("AVG(total_price)");
+                x = rs.getFloat("AVG(discounted_price)");
             }
             //probably have to run a return for array list here in main program
         } catch (Exception e){
@@ -121,11 +121,11 @@ public class Payment {
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
             //SQL query stuff
-            ResultSet rs = statement.executeQuery("select AVG(total_price) from transaction_history  WHERE date >= current_date() - interval 1 month");
+            ResultSet rs = statement.executeQuery("select AVG(discounted_price) from transaction_history  WHERE date >= current_date() - interval 1 month");
 
 
             while (rs.next()) {
-                x = rs.getFloat("AVG(total_price)");
+                x = rs.getFloat("AVG(discounted_price)");
             }
             //probably have to run a return for array list here in main program
         } catch (Exception e){

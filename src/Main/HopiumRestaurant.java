@@ -19,7 +19,7 @@ public class HopiumRestaurant {
         //new RestaurantStaffPageUI();
 
         /* Customer */
-        //new CustomerLoginPage();
+        new CustomerLoginPage();
         //new CustomerPageUI(42);
 
     }

@@ -172,7 +172,7 @@ public class Discount {
             while (rs.next()) { //This is the result set
                 float x = rs.getFloat("discount_value"); //save discount value temporarily
                 //update total price in transaction history
-                String query2 = "UPDATE transaction_history SET total_price = total_price * " + x + " WHERE transaction_id = " + transaction_id;
+                String query2 = "UPDATE transaction_history SET discounted_price = total_price * " + x + " WHERE transaction_id = " + transaction_id;
                 Statement statement = dbConnection.createStatement();
                 statement.executeUpdate(query2);
                 discountApplied = true;
