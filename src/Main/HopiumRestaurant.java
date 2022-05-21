@@ -10,16 +10,16 @@ public class HopiumRestaurant {
         /* Staff */
         //new StaffLoginPage();
         // Admin
-        //new UserAdminPageUI();
+        new UserAdminPageUI();
         // Owner
-        new OwnerPageUI();
+        //new OwnerPageUI();
         // Manager
         //new ManagerPageUI();
         // Restaurant Staff
         //new RestaurantStaffPageUI();
 
         /* Customer */
-        new CustomerLoginPage();
+        //new CustomerLoginPage();
         //new CustomerPageUI(42);
 
     }

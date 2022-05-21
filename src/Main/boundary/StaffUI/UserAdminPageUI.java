@@ -218,6 +218,20 @@ public class UserAdminPageUI extends JFrame{
     public void displayCreatePanel(){
         displayTitledBorder(panelCreate, "Create User Account / User Profile");
 
+        // Remove all components then add choice buttons on the top
+        Component[] componentList = panelCreate.getComponents();
+        // Loop through the components
+        for(Component c : componentList){
+            //Find the components you want to remove
+            if(c instanceof JButton || c instanceof JLabel || c instanceof JTextField || c instanceof JScrollPane || c instanceof Choice){
+                //Remove it
+                panelCreate.remove(c);
+            }
+            if (c instanceof JButton){
+                c.setEnabled(true);
+            }
+        }
+
         // Choice buttons on top
         JButton [] buttonChoices = {buttonDisplayCreateAccount, buttonDisplayCreateProfile};
         for (JButton jButton : buttonChoices){
