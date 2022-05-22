@@ -668,9 +668,7 @@ public class CustomerPageUI extends JFrame {
         CustomerPaymentController paymentController = new CustomerPaymentController();
 
         // set total price field
-        float totalPrice = Float.parseFloat(String.valueOf(paymentController.getTotalPrice(table_no)));
-        fieldPaymentTotalPrice.setText(String.valueOf(totalPrice));
-        /*fieldPaymentTotalPrice.setText(String.valueOf(paymentController.getTotalPrice(table_no)));*/
+        fieldPaymentTotalPrice.setText(String.valueOf(paymentController.getTotalPrice(table_no)));
 
         /* Buttons */
         // Input Coupon and Make Payment Buttons
