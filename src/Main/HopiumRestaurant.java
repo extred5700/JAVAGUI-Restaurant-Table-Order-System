@@ -2,15 +2,16 @@ package Main;
 
 import Main.boundary.CustomerLoginPage;
 import Main.boundary.StaffUI.*;
+import Main.boundary.StartingPage;
 
 public class HopiumRestaurant {
     public static void main(String[] args) {
-        //new StartingPage();
+        new StartingPage();
 
         /* Staff */
         //new StaffLoginPage();
         // Admin
-        new UserAdminPageUI();
+        //new UserAdminPageUI();
         // Owner
         //new OwnerPageUI();
         // Manager
