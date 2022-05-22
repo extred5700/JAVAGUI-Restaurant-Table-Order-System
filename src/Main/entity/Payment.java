@@ -86,7 +86,7 @@ public class Payment {
                 x = rs.getFloat("AVG(discounted_price)");
             }
             //probably have to run a return for array list here in main program
-        } catch (Exception e){  
+        } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
         }
