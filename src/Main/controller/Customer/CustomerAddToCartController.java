@@ -1,7 +1,6 @@
 package Main.controller.Customer;
 
 import Main.entity.Cart;
-import Main.entity.Customer;
 
 public class CustomerAddToCartController {
     // Function to add to cart
