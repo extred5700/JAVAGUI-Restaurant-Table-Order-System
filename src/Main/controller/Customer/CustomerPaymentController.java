@@ -18,9 +18,4 @@ public class CustomerPaymentController {
     public float getTotalPrice(int table_no) {
         return new Payment(new Cart(table_no).getTransaction_id()).getTotalPrice();
     }
-
-    // check for coupon
-    /*public boolean discountCoupon(int table_no, String coupon) {
-        return new Cart(table_no).applyDiscount(coupon);
-    }*/
 }
