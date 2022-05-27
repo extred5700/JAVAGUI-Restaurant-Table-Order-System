@@ -216,6 +216,7 @@ public class RestaurantStaffPageUI extends JFrame {
 
     // 1b) Method to construction of the JTable, Mouse Click Listener to display all transactions (JTable type returned as a JScrollPane type)
     public Component editTableConstruction(){
+        // Obtain data from staff Edit Controller
         StaffEditController staffEditController = new StaffEditController();
         String [][] data = staffEditController.displayOrders();
         // Display data in a table format
@@ -421,9 +422,9 @@ public class RestaurantStaffPageUI extends JFrame {
             // NO need to check whether the user keys in an integer (already done in displaySearchPanel(), text field initialization)
             int table_num = Integer.parseInt(fieldSearchTableNumber.getText());
             StaffSearchController staffSearchController = new StaffSearchController();
-            String [][] data = staffSearchController.searchBy(table_num);
+            String [][] orders = staffSearchController.searchBy(table_num);
             // Refresh Table
-            searchTableConstruction(data);
+            searchTableConstruction(orders);
         }
     }
 
