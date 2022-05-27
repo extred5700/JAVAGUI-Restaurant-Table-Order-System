@@ -71,7 +71,7 @@ public class User_Profile extends Staff{
 
     /* Function to return a array of String to display in the Dropdown Box for:
     * 1) StaffLoginPage.java
-    * 2) UserAdminPageUI, Creation of User Profiles
+    * 2) UserAdminPageUI, Creation & Editing of User Profiles
     * Purely returning the Strings of the different types of User Admin
     * Will only return active user profiles
     */

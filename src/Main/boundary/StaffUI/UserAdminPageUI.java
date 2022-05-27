@@ -5,7 +5,6 @@ import Main.controller.UserAdmin.AdminCreateController;
 import Main.controller.UserAdmin.AdminEditController;
 import Main.controller.UserAdmin.AdminSuspendController;
 import Main.controller.UserAdmin.AdminViewSearchController;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -213,6 +212,7 @@ public class UserAdminPageUI extends JFrame{
      * 1a) void displayCreatePanel() - Display JPanel for User Admin to create an account or profile
      * 1b) void buttonCreateChoices_Onclick() - Allows the user to choose between creation of User Account or User Profile
      * 1c) void buttonCreateUserAccount_Onclick() - Create button function to allow the user to create a User Account by passing the data to the controller
+     * 1d) void buttonCreateUserProfile_Onclick() - Create button function to allow the user to create a User Profile by passing the data to the controller
      */
     // 1a) Display JPanel for User Admin to create an account or profile
     public void displayCreatePanel(){

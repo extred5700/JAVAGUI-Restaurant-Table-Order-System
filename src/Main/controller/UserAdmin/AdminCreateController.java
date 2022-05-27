@@ -12,7 +12,7 @@ public class AdminCreateController {
         return user_profile.existingProfile();
     }
 
-    // Validate Account's existence before creation
+    // Validate User Account's existence before creation
     public boolean validateCreateAccount(String username, String password, String profile){
         // If User Account already in use
         if (user_account.checkUserExistence(username, password, profile)){
@@ -24,7 +24,7 @@ public class AdminCreateController {
         }
     }
 
-    // Validate Profile's existence before creation
+    // Validate User Profile's existence before creation
     public boolean validateCreateProfile(String profile){
         // If User Profile already in use
         if (user_profile.checkProfileExistence(profile)){

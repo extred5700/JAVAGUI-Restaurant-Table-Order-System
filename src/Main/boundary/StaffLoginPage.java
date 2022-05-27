@@ -2,7 +2,6 @@ package Main.boundary;
 
 import Main.boundary.StaffUI.*;
 import Main.controller.Staff.LoginController;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -127,10 +126,10 @@ public class StaffLoginPage extends JFrame{
         staffLoginFrame.setVisible(false);
         switch (profile) {
             case "user admin" -> new UserAdminPageUI(); // Display Administrator UI
-            case "restaurant owner" -> new OwnerPageUI();
-            case "restaurant manager" -> new ManagerPageUI();
-            case "restaurant staff" -> new RestaurantStaffPageUI();
-            case "default" -> System.out.println(1); // For Testing
+            case "restaurant owner" -> new OwnerPageUI(); // Display Restaurant Owner UI
+            case "restaurant manager" -> new ManagerPageUI(); // Display Restaurant Manager UI
+            case "restaurant staff" -> new RestaurantStaffPageUI(); // Display Restaurant Staff UI
+            case "default" -> System.out.println(1); // For external created profiles
         }
     } // end of method loginSuccess
 }

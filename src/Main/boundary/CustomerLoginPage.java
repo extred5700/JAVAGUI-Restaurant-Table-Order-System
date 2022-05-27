@@ -1,13 +1,11 @@
 package Main.boundary;
 
 import Main.boundary.CustomerUI.CustomerPageUI;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import static Main.boundary.StartingPage.displayBannerImage;
 
 public class CustomerLoginPage extends JFrame {
@@ -31,7 +29,6 @@ public class CustomerLoginPage extends JFrame {
         displayBannerImage.setBounds(0, 0, 505, 200);
         customerLoginFrame.getContentPane().add(displayBannerImage);
 
-
         // Header label
         JLabel labelTopText = new JLabel("Enter table number to view menu");
         labelTopText.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
@@ -53,7 +50,6 @@ public class CustomerLoginPage extends JFrame {
 
         /* BUTTON DESIGN */
         // Login Button
-        // Button
         JButton buttonLogin = new JButton("View Menu");
         buttonLogin.setBounds(40, 320, 200, 40);
         buttonLogin.setFont(new Font("Arial", Font.BOLD + Font.ITALIC, 15));
@@ -70,11 +66,9 @@ public class CustomerLoginPage extends JFrame {
         buttonReturn.addActionListener(buttonListener);
         customerLoginFrame.getContentPane().add(buttonLogin);
         customerLoginFrame.getContentPane().add(buttonReturn);
-
         customerLoginFrame.setVisible(true);
     }
 
-    // end of actionPerformed
     // Button Listener
     ActionListener buttonListener = e -> {
         JButton buttonPressed = (JButton) e.getSource();

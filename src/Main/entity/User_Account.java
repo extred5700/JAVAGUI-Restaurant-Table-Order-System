@@ -68,7 +68,7 @@ public class User_Account extends Staff{
             preparedStatement.setInt(3, profileID);
             preparedStatement.setString(4, active);
             preparedStatement.execute();
-            isUserCreated = true;
+            isUserCreated = true; // User Account is successfully created
         }catch (Exception e){
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
