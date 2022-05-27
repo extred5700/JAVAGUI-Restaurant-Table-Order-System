@@ -22,7 +22,6 @@ public class User_Account extends Staff{
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         try{
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             String query = "SELECT * FROM user_account INNER JOIN user_profile ON user_account.profile_id = user_profile.profile_id WHERE username = '" + username + "' AND password = '" + password + "' AND profile_name = '" + profile +"'";
             ResultSet rs = statement.executeQuery(query);
             if (!rs.next()){
@@ -41,7 +40,8 @@ public class User_Account extends Staff{
         return userExistence;
     } // end of method checkUserExistence()
 
-    // Function to Create a user account #3
+    // Function to Create a user account, if successful, return true
+    // User story 3
     public boolean createAccount(String username, String password, String profile) {
         boolean isUserCreated = false;
         String active = "Y";
@@ -59,7 +59,7 @@ public class User_Account extends Staff{
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
         }
-        //actually insert into table
+        // insert into table
         try{
             String query2 = "insert into user_account (username, password, profile_id, account_active)" + " values (?, ?, ?, ?) ";
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query2);
@@ -76,7 +76,8 @@ public class User_Account extends Staff{
         return isUserCreated;
     }
 
-    // Function to Edit user accounts #4
+    // Function to Edit user accounts  if successful, return true
+    // User story 4
     public boolean editAccount(String oldUsername, String newUsername, String newPassword, String newProfile) {
         boolean isUserEdited = false;
         int profileID = 0;
@@ -93,7 +94,7 @@ public class User_Account extends Staff{
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
         }
-
+        // update the table
         String query = "UPDATE user_account SET username ='" + newUsername + "',password='" + newPassword + "',profile_id='" + profileID + "' WHERE username ='" + oldUsername + "'";
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query);
@@ -104,7 +105,8 @@ public class User_Account extends Staff{
         return isUserEdited;
     }
 
-    // Function to Search for user accounts #5
+    // Function to Search for user accounts, returns 2D array of account details
+    // User story 5
     public String [][] searchAccount(String dataKeyedIn) {
         ArrayList<String> arrayListSearchedUsernames = new ArrayList<>();
         ArrayList<String> arrayListSearchedPasswords = new ArrayList<>();
@@ -141,7 +143,8 @@ public class User_Account extends Staff{
         return arrayAllSearchedData;
     }
 
-    // Function to View user accounts #6
+    // Function to View user accounts returns 2D array of account details
+    // User story 6
     public String [][] viewAccount() {
         ArrayList<String> arrayListSearchedUsernames = new ArrayList<>();
         ArrayList<String> arrayListSearchedPasswords = new ArrayList<>();
@@ -178,7 +181,8 @@ public class User_Account extends Staff{
         return arrayAllAccountData;
     }
 
-    // Function to Suspend user accounts #7
+    // Function to Suspend user accounts  if successful, return true
+    // User story 7
     public boolean suspendAccount(String selectedUsername, String newActiveStatus) {
         boolean isUserSuspended = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB

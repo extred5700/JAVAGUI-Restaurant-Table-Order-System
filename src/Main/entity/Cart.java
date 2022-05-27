@@ -1,7 +1,5 @@
 package Main.entity;
-import com.mysql.cj.protocol.Resultset;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +8,6 @@ public class Cart {
 
     // Variables
     private int transaction_id;
-//    private float total_price;
 
     // Default Constructor
     public Cart() {
@@ -75,7 +72,8 @@ public class Cart {
         }
     }
 
-    // Get Cart items using the transaction ID
+    // Get Cart items, returns a 2d array of items in cart
+    // User stories 32 and 24
     public String [][] viewCart(){
         ArrayList<String> arrayListOrderId = new ArrayList<>(); //Arraylist of order_id
         ArrayList<String> arrayListName = new ArrayList<>(); //Arraylist of item names
@@ -118,6 +116,7 @@ public class Cart {
     }
 
     // Add items to the cart, if successful, return true
+    // User story 29
     public boolean addToCart (int item_id, int qty){
         boolean isItemAdded = false;
         Connection dbConnection = dbConnection();
@@ -128,7 +127,7 @@ public class Cart {
             preparedStatement.setInt(2, item_id);
             preparedStatement.setInt(3, qty);
             preparedStatement.execute();
-            isItemAdded = true; //should be here - do let me know if its wrong place
+            isItemAdded = true;
         } catch (Exception e){
             System.err.println("Got an exception!");
             System.err.println(e.getMessage());
@@ -137,6 +136,7 @@ public class Cart {
     }
 
     // Edit items from the cart, if successful, return true
+    // User stories 30 and 23
     public boolean editCart (int order_id, int qty){
         boolean isItemEdited = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -151,6 +151,7 @@ public class Cart {
     }
 
     // Delete items from the cart, if successful, return true
+    // User stories 26 and 33
     public boolean deleteFromCart(int order_id){
         boolean isItemDeleted = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -164,73 +165,10 @@ public class Cart {
         return isItemDeleted;
     }
 
-    // Returns float of total price of current cart - for any payment displays
-    /*public float getTotalPrice(){
-        float x = 0;
-        Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "SELECT total_price FROM transaction_history WHERE transaction_id = " + transaction_id; //query
-        try {
-            PreparedStatement preparedStatement = dbConnection.prepareStatement(query); //execute query
-            ResultSet rs = preparedStatement.executeQuery();
 
-            while (rs.next()) { //This is the result set
-                x = rs.getFloat("total_price");
-            }
-        } catch (Exception e){
-            // Catches any SQL query issues
-            e.printStackTrace();
-        }
-        return x;
-    }*/
-
-    //Checks for valid discount and applies it, if successful, return true
-    /*public boolean applyDiscount(String discount_code){
-        boolean discountApplied = false;
-        Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "SELECT discount_value FROM discount WHERE coupon = '" + discount_code+"'"; //query
-        try {
-            //SQL query stuff
-            PreparedStatement preparedStatement = dbConnection.prepareStatement(query);//execute query
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()) { //This is the result set
-                float x = rs.getFloat("discount_value"); //save discount value temporarily
-                //update total price in transaction history
-                String query2 = "UPDATE transaction_history SET total_price = total_price * " + x + " WHERE transaction_id = " + transaction_id;
-                Statement statement = dbConnection.createStatement();
-                statement.executeUpdate(query2);
-                discountApplied = true;
-            }
-        } catch (Exception e){
-            // Catches any SQL query issues
-            e.printStackTrace();
-        }
-        return discountApplied;
-    }*/
-
-    // Updates transaction history with payment - requires phone number of customer. upon success, return true
-    /*public boolean makePayment (String phoneNumber){
-        boolean isPaymentSuccessful = false;
-
-        Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "UPDATE transaction_history SET date = current_date(), pNum = '" + phoneNumber + "', paid = 'Y' WHERE transaction_id = " + transaction_id; //query
-        try (Statement statement = dbConnection.createStatement()){
-            statement.executeUpdate(query); //execute query
-            isPaymentSuccessful = true;
-        } catch (SQLException e){
-            System.out.println(e);
-        }
-        return isPaymentSuccessful;
-    }*/
-
-    // Validate Customer's phone number
-    /*public boolean validatePhoneNumber(String phoneNumber) {
-        return phoneNumber.length() == 8 && (phoneNumber.charAt(0) == '8' || phoneNumber.charAt(0) == '9');
-    }*/
-
-    // Function to Edit order status #22
+    // Edit order status to fulfilled, if successful, return true
+    // User story 22
     public boolean editOrderStatus(int orderIDSelected) {
-        // Not calling Cart Entity class as Cart Entity class do not have Edit Order Status method
         boolean isOrderFulfilled = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         String query = "UPDATE order_history SET fulfilled ='" + "Y" + "' WHERE order_id='" + orderIDSelected + "'";
@@ -244,7 +182,8 @@ public class Cart {
         return isOrderFulfilled;
     }
 
-    // Function to View customer orders #25
+    // View all orders, returns 2d array of all orders
+    // User story 25
     public String [][] viewAllOrders() {
         ArrayList<String> arrayListOrderID = new ArrayList<>();
         ArrayList<String> arrayListFoodName = new ArrayList<>();
@@ -257,7 +196,7 @@ public class Cart {
         try (Statement statement = dbConnection.createStatement()){
             ResultSet set = statement.executeQuery(query);
             while (set.next()){
-                // Add data to their respective respective array list
+                // Add data to their respective array list
                 arrayListOrderID.add(set.getString("order_id"));
                 arrayListFoodName.add(set.getString("name"));
                 arrayListQuantity.add(set.getString("qty"));
@@ -281,15 +220,15 @@ public class Cart {
         return arrayAllOrderData;
     }
 
-    /* For Restaurant Owner Report Generation: Prefernce of Items */
-    // Function to generate daily dish/drink preference #43
+    // For Restaurant Owner Report Generation: preference of Items
+    // Function to generate daily dish/drink preference in array list
+    // User story 43
     public ArrayList<String> dailyPreference() {
         String x = "NULL";
         ArrayList<String> tempDaily = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"));
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date = current_date() GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 10");
 
             int i = 0;
@@ -298,7 +237,6 @@ public class Cart {
                 tempDaily.set(i,x);
                 i++;
             }
-            //probably have to run a return for array list here in main program
         } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
@@ -306,14 +244,14 @@ public class Cart {
         return tempDaily;
     }
 
-    // Function to generate weekly dish/drink preference #44
+    // Function to generate weekly dish/drink preference in array list
+    // User story 44
     public ArrayList<String> weeklyPreference() {
         String x = "NULL";
         ArrayList<String> tempWeekly = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"));
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 week GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 10");
 
             int i = 0;
@@ -322,7 +260,6 @@ public class Cart {
                 tempWeekly.set(i,x);
                 i++;
             }
-            //probably have to run a return for array list here in main program
         } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
@@ -330,14 +267,14 @@ public class Cart {
         return tempWeekly;
     }
 
-    // Function to generate monthly dish/drink preference #45
+    // Function to generate monthly dish/drink preference in array list
+    // User Story 45
     public ArrayList<String> monthlyPreference() {
         String x = "NULL";
         ArrayList<String> tempMonthly = new ArrayList<>(Arrays.asList("NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"));
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             ResultSet rs = statement.executeQuery("SELECT name, SUM(qty) FROM order_history INNER JOIN menu_item ON order_history.item_id = menu_item.item_id INNER JOIN transaction_history ON order_history.transaction_id = transaction_history.transaction_id WHERE date >= current_date() - interval 1 month GROUP BY order_history.item_id ORDER BY SUM(qty) DESC LIMIT 10");
 
             int i=0;
@@ -346,7 +283,6 @@ public class Cart {
                 tempMonthly.set(i,x);
                 i++;
             }
-            //probably have to run a return for array list here in main program
         } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
@@ -355,13 +291,15 @@ public class Cart {
     }
 
     // Function to return 2D array of all Menu Item preferences
+    // Converts arraylists to 2D array
+    // User stories 43,44,45
     public String [][] generatePreferenceReport(){
         String [][] data = new String[10][3];
         for (int row = 0; row < data.length; row++){
             for (int column = 0; column < data[row].length; column++){
-                data[row][0] = dailyPreference().get(row);
-                data[row][1] = weeklyPreference().get(row);
-                data[row][2] = monthlyPreference().get(row);
+                data[row][0] = dailyPreference().get(row); // User story 43
+                data[row][1] = weeklyPreference().get(row); // User story 44
+                data[row][2] = monthlyPreference().get(row); // User story 45
             }
         } // end of for loop
         return data;

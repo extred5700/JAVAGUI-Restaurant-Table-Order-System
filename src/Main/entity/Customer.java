@@ -1,7 +1,8 @@
 package Main.entity;
 
-import com.mysql.cj.x.protobuf.MysqlxPrepare;
+// double check - can delete this class?
 
+import com.mysql.cj.x.protobuf.MysqlxPrepare;
 import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;

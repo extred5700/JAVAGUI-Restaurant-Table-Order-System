@@ -1,14 +1,12 @@
 package Main.entity;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Payment {
     // Variable Declaration
     private int transaction_id;
 
-    // Default Contructor
+    // Default Constructor
     public Payment() {
         transaction_id = 0;
     }
@@ -52,6 +50,7 @@ public class Payment {
     }
 
     // Updates transaction history with payment - requires phone number of customer. upon success, return true
+    // User story 34
     public boolean makePayment (String phoneNumber){
         boolean isPaymentSuccessful = false;
 
@@ -66,26 +65,25 @@ public class Payment {
         return isPaymentSuccessful;
     }
 
-    // Validate Customer's phone number
+    // Validate Customer's phone number, returns true if phone number is valid
     public boolean validatePhoneNumber(String phoneNumber) {
         return phoneNumber.length() == 8 && (phoneNumber.charAt(0) == '8' || phoneNumber.charAt(0) == '9');
     }
 
     /* For Restaurant Owner Report Generation: Average Spending */
-    // Function to generate daily average spending per visit #37
+    // Function to generate daily average spending per visit in array list
+    // User story 37
     public String dailySpending() {
         float x = 0;
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             ResultSet rs = statement.executeQuery("select AVG(discounted_price) from transaction_history WHERE date = current_date()");
 
 
             while (rs.next()) {
                 x = rs.getFloat("AVG(discounted_price)");
             }
-            //probably have to run a return for array list here in main program
         } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
@@ -93,20 +91,19 @@ public class Payment {
         return Float.toString(x);
     }
 
-    // Function to generate weekly average spending per visit #38
+    // Function to generate weekly average spending per visit in array list
+    // User story 38
     public String weeklySpending() {
         float x = 0;
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             ResultSet rs = statement.executeQuery("select AVG(discounted_price) from transaction_history  WHERE date >= current_date() - interval 1 week");
 
 
             while (rs.next()) {
                 x = rs.getFloat("AVG(discounted_price)");
             }
-            //probably have to run a return for array list here in main program
         } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
@@ -114,20 +111,19 @@ public class Payment {
         return Float.toString(x);
     }
 
-    // Function to generate monthly average spending per visit #39
+    // Function to generate monthly average spending per visit in array list
+    // User story 39
     public String monthlySpending() {
         float x = 0;
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             ResultSet rs = statement.executeQuery("select AVG(discounted_price) from transaction_history  WHERE date >= current_date() - interval 1 month");
 
 
             while (rs.next()) {
                 x = rs.getFloat("AVG(discounted_price)");
             }
-            //probably have to run a return for array list here in main program
         } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
@@ -136,20 +132,19 @@ public class Payment {
     }
 
     /* For Restaurant Owner Report Generation: Frequency of Visits */
-    // Function to generate daily frequency of visits #40
+    // Function to generate daily frequency of visits in array list
+    // User story 40
     public String dailyFrequency() {
         int x = 0;
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             ResultSet rs = statement.executeQuery("SELECT count(*) FROM transaction_history WHERE date = current_date()");
 
 
             while (rs.next()) {
                 x = rs.getInt("count(*)");
             }
-            //probably have to run a return for array list here in main program
         } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
@@ -157,20 +152,19 @@ public class Payment {
         return Integer.toString(x);
     }
 
-    // Function to generate weekly frequency of visits #41
+    // Function to generate weekly frequency of visits in array list
+    // User story 41
     public String weeklyFrequency() {
         int x = 0;
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             ResultSet rs = statement.executeQuery("SELECT count(*) FROM transaction_history WHERE date >= current_date() - interval 1 week");
 
 
             while (rs.next()) {
                 x = rs.getInt("count(*)");
             }
-            //probably have to run a return for array list here in main program
         } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
@@ -178,20 +172,19 @@ public class Payment {
         return Integer.toString(x);
     }
 
-    // Function to generate monthly frequency of visit #42
+    // Function to generate monthly frequency of visit in array list
+    // User story 42
     public String monthlyFrequency() {
         int x = 0;
         try{
             Connection dbConnection = dbConnection();
             Statement statement = dbConnection.createStatement();
-            //SQL query stuff
             ResultSet rs = statement.executeQuery("SELECT count(*) FROM transaction_history WHERE date >= current_date() - interval 1 month");
 
 
             while (rs.next()) {
                 x = rs.getInt("count(*)");
             }
-            //probably have to run a return for array list here in main program
         } catch (Exception e){
             // Catches any SQL query issues
             e.printStackTrace();
@@ -203,6 +196,7 @@ public class Payment {
     * 1. Average Spending
     * 2. Frequency of Visits
     * And return the data as a 2D array back to GenerateReportController
+    * User stories 37,38,39,40,41,42
     */
     public String [][] generateReport(String radioButtonSelection){
         String [][] data = {

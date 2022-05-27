@@ -7,17 +7,9 @@ public class User_Profile extends Staff{
     // Variable Declaration
     Staff staff = new Staff();
 
-    /* Not sure whether need constructor
-
     // Default Constructor
     public User_Profile(){
     }
-
-    // Other Constructor
-    public User_Profile(String profile){
-        super(profile);
-    }
-    */
 
     // Validate User Profile
     public boolean checkProfileExistence(String profile){
@@ -41,7 +33,8 @@ public class User_Profile extends Staff{
         return profileExistence;
     }
 
-    // Function to create a User Profile #8
+    // Function to create a User Profile  if successful, return true
+    // User story 8
     public boolean createProfile(String newProfile){
         boolean isProfileCreated = false;
         String active = "Y";
@@ -61,7 +54,8 @@ public class User_Profile extends Staff{
         return isProfileCreated;
     }
 
-    // Function to edit a User Profile #9
+    // Function to edit a User Profile if successful, return true
+    // User story 9
     public boolean editProfile(int selectedProfileID, String newProfile){
         boolean isProfileEdited = false;
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB
@@ -102,7 +96,8 @@ public class User_Profile extends Staff{
         return arrayProfiles;
     }
 
-    // Function to search User Profile #10
+    // Function to search User Profile returns 2D array of profile details
+    // User story 10
     public String[][] searchProfile(String dataKeyedIn){
         ArrayList<String> arrayListSearchedProfileID = new ArrayList<>();
         ArrayList<String> arrayListSearchedProfileName = new ArrayList<>();
@@ -135,7 +130,8 @@ public class User_Profile extends Staff{
         return arrayAllSearchedData;
     }
 
-    // Function to view User Profile #11
+    // Function to view User Profile returns 2D array of profile details
+    // User story 11
     public String[][] viewProfile(){
         ArrayList<String> arrayListSearchedProfileID = new ArrayList<>();
         ArrayList<String> arrayListSearchedProfileName = new ArrayList<>();
@@ -168,7 +164,8 @@ public class User_Profile extends Staff{
         return arrayAllProfileData;
     }
 
-    // Function to suspend/un-suspend User Profile #7
+    // Function to suspend/un-suspend User Profile if successful, return true
+    // User story 7
     public boolean suspendProfile(int selectedProfileID, String newActiveStatus){
         boolean isProfileSuspended = false;
         Connection dbConnection = staff.dbConnection(); // Set up connection with the DB

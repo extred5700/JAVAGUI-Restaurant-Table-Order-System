@@ -1,6 +1,5 @@
 package Main.entity;
 
-// This is just a draft for the Order class - May change depending on our UML design in the future
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -59,8 +58,8 @@ public class Menu_Items {
         return menuItemExistence;
     }
 
-    // Will return true upon successful creation of menu item
-    // Function to Create menu items #15
+    // Function to Create menu items, if successful, return true
+    // User story 15
     public boolean createMenuItems(String food_name, Float item_price, String category) {
         boolean isMenuItemCreated = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -79,7 +78,8 @@ public class Menu_Items {
         return isMenuItemCreated;
     }
 
-    // View Menu Items for Restaurant Manager
+    // Function to view all menu items, returns 2D array, this is used by managers
+    // User story 18
     public String [][] viewMenuItems(){
         ArrayList<String> arrayListItemID = new ArrayList<>();
         ArrayList<String> arrayListName = new ArrayList<>();
@@ -113,7 +113,8 @@ public class Menu_Items {
         return arrayAllMenuItems;
     }
 
-    // Function to Edit menu items #16
+    // Function to edit menu items, if successful, return true
+    // User story 16
     public boolean editMenuItem(int itemID, String newFoodName, Float new_price) {
         boolean isMenuItemEdited = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -127,7 +128,8 @@ public class Menu_Items {
         return isMenuItemEdited;
     }
 
-    // Function to Search menu items #17
+    // Function to search menu items, if successful, return true
+    // User story 17
     public String [][] searchMenuItems(String searchText) {
         ArrayList<String> arrayListSearchedItemID = new ArrayList<>();
         ArrayList<String> arrayListSearchedFoodName = new ArrayList<>();
@@ -137,7 +139,6 @@ public class Menu_Items {
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         try{
             Statement statement = dbConnection.createStatement();
-            // SQL Query Stuff
             ResultSet rs = statement.executeQuery("SELECT * FROM menu_item WHERE deleted = 'N' AND name LIKE '%" + searchText + "%'");
 
             while (rs.next()) { //This is the result set
@@ -164,7 +165,8 @@ public class Menu_Items {
         return arrayAllSearchData;
     }
 
-    // Function to Delete menu item #19
+    // Function to delete menu items, if successful, return true
+    // User story 19
     public boolean deleteMenuItem(int itemID) {
         boolean isMenuItemDeleted = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -178,7 +180,8 @@ public class Menu_Items {
         return isMenuItemDeleted;
     }
 
-    // View Menu Items for Customer
+    // Function to view menu items, returns 2D array, this is used by customers
+    // User story 28 and 31
     public String [][] viewMenu(String category){
         ArrayList<String> arrayListItemID = new ArrayList<>();
         ArrayList<String> arrayListItemName = new ArrayList<>();

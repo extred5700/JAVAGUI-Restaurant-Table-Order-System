@@ -39,11 +39,11 @@ public class Discount {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
             if (!rs.next()){
-                //This means no coupon found
+                // This means no coupon found
                 System.out.println("No coupon found.");
             }
             else{
-                //This means coupon found
+                // This means coupon found
                 System.out.println("Coupon already exists.");
                 couponExistence = true;
             }
@@ -54,7 +54,8 @@ public class Discount {
         return couponExistence;
     }
 
-    // Return true upon successful creation of Coupon
+    // Function to create coupon, if successful, return true
+    // User story 420
     public boolean createCoupon(String coupon, Float discount){
         boolean isCouponCreated = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -72,7 +73,8 @@ public class Discount {
         return isCouponCreated;
     }
 
-    // Function to view all coupons
+    // Function to view all coupons, if successful, return true
+    // User story 422
     public String [][] viewCoupons(){
         ArrayList<String> arrayListCouponName = new ArrayList<>();
         ArrayList<String> arrayListDiscountValue = new ArrayList<>();
@@ -100,7 +102,8 @@ public class Discount {
         return arrayAllCoupons;
     }
 
-    // Returns true upon successful editing of Coupon
+    // Function to edit coupons, if successful, return true
+    // User story 421
     public boolean editCoupon(String oldCouponName, String newCouponName, Float new_discount_value){
         boolean isCouponEdited = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -114,7 +117,8 @@ public class Discount {
         return isCouponEdited;
     }
 
-    // Search Coupons by Coupon name and return by 2D array
+    // Function to search Coupons by Coupon name and return by 2D array
+    // User story 424
     public String [][] searchCoupon(String searchText){
         ArrayList<String> arrayListSearchedCouponName = new ArrayList<>();
         ArrayList<String> arrayListSearchedDiscountValue = new ArrayList<>();
@@ -122,7 +126,6 @@ public class Discount {
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         try{
             Statement statement = dbConnection.createStatement();
-            // SQL Query Stuff
             ResultSet rs = statement.executeQuery("SELECT * FROM discount WHERE coupon LIKE '%" + searchText + "%'");
 
             while (rs.next()) { //This is the result set
@@ -145,7 +148,8 @@ public class Discount {
         return arrayAllSearchData;
     }
 
-    // Function to Delete Coupon
+    // Function to Delete Coupon, if successful, return true
+    // User story 423
     public boolean deleteCoupon(String coupon){
         boolean isCouponDeleted = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
@@ -159,19 +163,19 @@ public class Discount {
         return isCouponDeleted;
     }
 
-    //Checks for valid discount and applies it, if successful, return true
+    // Checks for valid discount and applies it, if successful, return true
+    // User story 425
     public boolean applyDiscount(String discount_code){
         boolean discountApplied = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
         String query = "SELECT discount_value FROM discount WHERE coupon = '" + discount_code+"'"; //query
         try {
-            //SQL query stuff
             PreparedStatement preparedStatement = dbConnection.prepareStatement(query);//execute query
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) { //This is the result set
                 float x = rs.getFloat("discount_value"); //save discount value temporarily
-                //update total price in transaction history
+                //update discounted price in transaction history
                 String query2 = "UPDATE transaction_history SET discounted_price = total_price * " + x + " WHERE transaction_id = " + transaction_id;
                 Statement statement = dbConnection.createStatement();
                 statement.executeUpdate(query2);

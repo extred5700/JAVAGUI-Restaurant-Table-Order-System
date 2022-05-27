@@ -1,6 +1,7 @@
 package Main.entity;
 
 // This is just a draft for the Order class - May change depending on our UML design in the future
+// can double check if we need this entity?
 
 public class Order {
     // Variable Declaration
