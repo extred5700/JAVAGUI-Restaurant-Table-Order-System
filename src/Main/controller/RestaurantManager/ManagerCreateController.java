@@ -19,6 +19,8 @@ public class ManagerCreateController {
         }
     }
 
+    // Check whether Coupon is in the DB, if it is, return false
+    // else, create the Coupon and return True
     public boolean validateCreateCoupon(String coupon, Float discount){
         // If coupon already exist
         if (myDiscount.checkCouponExistence(coupon)){

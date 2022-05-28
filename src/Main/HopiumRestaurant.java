@@ -6,7 +6,7 @@ import Main.boundary.StartingPage;
 
 public class HopiumRestaurant {
     public static void main(String[] args) {
-        new StartingPage();
+        //new StartingPage();
 
         /* Staff */
         //new StaffLoginPage();
@@ -15,7 +15,7 @@ public class HopiumRestaurant {
         // Owner
         //new OwnerPageUI();
         // Manager
-        //new ManagerPageUI();
+        new ManagerPageUI();
         // Restaurant Staff
         //new RestaurantStaffPageUI();
 

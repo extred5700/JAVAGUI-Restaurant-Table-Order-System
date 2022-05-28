@@ -1,6 +1,5 @@
 package Main.entity;
 
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -115,10 +114,10 @@ public class Menu_Items {
 
     // Function to edit menu items, if successful, return true
     // User story 16
-    public boolean editMenuItem(int itemID, String newFoodName, Float new_price) {
+    public boolean editMenuItem(int itemID, String newFoodName, Float new_item_price) {
         boolean isMenuItemEdited = false;
         Connection dbConnection = dbConnection(); // Set up connection with the DB
-        String query = "UPDATE menu_item SET name ='" + newFoodName + "',item_price='" + new_price + "' WHERE item_id='" + itemID + "'";
+        String query = "UPDATE menu_item SET name ='" + newFoodName + "',item_price='" + new_item_price + "' WHERE item_id='" + itemID + "'";
         try (Statement statement = dbConnection.createStatement()){
             statement.executeUpdate(query);
             isMenuItemEdited = true;

@@ -2,7 +2,6 @@ package Main.boundary.StaffUI;
 
 import Main.boundary.StaffLoginPage;
 import Main.controller.RestaurantManager.*;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -227,7 +226,7 @@ public class ManagerPageUI extends JFrame {
     * 1a) void displayCreatePanel() - Method to display JPanel for Restaurant Manager to create menu items or coupons
     * 1b) void buttonCreateChoices_Onclick(String buttonPressed) - Allows the user to choose between creation of Menu Items OR coupon
     * 1c) void buttonCreateMenuItem_Onclick() - Create Menu Item button function to allow the user to create a Menu Item by passing the data to the controller
-    * 1d) void buttonCreateCoupon_Onclick() - Create Coupon button function to allow the user to create a Menu Item by passing the data to the controller
+    * 1d) void buttonCreateCoupon_Onclick() - Create Coupon button function to allow the user to create a Coupon by passing the data to the controller
     */
     // 1a) Method to display JPanel for Restaurant Manager to create menu items and coupons
     public void displayCreatePanel(){
@@ -394,7 +393,7 @@ public class ManagerPageUI extends JFrame {
         } // end of if-else statements
     }
 
-    // 1d) Create Coupon button function to allow the user to create a Menu Item by passing the data to the controller
+    // 1d) Create Coupon button function to allow the user to create a Coupon by passing the data to the controller
     public void buttonCreateCoupon_Onclick(){
         if (fieldCreateCouponName.getText().isEmpty() || fieldCreateCouponDiscount.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty!", "Error!", JOptionPane.WARNING_MESSAGE);
@@ -436,7 +435,7 @@ public class ManagerPageUI extends JFrame {
     * 2d) void buttonEditMenuItem_Onclick() - Edit Menu Item button function to allow the user to edit a Menu Item by passing the data to the controller
     * Methods 2e and 2f belongs to Editing COUPONS
     * 2e) Component editCouponTableConstruction() - Construction of table variables for EDIT COUPON functions
-    * 2f) void buttonEditCoupon_Onclick() - Edit Coupon button function to allow the user to edit a Menu Item by passing the data to the controller
+    * 2f) void buttonEditCoupon_Onclick() - Edit Coupon button function to allow the user to edit a Coupon by passing the data to the controller
     * */
     // 2a) Method to display JPanel for Restaurant Manager to edit menu items or coupons
     public void displayEditPanel(){
@@ -688,7 +687,7 @@ public class ManagerPageUI extends JFrame {
         return editCouponScrollPane;
     }
 
-    // 2f) Edit Coupon button function to allow the user to edit a Menu Item by passing the data to the controller
+    // 2f) Edit Coupon button function to allow the user to edit a Coupon by passing the data to the controller
     public void buttonEditCoupon_Onclick(){
         if (fieldEditCouponName.getText().isEmpty() || fieldEditCouponDiscountValue.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Please do not leave the text fields empty!", "Error!", JOptionPane.WARNING_MESSAGE);
@@ -733,7 +732,7 @@ public class ManagerPageUI extends JFrame {
 
 
     /* 3. SEARCH function
-    * 3a) void displaySearchPanel() - Method to display JPanel for Restaurant Manager to search menu items or coupons
+    * 3a) void displaySearchPanel() - Method to display JPanel for Restaurant Manager to search MENU ITEMS or COUPONS
     * Methods 3b and 3c belongs to searching MENU ITEMS
     * 3b) void buttonSearchMenuItem_Onclick() - Search by Menu Item Name button function
     * 3c) Component searchMenuItemTableConstruction(String [][] data) - Construction of table variables for MENU ITEMS functions
@@ -912,7 +911,6 @@ public class ManagerPageUI extends JFrame {
     public void buttonViewMenuItem_Onclick(){
         buttonViewMenuItem.setEnabled(false);
         buttonViewCoupon.setEnabled(true);
-
         // Table
         ManagerViewController managerViewController = new ManagerViewController();
         String [][] arrayAllMenuItems = managerViewController.displayMenuItems();
@@ -945,7 +943,7 @@ public class ManagerPageUI extends JFrame {
         return viewMenuItemScrollPane1;
     }
 
-    // 4d) View Coupon button function to allow the user to view all Menu Items on a table upon pressing the View All Coupons
+    // 4d) View Coupon button function to allow the user to view all Coupons on a table upon pressing the View All Coupons
     public void buttonViewCoupon_Onclick(){
         buttonViewCoupon.setEnabled(false);
         buttonViewMenuItem.setEnabled(true);
@@ -984,9 +982,9 @@ public class ManagerPageUI extends JFrame {
 
     /* 5. SUSPEND function
     * 5a) void displayDeletePanel() - Method to display JPanel for Restaurant Manager to delete menu items or coupons
-    * 5b) void buttonDeleteChoices_Onclick(String buttonPressed) - Allows the user to choose between deletion of Menu Items OR coupon, then display the respective GUI components
+    * 5b) void buttonDeleteChoices_Onclick(String buttonPressed) - Allows the user to choose between deletion of Menu Items OR Coupons, then display the respective GUI components
     * Methods 5c and 5d belongs to deleting MENU ITEMS
-    * 5c) void buttonDeleteMenuItem_Onclick() - Delete Menu Item button function to allow the user to delete a Menu Items on a table upon pressing the Delete Menu Item Button
+    * 5c) void buttonDeleteMenuItem_Onclick() - Delete Menu Item button function to allow the user to delete a Menu Item on a table upon pressing the Delete Menu Item Button
     * 5d) Component deleteMenuItemTableConstruction() - Construction of table variables for MENU ITEMS
     * Methods 5e and 5f belongs to deleting COUPONS
     * 5e) void buttonDeleteCoupon_Onclick() - Delete Coupon button function to allow the user to delete a Coupon on a table upon pressing the Delete Coupon Button
@@ -1104,8 +1102,8 @@ public class ManagerPageUI extends JFrame {
         ManagerDeleteController managerDeleteController = new ManagerDeleteController();
         int rowSelected = tableDeleteMenuItems.getSelectedRow();
         if (rowSelected != -1){
-            int itemIDSelected = Integer.parseInt((String)tableDeleteMenuItems.getModel().getValueAt(rowSelected, 0));
-            if (managerDeleteController.deleteItem(itemIDSelected)){
+            int itemID = Integer.parseInt((String)tableDeleteMenuItems.getModel().getValueAt(rowSelected, 0));
+            if (managerDeleteController.deleteItem(itemID)){
                 JOptionPane.showMessageDialog(null, "Menu Item successfully deleted.", "Menu Item Deletion", JOptionPane.INFORMATION_MESSAGE);
                 buttonDeleteChoices_Onclick("Menu Items");
             }
@@ -1150,8 +1148,8 @@ public class ManagerPageUI extends JFrame {
         ManagerDeleteController managerDeleteController = new ManagerDeleteController();
         int rowSelected = tableDeleteCoupon.getSelectedRow();
         if (rowSelected != -1){
-            String couponSelected = (String)tableDeleteCoupon.getModel().getValueAt(rowSelected, 0);
-            if (managerDeleteController.deleteCouponByName(couponSelected)){
+            String coupon = (String)tableDeleteCoupon.getModel().getValueAt(rowSelected, 0);
+            if (managerDeleteController.deleteCouponByName(coupon)){
                 JOptionPane.showMessageDialog(null, "Coupon successfully deleted.", "Coupon Deletion", JOptionPane.INFORMATION_MESSAGE);
                 buttonDeleteChoices_Onclick("Coupon");
             }
